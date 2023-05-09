@@ -1,0 +1,14 @@
+cff-version: 0.1.0
+message: "If you use this software, please cite it as below."
+authors:
+- family-names: "Labe"
+  given-names: "Zachary"
+  orcid: "https://orcid.org/0000-0002-6394-7651"
+- family-names: "Johnson"
+  given-names: "Nathaniel"
+- family-names: "Delworth"
+  given-names: "Thomas"
+title: "DetectMitigate"
+version: 0.1
+date-released: 2023-05-09
+url: "https://github.com/zmlabe/DetectMitigate"
