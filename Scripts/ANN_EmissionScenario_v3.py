@@ -60,7 +60,7 @@ dataset_obs = 'ERA5_MEDS'
 lenOfPicks = len(modelGCMs)
 allDataLabels = modelGCMs
 monthlychoice = 'annual'
-variq = 'T2M'
+variq = 'PRECT'
 reg_name = 'Globe'
 level = 'surface'
 ###############################################################################
@@ -163,9 +163,9 @@ Xtrain,Ytrain,Xtest,Ytest,Xval,Yval,Xtrain_shape,Xtest_shape,Xval_shape,testIndi
 ### Model paramaters
 hidden = [30,30,30]
 n_epochs = 1500
-batch_size = 128
+batch_size = 256
 lr_here = 0.0001
-ridgePenalty = 0.1
+ridgePenalty = 0.8
 actFun = 'relu'
 input_shape=np.shape(Xtrain)[1]
 output_shape=np.shape(Ytrain)[1]

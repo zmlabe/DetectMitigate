@@ -365,15 +365,15 @@ ax.tick_params('both',length=4.,width=2,which='major',color='dimgrey')
 ax.tick_params(axis='x',labelsize=6,pad=1.5)
 ax.tick_params(axis='y',labelsize=6,pad=1.5)
 
-plt.scatter(VAR_xpos_os,tre_ypos_os,marker='o',s=30,color='maroon',
+plt.scatter(VAR_xpos_os,tre_ypos_os,marker='o',s=30,color='teal',
             alpha=0.4,edgecolors='teal',linewidth=0,clip_on=False)
 plt.scatter(VAR_xneg_os,tre_yneg_os,marker='o',s=30,color='maroon',
             alpha=0.2,edgecolors='maroon',linewidth=0,clip_on=False)
 
-plt.xticks(np.arange(-4,4,0.5),map(str,np.round(np.arange(-4,4,0.5),2)),fontsize=10)
+plt.xticks(np.arange(-4,4,0.1),map(str,np.round(np.arange(-4,4,0.1),2)),fontsize=10)
 plt.yticks(np.arange(-4,4,0.5),map(str,np.round(np.arange(-4,4,0.5),2)),fontsize=10)
-plt.xlim([-0.4,0.4])
-plt.ylim([-1,0.4])
+plt.xlim([0,0.3])
+plt.ylim([-1.5,0.5])
 
 plt.title('XAI for %s-%s using %s' % (yrmin_os,yrmax_os,variq),color='k',fontsize=15)
 
@@ -399,15 +399,15 @@ ax.tick_params('both',length=4.,width=2,which='major',color='dimgrey')
 ax.tick_params(axis='x',labelsize=6,pad=1.5)
 ax.tick_params(axis='y',labelsize=6,pad=1.5)
 
-plt.scatter(VAR_xpos_os_10ye,tre_ypos_os_10ye,marker='o',s=30,color='maroon',
+plt.scatter(VAR_xpos_os_10ye,tre_ypos_os_10ye,marker='o',s=30,color='teal',
             alpha=0.4,edgecolors='teal',linewidth=0,clip_on=False)
 plt.scatter(VAR_xneg_os_10ye,tre_yneg_os_10ye,marker='o',s=30,color='maroon',
             alpha=0.2,edgecolors='maroon',linewidth=0,clip_on=False)
 
-plt.xticks(np.arange(-4,4,0.5),map(str,np.round(np.arange(-4,4,0.5),2)),fontsize=10)
+plt.xticks(np.arange(-4,4,0.1),map(str,np.round(np.arange(-4,4,0.1),2)),fontsize=10)
 plt.yticks(np.arange(-4,4,0.5),map(str,np.round(np.arange(-4,4,0.5),2)),fontsize=10)
-plt.xlim([-0.4,0.4])
-plt.ylim([-1,0.4])
+plt.xlim([0,0.3])
+plt.ylim([-1.5,0.5])
 
 plt.title('XAI for %s-%s using %s' % (yrmin_os_10ye,yrmax_os_10ye,variq),color='k',fontsize=15)
 
@@ -466,16 +466,12 @@ spear_trend_os_all = calcTrend(spear_os)
 spear_trend_os_10ye_all = calcTrend(spear_os_10ye)
 
 ### Calculate ensemble std of time
-spear_stdtrend_os = np.nanmean(np.nanstd(spear_trend_os,axis=1),axis=0)
-spear_stdtrend_os_10ye = np.nanmean(np.nanstd(spear_trend_os_10ye,axis=1),axis=0)
+spear_stdtrend_os = np.nanmean(np.nanstd(spear_os,axis=1),axis=0)
+spear_stdtrend_os_10ye = np.nanmean(np.nanstd(spear_os_10ye,axis=1),axis=0)
 
 ### Calculate ensemble mean of trends
 spear_trend_os = np.nanmean(spear_trend_os_all,axis=0)
 spear_trend_os_10ye = np.nanmean(spear_trend_os_10ye_all,axis=0)
-
-### Calculate VAR
-spear_VAR_os_all = abs(spear_trend_os)/spear_trend_os
-spear_VAR_os_10ye_all = abs(spear_trend_os_10ye)/spear_trend_os_10ye
 
 ### Calculate ensemble mean 
 lrp_os_ig = np.nanmean(lrp_os,axis=0)
@@ -580,15 +576,15 @@ ax.tick_params('both',length=4.,width=2,which='major',color='dimgrey')
 ax.tick_params(axis='x',labelsize=6,pad=1.5)
 ax.tick_params(axis='y',labelsize=6,pad=1.5)
 
-plt.scatter(VAR_xpos_os,tre_ypos_os,marker='o',s=30,color='maroon',
+plt.scatter(VAR_xpos_os,tre_ypos_os,marker='o',s=30,color='teal',
             alpha=0.4,edgecolors='teal',linewidth=0,clip_on=False)
 plt.scatter(VAR_xneg_os,tre_yneg_os,marker='o',s=30,color='maroon',
             alpha=0.2,edgecolors='maroon',linewidth=0,clip_on=False)
 
 plt.xticks(np.arange(-4,4,0.5),map(str,np.round(np.arange(-4,4,0.5),2)),fontsize=10)
 plt.yticks(np.arange(-4,4,0.5),map(str,np.round(np.arange(-4,4,0.5),2)),fontsize=10)
-plt.xlim([0,2])
-plt.ylim([-1,0.4])
+plt.xlim([0,4])
+plt.ylim([-1.5,0.5])
 
 plt.title('XAI for %s-%s using %s' % (yrmin_os,yrmax_os,variq),color='k',fontsize=15)
 
@@ -614,15 +610,15 @@ ax.tick_params('both',length=4.,width=2,which='major',color='dimgrey')
 ax.tick_params(axis='x',labelsize=6,pad=1.5)
 ax.tick_params(axis='y',labelsize=6,pad=1.5)
 
-plt.scatter(VAR_xpos_os_10ye,tre_ypos_os_10ye,marker='o',s=30,color='maroon',
+plt.scatter(VAR_xpos_os_10ye,tre_ypos_os_10ye,marker='o',s=30,color='teal',
             alpha=0.4,edgecolors='teal',linewidth=0,clip_on=False)
 plt.scatter(VAR_xneg_os_10ye,tre_yneg_os_10ye,marker='o',s=30,color='maroon',
             alpha=0.2,edgecolors='maroon',linewidth=0,clip_on=False)
 
 plt.xticks(np.arange(-4,4,0.5),map(str,np.round(np.arange(-4,4,0.5),2)),fontsize=10)
 plt.yticks(np.arange(-4,4,0.5),map(str,np.round(np.arange(-4,4,0.5),2)),fontsize=10)
-plt.xlim([0,2])
-plt.ylim([-1,0.4])
+plt.xlim([0,4])
+plt.ylim([-1.5,0.5])
 
 plt.title('XAI for %s-%s using %s' % (yrmin_os_10ye,yrmax_os_10ye,variq),color='k',fontsize=15)
 
