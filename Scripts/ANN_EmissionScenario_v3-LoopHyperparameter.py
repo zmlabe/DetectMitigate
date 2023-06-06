@@ -60,7 +60,7 @@ dataset_obs = 'ERA5_MEDS'
 lenOfPicks = len(modelGCMs)
 allDataLabels = modelGCMs
 monthlychoice = 'annual'
-variq = 'T2M'
+variq = 'PRECT'
 reg_name = 'Globe'
 level = 'surface'
 ###############################################################################
@@ -204,13 +204,13 @@ def netcdfLRPz_OS(lats,lons,var,directory,typemodel,savename):
 ###############################################################################
 ###############################################################################
 ###############################################################################    
-COUNTER = 10
+COUNTER = 5
 
 ###############################################################################
 ### Create hyperparameter list
 hiddenalltry = [[5],[20],[30],[100],[5,5],[20,20],[30,30],[100,100],[5,5,5],[20,20,20],[30,30,30],[100,100,100],[5,5,5,5],[20,20,20,20],[30,30,30,30],[100,100,100,100]]
 
-version = 16
+version = 1
 hiddenall = hiddenalltry[version]
 hiddenallstr = str(len(hiddenalltry[version])) + 'x' + str(hiddenalltry[version][0])
 ridgePenaltyall = [0.001,0.01,0.05,0.1,0.2,0.5,1,5]
@@ -414,7 +414,7 @@ for rp in range(len(ridgePenaltyall)):
         ###############################################################################
         ###############################################################################
         ### Start saving everything
-        savename = 'ANNv3_EmissionScenario_' + variq + '_' + reg_name + '_' + monthlychoice + '_' + actFun + '_L2_'+ str(ridgePenalty)+ '_LR_' + str(lr_here)+ '_Batch'+ str(batch_size)+ '_Iters' + str(n_epochs) + '_' + str(len(hidden)) + 'x' + str(hidden[0]) + '_SegSeed' + str(random_segment_seed) + '_NetSeed'+ str(random_network_seed) 
+        savename = 'ANNv3_EmissionScenario_' + variq + '_' + reg_name + '_' + monthlychoice + '_' + actFun + '_L2_'+ str(ridgePenalty)+ '_LR_' + str(lr_here)+ '_Batch'+ str(batch_size)+ '_Iters' + str(n_epochs) + '_' + str(len(hidden)) + 'x' + str(hidden[0]) + '_SegSeed' + str(random_segment_seed) + '_NetSeed'+ str(random_network_seed) + '_COUNTER' + str(seee+1) 
         
         ###############################################################################
         ###############################################################################
@@ -512,12 +512,12 @@ for rp in range(len(ridgePenaltyall)):
         ##############################################################################
         ##############################################################################
         ### For testing data only (z-rule)
-        lrptestz = LRPf.calc_LRPModel(model,XtestS,Ytest,biasBool,
-                                                annType,num_of_class,
-                                                yearsall,lrpRule1,normLRP,
-                                                numLats,numLons,numDim)
+        # lrptestz = LRPf.calc_LRPModel(model,XtestS,Ytest,biasBool,
+        #                                         annType,num_of_class,
+        #                                         yearsall,lrpRule1,normLRP,
+        #                                         numLats,numLons,numDim)
         
-        netcdfLRPz(lats,lons,lrptestz,directoryoutputl,'Testing',savename)
+        # netcdfLRPz(lats,lons,lrptestz,directoryoutputl,'Testing',savename)
             
         ##############################################################################
         ##############################################################################

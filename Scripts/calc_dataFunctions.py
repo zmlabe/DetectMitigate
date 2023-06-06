@@ -429,6 +429,20 @@ def readFiles(variq,dataset,monthlychoice,scenario):
         scenario = 'SSP585'
         lat1,lon1,data = SPMh.read_SPEAR_MED_Historical(directorydataSPMh,variq,monthlychoice,
                                             sliceshapeSPMh,slicenanSPMh,numOfEnsSPMh,'historicalforcing')
+    elif dataset == 'SPEAR_MED_ALLofHistorical':
+        import read_SPEAR_MED_Historical as SPMhall
+        directorydataSPMhall = '/work/Zachary.Labe/Data/SPEAR/SPEAR_MED/monthly/'
+        sliceyearSPMhall = np.arange(1921,2100+1,1)
+        if monthlychoice == 'none':
+            sliceshapeSPMhall = 5
+        else:
+            sliceshapeSPMhall = 4
+        slicenanSPMhall = 'nan'
+        levelSPMhall = 'surface'
+        numOfEnsSPMhall = 30
+        scenario = 'SSP585'
+        lat1,lon1,data = SPMhall.read_SPEAR_MED_Historical(directorydataSPMhall,variq,monthlychoice,
+                                            sliceshapeSPMhall,slicenanSPMhall,numOfEnsSPMhall,'ALLofhistoricalforcing')
     elif dataset == 'SPEAR_MED_FA':
         import read_SPEAR_MED_FA as SPMF
         directorydataSPMF = '/work/Zachary.Labe/Data/'

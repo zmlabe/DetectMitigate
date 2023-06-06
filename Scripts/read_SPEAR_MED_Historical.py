@@ -280,6 +280,11 @@ def read_SPEAR_MED_Historical(directory,vari,sliceperiod,sliceshape,slicenan,num
         print('HISTORICAL YEARS')
         print(time[yearhistq])
         histmodel = ensshape[:,yearhistq,:,:]
+    elif timeper == 'ALLofhistoricalforcing':
+        yearhistq = np.where((time >= 1921) & (time <= 2014))[0]
+        print('HISTORICAL YEARS')
+        print(time[yearhistq])
+        histmodel = ensshape[:,yearhistq,:,:]
     else:
         print(ValueError('SOMETHING IS WRONG WITH THE YEARS OF ANALYSIS!!!'))
         sys.exit()

@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['PRECT']
+variablesall = ['U200']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 9
@@ -121,7 +121,7 @@ spear_os1 = np.nanmean(spear_osm[os_yr-5:os_yr+5,:,:],axis=0)
 spear_os1_10ye = np.nanmean(spear_osm_10ye[os_10ye_yr-5:os_10ye_yr+5,:,:],axis=0)
 
 ### Second epoch around overshoot ending 50 years later
-end = 10
+end = 50
 spear_os2 = np.nanmean(spear_osm[end+os_yr-5:end+os_yr+5,:,:],axis=0)
 spear_os2_10ye = np.nanmean(spear_osm_10ye[end+os_10ye_yr-5:end+os_10ye_yr+5,:,:],axis=0)
 
@@ -164,7 +164,13 @@ m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Colorbar limits
 if variq == 'T2M':
-    barlim = np.arange(-2,2,1)
+    barlim = np.arange(-2,3,1)
+    limit = np.arange(-2,2.1,0.1)
+elif variq == 'U200':
+    barlim = np.arange(-3,4,1)
+    limit = np.arange(-3,3.1,0.1)
+elif variq == 'U700':
+    barlim = np.arange(-2,3,1)
     limit = np.arange(-2,2.1,0.1)
 elif variq == 'PRECT':
     barlim = np.arange(-1,1.1,0.5)
@@ -174,7 +180,7 @@ elif variq == 'PRECT':
 cs = m.contourf(lon2,lat2,change_os,limit,
                   extend='both',latlon=True)
                 
-if variq == 'T2M':
+if any([variq == 'T2M',variq == 'U200',variq == 'U700']):
     cmap = cmocean.cm.balance    
 elif variq == 'PRECT':
     cmap = cmr.seasons_r       
@@ -207,6 +213,10 @@ if variq == 'PRECT':
     label = r'\textbf{PRECIPITATION CHANGE [mm/day]}' 
 elif variq == 'T2M':
     label = r'\textbf{TEMPERATURE CHANGE [$^{\circ}$C]}' 
+elif variq == 'U200':
+    label = r'\textbf{U200 CHANGE [$^{\circ}$C]}' 
+elif variq == 'U700':
+    label = r'\textbf{U700 CHANGE [$^{\circ}$C]}' 
 cbar1.set_label(label,fontsize=9,color='dimgrey',labelpad=1.4)  
 cbar1.set_ticks(barlim)
 cbar1.set_ticklabels(list(map(str,barlim)))
