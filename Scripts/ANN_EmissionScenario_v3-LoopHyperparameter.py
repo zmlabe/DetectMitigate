@@ -204,16 +204,16 @@ def netcdfLRPz_OS(lats,lons,var,directory,typemodel,savename):
 ###############################################################################
 ###############################################################################
 ###############################################################################    
-COUNTER = 5
+COUNTER = 3
 
 ###############################################################################
 ### Create hyperparameter list
 hiddenalltry = [[5],[20],[30],[100],[5,5],[20,20],[30,30],[100,100],[5,5,5],[20,20,20],[30,30,30],[100,100,100],[5,5,5,5],[20,20,20,20],[30,30,30,30],[100,100,100,100]]
 
-version = 1
+version = 0
 hiddenall = hiddenalltry[version]
 hiddenallstr = str(len(hiddenalltry[version])) + 'x' + str(hiddenalltry[version][0])
-ridgePenaltyall = [0.001,0.01,0.05,0.1,0.2,0.5,1,5]
+ridgePenaltyall = [0.001,0.01,0.1,5]
 random_network_seedall = []
 random_segment_seedall = []
 savenameall = []
@@ -500,67 +500,67 @@ for rp in range(len(ridgePenaltyall)):
                  recalltest=recalltest,recallval=recallval,
                  f1_train=f1_train,f1_test=f1_test,f1_val=f1_val)
         
-        ##############################################################################
-        ##############################################################################
-        ##############################################################################
-        ## Visualizing through LRP
-        numLats = lats.shape[0]
-        numLons = lons.shape[0]  
-        numDim = 3
+        # ##############################################################################
+        # ##############################################################################
+        # ##############################################################################
+        # ## Visualizing through LRP
+        # numLats = lats.shape[0]
+        # numLons = lons.shape[0]  
+        # numDim = 3
         
-        ##############################################################################
-        ##############################################################################
-        ##############################################################################
-        ### For testing data only (z-rule)
-        # lrptestz = LRPf.calc_LRPModel(model,XtestS,Ytest,biasBool,
-        #                                         annType,num_of_class,
-        #                                         yearsall,lrpRule1,normLRP,
-        #                                         numLats,numLons,numDim)
+        # ##############################################################################
+        # ##############################################################################
+        # ##############################################################################
+        # ### For testing data only (z-rule)
+        # # lrptestz = LRPf.calc_LRPModel(model,XtestS,Ytest,biasBool,
+        # #                                         annType,num_of_class,
+        # #                                         yearsall,lrpRule1,normLRP,
+        # #                                         numLats,numLons,numDim)
         
-        # netcdfLRPz(lats,lons,lrptestz,directoryoutputl,'Testing',savename)
+        # # netcdfLRPz(lats,lons,lrptestz,directoryoutputl,'Testing',savename)
             
-        ##############################################################################
-        ##############################################################################
-        ##############################################################################
-        ### Overshoot stuff
-        ### Try one ensemble member for SPEAR SSP534OS
-        ensembleMember = 0
-        ensembleMember_10ye = 0
-        testingEnsembleMemberSq = dSS.read_InferenceLargeEnsemble(variq,'SPEAR_MED_Scenario',dataset_obs,monthlychoice,
-                                                                'SSP534OS','MED',lat_bounds,lon_bounds,
-                                                                land_only,ocean_only,Xmean,Xstd,ensembleMember)
-        ypred_overshootq = model.predict(testingEnsembleMemberSq,verbose=1)
-        ypred_pickovershootq = np.argmax(ypred_overshootq,axis=1)
+        # ##############################################################################
+        # ##############################################################################
+        # ##############################################################################
+        # ### Overshoot stuff
+        # ### Try one ensemble member for SPEAR SSP534OS
+        # ensembleMember = 0
+        # ensembleMember_10ye = 0
+        # testingEnsembleMemberSq = dSS.read_InferenceLargeEnsemble(variq,'SPEAR_MED_Scenario',dataset_obs,monthlychoice,
+        #                                                         'SSP534OS','MED',lat_bounds,lon_bounds,
+        #                                                         land_only,ocean_only,Xmean,Xstd,ensembleMember)
+        # ypred_overshootq = model.predict(testingEnsembleMemberSq,verbose=1)
+        # ypred_pickovershootq = np.argmax(ypred_overshootq,axis=1)
             
-        ###############################################################
-        ###############################################################
-        ###############################################################
-        ### Try one ensemble members for SPEAR SSP534OS_10ye
-        testingEnsembleMemberSq_10ye = dSS.read_InferenceLargeEnsemble(variq,'SPEAR_MED_SSP534OS_10ye',dataset_obs,monthlychoice,
-                                                                'SSP534OS_10ye','MED',lat_bounds,lon_bounds,
-                                                                land_only,ocean_only,Xmean,Xstd,ensembleMember_10ye)
-        ypred_overshootq_10ye = model.predict(testingEnsembleMemberSq_10ye,verbose=1)
-        ypred_pickovershootq_10ye = np.argmax(ypred_overshootq_10ye,axis=1)
+        # ###############################################################
+        # ###############################################################
+        # ###############################################################
+        # ### Try one ensemble members for SPEAR SSP534OS_10ye
+        # testingEnsembleMemberSq_10ye = dSS.read_InferenceLargeEnsemble(variq,'SPEAR_MED_SSP534OS_10ye',dataset_obs,monthlychoice,
+        #                                                         'SSP534OS_10ye','MED',lat_bounds,lon_bounds,
+        #                                                         land_only,ocean_only,Xmean,Xstd,ensembleMember_10ye)
+        # ypred_overshootq_10ye = model.predict(testingEnsembleMemberSq_10ye,verbose=1)
+        # ypred_pickovershootq_10ye = np.argmax(ypred_overshootq_10ye,axis=1)
         
-        ### For OS data only to calculate XAI
-        lrp_os = LRPf.calc_LRPObs(model,testingEnsembleMemberSq,biasBool,annType,
-                                            num_of_class,yearsall,lrpRule3,
-                                            normLRP,numLats,numLons,numDim)
-        lrp_os_10ye = LRPf.calc_LRPObs(model,testingEnsembleMemberSq_10ye,biasBool,annType,
-                                            num_of_class,yearsall,lrpRule3,
-                                            normLRP,numLats,numLons,numDim)
+        # ### For OS data only to calculate XAI
+        # lrp_os = LRPf.calc_LRPObs(model,testingEnsembleMemberSq,biasBool,annType,
+        #                                     num_of_class,yearsall,lrpRule3,
+        #                                     normLRP,numLats,numLons,numDim)
+        # lrp_os_10ye = LRPf.calc_LRPObs(model,testingEnsembleMemberSq_10ye,biasBool,annType,
+        #                                     num_of_class,yearsall,lrpRule3,
+        #                                     normLRP,numLats,numLons,numDim)
         
-        netcdfLRPz_OS(lats,lons,lrp_os,directoryoutputl,'OS',savename)
-        netcdfLRPz_OS(lats,lons,lrp_os_10ye,directoryoutputl,'OS_10ye',savename)
+        # netcdfLRPz_OS(lats,lons,lrp_os,directoryoutputl,'OS',savename)
+        # netcdfLRPz_OS(lats,lons,lrp_os_10ye,directoryoutputl,'OS_10ye',savename)
         
-        ##############################################################################
-        ##############################################################################
-        ##############################################################################
-        ### Save overshoot predictions for all ensemble members
-        np.savetxt(directoryoutputover + 'overshootPredictedLabels_' + savename+ '.txt',ypred_pickovershootq)
-        np.savez(directoryoutputover + 'overshootPredictedConfidence_' + savename+ '.npz',overshootconf = ypred_overshootq)
-        np.savetxt(directoryoutputover + 'overshoot_10yePredictedLabels_' + savename+ '.txt',ypred_pickovershootq_10ye)
-        np.savez(directoryoutputover + 'overshoot_10yePredictedConfidence_' + savename+ '.npz',overshootconf = ypred_overshootq)
+        # ##############################################################################
+        # ##############################################################################
+        # ##############################################################################
+        # ### Save overshoot predictions for all ensemble members
+        # np.savetxt(directoryoutputover + 'overshootPredictedLabels_' + savename+ '.txt',ypred_pickovershootq)
+        # np.savez(directoryoutputover + 'overshootPredictedConfidence_' + savename+ '.npz',overshootconf = ypred_overshootq)
+        # np.savetxt(directoryoutputover + 'overshoot_10yePredictedLabels_' + savename+ '.txt',ypred_pickovershootq_10ye)
+        # np.savez(directoryoutputover + 'overshoot_10yePredictedConfidence_' + savename+ '.npz',overshootconf = ypred_overshootq)
 
         ### Save metadata
         random_network_seedall.append(random_network_seed)

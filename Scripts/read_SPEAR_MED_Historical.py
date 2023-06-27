@@ -233,6 +233,62 @@ def read_SPEAR_MED_Historical(directory,vari,sliceperiod,sliceshape,slicenan,num
             ensshape = enstime
         print('Shape of output = ', ensshape.shape,[[ensshape.ndim]])
         print('Completed: May MEAN!')
+    elif sliceperiod == 'June':
+        enstime = np.nanmean(ensvalue[:,:,5:6,:,:],axis=2)
+        if sliceshape == 1:
+            ensshape = enstime.ravel()
+        elif any([sliceshape == 4,sliceshape == 5]):
+            ensshape = enstime
+        print('Shape of output = ', ensshape.shape,[[ensshape.ndim]])
+        print('Completed: June MEAN!')
+    elif sliceperiod == 'July':
+        enstime = np.nanmean(ensvalue[:,:,6:7,:,:],axis=2)
+        if sliceshape == 1:
+            ensshape = enstime.ravel()
+        elif any([sliceshape == 4,sliceshape == 5]):
+            ensshape = enstime
+        print('Shape of output = ', ensshape.shape,[[ensshape.ndim]])
+        print('Completed: July MEAN!')
+    elif sliceperiod == 'August':
+        enstime = np.nanmean(ensvalue[:,:,7:8,:,:],axis=2)
+        if sliceshape == 1:
+            ensshape = enstime.ravel()
+        elif any([sliceshape == 4,sliceshape == 5]):
+            ensshape = enstime
+        print('Shape of output = ', ensshape.shape,[[ensshape.ndim]])
+        print('Completed: August MEAN!')
+    elif sliceperiod == 'September':
+        enstime = np.nanmean(ensvalue[:,:,8:9,:,:],axis=2)
+        if sliceshape == 1:
+            ensshape = enstime.ravel()
+        elif any([sliceshape == 4,sliceshape == 5]):
+            ensshape = enstime
+        print('Shape of output = ', ensshape.shape,[[ensshape.ndim]])
+        print('Completed: September MEAN!')
+    elif sliceperiod == 'October':
+        enstime = np.nanmean(ensvalue[:,:,9:10,:,:],axis=2)
+        if sliceshape == 1:
+            ensshape = enstime.ravel()
+        elif any([sliceshape == 4,sliceshape == 5]):
+            ensshape = enstime
+        print('Shape of output = ', ensshape.shape,[[ensshape.ndim]])
+        print('Completed: October MEAN!')
+    elif sliceperiod == 'November':
+        enstime = np.nanmean(ensvalue[:,:,10:11,:,:],axis=2)
+        if sliceshape == 1:
+            ensshape = enstime.ravel()
+        elif any([sliceshape == 4,sliceshape == 5]):
+            ensshape = enstime
+        print('Shape of output = ', ensshape.shape,[[ensshape.ndim]])
+        print('Completed: November MEAN!')
+    elif sliceperiod == 'December':
+        enstime = np.nanmean(ensvalue[:,:,11:12,:,:],axis=2)
+        if sliceshape == 1:
+            ensshape = enstime.ravel()
+        elif any([sliceshape == 4,sliceshape == 5]):
+            ensshape = enstime
+        print('Shape of output = ', ensshape.shape,[[ensshape.ndim]])
+        print('Completed: December MEAN!')
     elif sliceperiod == 'none':
         if sliceshape == 1:
             ensshape = ensvalue.ravel()
@@ -261,7 +317,7 @@ def read_SPEAR_MED_Historical(directory,vari,sliceperiod,sliceshape,slicenan,num
 
     ###########################################################################
     ### Change units
-    if any([vari=='T2M',vari=='SST',vari=='TMAX',vari=='TMIN']):
+    if any([vari=='T2M',vari=='SST',vari=='TMAX',vari=='TMIN',vari=='TMAXabs',vari=='TMINabs']):
         ensshape = ensshape - 273.15 # K to C
         print('Completed: Changed units (K to C)!')
     elif any([vari=='PRECL',vari=='PRECC',vari=='PRECT',vari=='WA',vari=='EVAP',vari=='SNOWRATE']):
@@ -272,6 +328,9 @@ def read_SPEAR_MED_Historical(directory,vari,sliceperiod,sliceshape,slicenan,num
         ensshape = ensshape / 1000 # kg/m^2 to m
         ### "Average Monthly column-integrated snow water"
         print('*** CURRENT UNITS ---> [[ m ]]! ***')
+    elif any([vari == 'tau_x',vari == 'tau_y']):
+        ensshape = ensshape * -1 # (-1 x forcing on the atmosphere; show downward stress)
+        print('*** CURRENT UNITS (multiplied by -1) ---> [[ N/m2 ]]! ***')
     
     ###########################################################################
     ### Select years of analysis (1929-2014)

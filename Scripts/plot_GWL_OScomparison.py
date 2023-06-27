@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['PRECT']
+variablesall = ['U200']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 9
@@ -109,7 +109,7 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-selectGWL = 1.5
+selectGWL = 1.7
 selectGWLn = '%s' % (int(selectGWL*10))
 yrplus = 3
 
@@ -280,10 +280,33 @@ elif variq == 'PRECT':
     limit = np.arange(-2,2.01,0.05)
     barlim2 = np.arange(-1,1.1,0.5)
     limit2 = np.arange(-1,1.01,0.05)
+elif any([variq == 'U700']):
+    barlim = np.arange(-2,2.1,0.5)
+    limit = np.arange(-2,2.01,0.05)
+    barlim2 = np.arange(-1,1.1,0.5)
+    limit2 = np.arange(-1,1.01,0.05)  
+elif any([variq == 'U200']):
+    barlim = np.arange(-5,5.1,1)
+    limit = np.arange(-5,5.01,0.1)
+    barlim2 = np.arange(-5,5.1,1)
+    limit2 = np.arange(-5,5.01,0.1)    
+elif any([variq == 'tau_x',variq == 'tau_y']):
+    barlim = np.arange(-0.02,0.021,0.01)
+    limit = np.arange(-0.02,0.0201,0.0001)
+    barlim2 = np.arange(-0.02,0.021,0.01)
+    limit2 = np.arange(-0.02,0.0201,0.0001)  
 if variq == 'PRECT':
     label = r'\textbf{PRECIPITATION CHANGE [mm/day]}' 
 elif variq == 'T2M':
     label = r'\textbf{TEMPERATURE CHANGE [$^{\circ}$C]}' 
+elif variq == 'U200':
+    label = r'\textbf{U200 CHANGE [m/s]}' 
+elif variq == 'U700':
+    label = r'\textbf{U700 CHANGE [m/s]}' 
+elif variq == 'tau_x':
+    label = r'\textbf{ZONAL WIND STRESS CHANGE [Pa]}' 
+elif variq == 'tau_y':
+    label = r'\textbf{MERIDIONAL WIND STRESS CHANGE [Pa]}' 
 
 ### Map world map
 fig = plt.figure(figsize=(10,4))
@@ -299,11 +322,19 @@ m.drawcoastlines(color='dimgrey',linewidth=0.7)
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,climatechange_GWL,limit,
                   extend='both',latlon=True)
+
+if any([variq == 'tau_x',variq == 'tau_y']):
+    m.fillcontinents(color='dimgrey',zorder=30)
+    m.drawcoastlines(color='darkgrey',linewidth=0.7)
+else:
+    m.drawcoastlines(color='dimgrey',linewidth=0.7)
                 
 if variq == 'T2M':
     cmap = cmocean.cm.balance    
 elif variq == 'PRECT':
-    cmap = cmr.seasons_r       
+    cmap = cmr.seasons_r    
+elif any([variq == 'U200',variq == 'U700',variq == 'tau_x',variq == 'tau_y']):
+    cmap = cmr.fusion_r  
 cs.set_cmap(cmap)
 
 plt.title(r'\textbf{(a); %s$^{\circ}$C [%s] for SSP5-8.5}' % (selectGWL,years[ssp_GWL]),fontsize=11,color='dimgrey')
@@ -316,12 +347,17 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,os_GWL,limit,
                 extend='both',latlon=True)                        
 cs.set_cmap(cmap)
+
+if any([variq == 'tau_x',variq == 'tau_y']):
+    m.fillcontinents(color='dimgrey',zorder=30)
+    m.drawcoastlines(color='darkgrey',linewidth=0.7)
+else:
+    m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 plt.title(r'\textbf{(b); %s$^{\circ}$C [%s] for SSP5-3.4OS}' % (selectGWL,years[os_second_GWL]),fontsize=11,color='dimgrey')
 
@@ -333,12 +369,17 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,os_10ye_GWL,limit,
                 extend='both',latlon=True)                        
 cs.set_cmap(cmap)
+
+if any([variq == 'tau_x',variq == 'tau_y']):
+    m.fillcontinents(color='dimgrey',zorder=30)
+    m.drawcoastlines(color='darkgrey',linewidth=0.7)
+else:
+    m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 plt.title(r'\textbf{(c); %s$^{\circ}$C [%s] for SSP5-3.4OS_10ye}' % (selectGWL,years[os_10ye_second_GWL]),fontsize=11,color='dimgrey')
 
@@ -350,7 +391,6 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs2 = m.contourf(lon2,lat2,diff_os,limit2,
@@ -360,7 +400,13 @@ cs2.set_cmap(cmap)
 pval_os[np.where(np.isnan(pval_os))] = 0.     
 pval_os[np.where(pval_os == 1)] = np.nan   
 pval_os[np.where(pval_os == 0)] = 1. 
-cs3 = m.contourf(lon2,lat2,pval_os,colors='None',hatches=['/////////'],latlon=True)                  
+cs3 = m.contourf(lon2,lat2,pval_os,colors='None',hatches=['/////////'],latlon=True)   
+
+if any([variq == 'tau_x',variq == 'tau_y']):
+    m.fillcontinents(color='dimgrey',zorder=30)
+    m.drawcoastlines(color='darkgrey',linewidth=0.7)
+else:
+    m.drawcoastlines(color='dimgrey',linewidth=0.7)               
 
 plt.title(r'\textbf{(d); (b) minus (a)}',fontsize=11,color='dimgrey')
 
@@ -372,7 +418,6 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs2 = m.contourf(lon2,lat2,diff_os_10ye,limit2,
@@ -382,7 +427,13 @@ cs2.set_cmap(cmap)
 pval_os_10ye[np.where(np.isnan(pval_os_10ye))] = 0.     
 pval_os_10ye[np.where(pval_os_10ye == 1)] = np.nan   
 pval_os_10ye[np.where(pval_os_10ye == 0)] = 1. 
-cs3 = m.contourf(lon2,lat2,pval_os_10ye,colors='None',hatches=['/////////'],latlon=True)                       
+cs3 = m.contourf(lon2,lat2,pval_os_10ye,colors='None',hatches=['/////////'],latlon=True)      
+
+if any([variq == 'tau_x',variq == 'tau_y']):
+    m.fillcontinents(color='dimgrey',zorder=30)
+    m.drawcoastlines(color='darkgrey',linewidth=0.7)
+else:
+    m.drawcoastlines(color='dimgrey',linewidth=0.7)                 
 
 plt.title(r'\textbf{(e); (c) minus (a)}',fontsize=11,color='dimgrey')
 
@@ -391,7 +442,7 @@ cbarg = fig.colorbar(cs,cax=cbar_axg,orientation='vertical',
                     extend='both',extendfrac=0.07,drawedges=False) 
 cbarg.set_label(label,fontsize=8,color='k',labelpad=12)
 cbarg.set_ticks(barlim)
-cbarg.set_ticklabels(list(map(str,barlim))) 
+cbarg.set_ticklabels(list(map(str,np.round(barlim,2)))) 
 cbarg.ax.tick_params(axis='y', size=.01,labelsize=7)
 cbarg.outline.set_edgecolor('dimgrey')
 
@@ -400,11 +451,11 @@ cbar = fig.colorbar(cs2,cax=cbar_ax,orientation='vertical',
                     extend='both',extendfrac=0.07,drawedges=False) 
 cbar.set_label(label,fontsize=8,color='k',labelpad=8)  
 cbar.set_ticks(barlim2)
-cbar.set_ticklabels(list(map(str,barlim2))) 
+cbar.set_ticklabels(list(map(str,np.round(barlim2,2)))) 
 cbar.ax.tick_params(axis='y', size=.01,labelsize=7)
 cbar.outline.set_edgecolor('dimgrey')  
 
 ### Save figure 
 plt.tight_layout()   
 fig.subplots_adjust(right=0.93)
-plt.savefig(directoryfigure + 'GWL-%s_%s.png' % (selectGWLn,variq),dpi=300)
+plt.savefig(directoryfigure + 'GWL-%s_%s_%s.png' % (selectGWLn,variq,seasons[0]),dpi=300)
