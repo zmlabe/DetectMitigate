@@ -16,15 +16,16 @@ Usage
     [6] calculate_anomalies(data,data_obs,lats,lons,baseline,yearsall)
     [7] remove_ensemble_mean(data,ravel_modelens,ravelmodeltime,rm_standard_dev,numOfEns)
     [8] remove_ocean(data,data_obs)
-    [9] remove_land(data,data_obs)
-    [10] standardize_data(Xtrain,Xtest)
-    [11] standardize_dataVal(Xtrain,Xtest,Xval)
-    [12] standardize_dataSEPARATE(Xtrain,Xtest):
-    [13] rm_standard_dev(var,window,ravelmodeltime,numOfEns)
-    [14] rm_variance_dev(var,window)
-    [15] addNoiseTwinSingle(data,integer,sizeOfTwin,random_segment_seed,maskNoiseClass,lat_bounds,lon_bounds)
-    [16] smoothedEnsembles(data,lat_bounds,lon_bounds)
-    [17] read_InferenceLargeEnsemble(variq,dataset_inference,dataset_obs,monthlychoice,scenario,resolution,lat_bounds,lon_bounds,land_only,ocean_only,Xmean,Xstd,ensembleMember)
+    [9] mask_CONUS(data,data_obs,resolution)
+    [10] remove_land(data,data_obs)
+    [11] standardize_data(Xtrain,Xtest)
+    [12] standardize_dataVal(Xtrain,Xtest,Xval)
+    [13] standardize_dataSEPARATE(Xtrain,Xtest):
+    [14] rm_standard_dev(var,window,ravelmodeltime,numOfEns)
+    [15] rm_variance_dev(var,window)
+    [16] addNoiseTwinSingle(data,integer,sizeOfTwin,random_segment_seed,maskNoiseClass,lat_bounds,lon_bounds)
+    [17] smoothedEnsembles(data,lat_bounds,lon_bounds)
+    [18] read_InferenceLargeEnsemble(variq,dataset_inference,dataset_obs,monthlychoice,scenario,resolution,lat_bounds,lon_bounds,land_only,ocean_only,Xmean,Xstd,ensembleMember)
 """
 
 def rmse(a,b):
@@ -226,6 +227,72 @@ def remove_ocean(data,data_obs,lat_bounds,lon_bounds):
     data_obsmask[np.where(data_obsmask==0.)] = 0
     
     return datamask, data_obsmask
+
+###############################################################################
+
+def mask_CONUS(data,data_obs,resolution,lat_bounds,lon_bounds):
+    """
+    Only plot values over CONUS for LOWS or MEDS resolution
+    """
+    
+    ### Import modules
+    import numpy as np
+    from netCDF4 import Dataset
+    import sys
+    import calc_dataFunctions as df
+    
+    ### Read in land mask
+    if resolution == 'LOWS':
+        directorydata = '/work/Zachary.Labe/Data/NClimGrid_LOWS/'
+        filename = 'T2M_1895-2021.nc'
+        datafile = Dataset(directorydata + filename)
+        maskq = np.asarray(datafile.variables['T2M'][:])
+        lats = datafile.variables['lat'][:]
+        lons = datafile.variables['lon'][:]
+        datafile.close()
+    elif resolution == 'MEDS':
+        directorydata = '/work/Zachary.Labe/Data/NClimGrid_MEDS/'
+        filename = 'T2M_1895-2021.nc'
+        datafile = Dataset(directorydata + filename)
+        maskq = np.asarray(datafile.variables['T2M'][:])
+        lats = datafile.variables['lat'][:]
+        lons = datafile.variables['lon'][:]
+        datafile.close()
+    elif resolution == 'HIGHS':
+        directorydata = '/work/Zachary.Labe/Data/NClimGrid_HIGHS/'
+        filename = 'T2M_1895-2021.nc'
+        datafile = Dataset(directorydata + filename)
+        maskq = np.asarray(datafile.variables['T2M'][:])
+        lats = datafile.variables['lat'][:]
+        lons = datafile.variables['lon'][:]
+        datafile.close()
+    elif resolution == 'original':
+        directorydata = '/work/Zachary.Labe/Data/NClimGrid/'
+        filename = 'T2M_1895-2021.nc'
+        datafile = Dataset(directorydata + filename)
+        maskq = np.asarray(datafile.variables['T2M'][:])
+        lats = datafile.variables['lat'][:]
+        lons = datafile.variables['lon'][:]
+        datafile.close()
+    else:
+        print(ValueError('WRONG RESOLUTION SELECTED FOR MASK!'))
+        sys.exit()
+        
+    maskq,lats,lons = df.getRegion(maskq,lats,lons,lat_bounds,lon_bounds)
+        
+    ### Mask values 
+    maskq[np.where(np.isnan(maskq))] = 0.
+    maskq[np.where(maskq != 0.)] = 1
+    datamask = data * maskq[0]
+    data_obsmask = data_obs * maskq[0]
+    
+    ### Set to nans
+    datamask[np.where(datamask == 0.)] = np.nan
+    data_obsmask[np.where(data_obsmask == 0.)] = np.nan
+
+    print('<<<<<< COMPLETED: mask_CONUS()')
+    return datamask,data_obsmask
+
 
 ###############################################################################
 

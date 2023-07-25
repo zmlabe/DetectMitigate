@@ -1070,8 +1070,8 @@ def regions(name):
         lat_bounds = (50.,60.)
         lon_bounds = (360-11., 360.)
     elif name == 'US':
-        lat_bounds = (24, 60)
-        lon_bounds = (235, 290)
+        lat_bounds = (20, 55)
+        lon_bounds = (220, 310)
     elif name == 'NAext':
         lat_bounds = (25, 90)
         lon_bounds = (200,330)         

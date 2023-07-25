@@ -10,6 +10,7 @@ Version    : 1 binary for ssp245 or ssp119, 2 - added capability for all XAI of 
 import sys
 import matplotlib.pyplot as plt
 import cmocean
+import cmasher as cmr
 import numpy as np
 import calc_Utilities as UT
 import calc_dataFunctions as df
@@ -21,6 +22,7 @@ from tensorflow.keras.layers import Dense, Activation
 import calc_Stats as dSS
 from sklearn.metrics import accuracy_score,confusion_matrix,precision_recall_fscore_support,plot_confusion_matrix,precision_score,recall_score,f1_score
 from sklearn.metrics import classification_report
+from sklearn.metrics import ConfusionMatrixDisplay
 import calc_LRPclass_Detect_PosNeg as LRPf
 
 ###############################################################################
@@ -367,6 +369,11 @@ acctrain = accuracyTotalTime(ypred_picktrain,actual_classtrain)
 acctest = accuracyTotalTime(ypred_picktest,actual_classtest)
 accval = accuracyTotalTime(ypred_pickval,actual_classval)
 print(acctrain,accval,acctest)
+
+plt.figure()
+cm = confusion_matrix(actual_classtest,ypred_picktest)
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=scenarioall)
+disp.plot(cmap=cmr.fall)
 
 ### Define variable for analysis
 print('\n\n------------------------')
