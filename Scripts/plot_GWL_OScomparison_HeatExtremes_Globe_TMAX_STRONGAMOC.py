@@ -1,8 +1,8 @@
 """
-Calculate trend for OS with daily TMAX
+Calculate trend for OS with daily TMAX with global maps for AMOC runs
 
 Author    : Zachary M. Labe
-Date      : 25 July 2023
+Date      : 8 August 2023
 """
 
 from netCDF4 import Dataset
@@ -24,11 +24,12 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['TMAX']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_AMOC = 9
 yearsh = np.arange(1921,2014+1,1)
 years = np.arange(1921,2100+1)
 years_os = np.arange(2011,2100+1)
-years_os_10ye = np.arange(2031,2100+1)
+years_os_AMOC = np.arange(2015,2100+1)
+years_os_AMOC2 = np.arange(2041,2100+1)
 
 ###############################################################################
 ###############################################################################
@@ -42,55 +43,8 @@ modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
 seasons = ['annual']
 slicemonthnamen = ['ANNUAL']
 monthlychoice = seasons[0]
-reg_name = 'US'
-varcount = 'count95'
-
-### Calculate linear trends
-def calcTrend(data):
-    if data.ndim == 3:
-        slopes = np.empty((data.shape[1],data.shape[2]))
-        x = np.arange(data.shape[0])
-        for i in range(data.shape[1]):
-            for j in range(data.shape[2]):
-                mask = np.isfinite(data[:,i,j])
-                y = data[:,i,j]
-                
-                if np.sum(mask) == y.shape[0]:
-                    xx = x
-                    yy = y
-                else:
-                    xx = x[mask]
-                    yy = y[mask]      
-                if np.isfinite(np.nanmean(yy)):
-                    slopes[i,j],intercepts, \
-                    r_value,p_value,std_err = sts.linregress(xx,yy)
-                else:
-                    slopes[i,j] = np.nan
-    elif data.ndim == 4:
-        slopes = np.empty((data.shape[0],data.shape[2],data.shape[3]))
-        x = np.arange(data.shape[1])
-        for ens in range(data.shape[0]):
-            print('Ensemble member completed: %s!' % (ens+1))
-            for i in range(data.shape[2]):
-                for j in range(data.shape[3]):
-                    mask = np.isfinite(data[ens,:,i,j])
-                    y = data[ens,:,i,j]
-                    
-                    if np.sum(mask) == y.shape[0]:
-                        xx = x
-                        yy = y
-                    else:
-                        xx = x[mask]
-                        yy = y[mask]      
-                    if np.isfinite(np.nanmean(yy)):
-                        slopes[ens,i,j],intercepts, \
-                        r_value,p_value,std_err = sts.linregress(xx,yy)
-                    else:
-                        slopes[ens,i,j] = np.nan
-    
-    dectrend = slopes * 10.   
-    print('Completed: Finished calculating trends!')      
-    return dectrend
+reg_name = 'Globe'
+varcount = 'count90'
 
 ###############################################################################
 ###############################################################################
@@ -111,7 +65,7 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-selectGWL = 1.8
+selectGWL = 2.1
 selectGWLn = '%s' % (int(selectGWL*10))
 yrplus = 3
 
@@ -120,7 +74,7 @@ lat_bounds,lon_bounds = UT.regions('Globe')
 spear_mt,lats,lons = read_primary_dataset('T2M','SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
 spear_ht,lats,lons = read_primary_dataset('T2M','SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
 spear_osmt,lats,lons = read_primary_dataset('T2M','SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
-spear_osm_10yet,lats,lons = read_primary_dataset('T2M','SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
+spear_osm_AMOCt,lats,lons = read_primary_dataset('T2M','SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',monthlychoice,'SSP534OS_AMOC',lat_bounds,lon_bounds)
 lon2,lat2 = np.meshgrid(lons,lats)
 
 yearq = np.where((yearsh >= 1921) & (yearsh <= 1950))[0]
@@ -129,27 +83,27 @@ climoh_speart = np.nanmean(np.nanmean(spear_ht[:,yearq,:,:],axis=1),axis=0)
 spear_aht = spear_ht - climoh_speart[np.newaxis,np.newaxis,:,:]
 spear_amt = spear_mt - climoh_speart[np.newaxis,np.newaxis,:,:]
 spear_aosmt = spear_osmt - climoh_speart[np.newaxis,np.newaxis,:,:]
-spear_aosm_10yet = spear_osm_10yet - climoh_speart[np.newaxis,np.newaxis,:,:]
+spear_aosm_AMOCt = spear_osm_AMOCt - climoh_speart[np.newaxis,np.newaxis,:,:]
 
 ### Calculate global average in SPEAR_MED
 lon2,lat2 = np.meshgrid(lons,lats)
 spear_ah_globeht = UT.calc_weightedAve(spear_aht,lat2)
 spear_am_globeht = UT.calc_weightedAve(spear_amt,lat2)
 spear_osm_globeht = UT.calc_weightedAve(spear_aosmt,lat2)
-spear_osm_10ye_globeht = UT.calc_weightedAve(spear_aosm_10yet,lat2)
+spear_osm_AMOC_globeht = UT.calc_weightedAve(spear_aosm_AMOCt,lat2)
 
 ### Calculate GWL for ensemble means
 gwl_spearht = np.nanmean(spear_ah_globeht,axis=0)
 gwl_spearft = np.nanmean(spear_am_globeht,axis=0)
 gwl_ost = np.nanmean(spear_osm_globeht,axis=0)
-gwl_os_10yet = np.nanmean(spear_osm_10ye_globeht,axis=0)
+gwl_os_AMOCt = np.nanmean(spear_osm_AMOC_globeht,axis=0)
 
 ### Combined gwl
 gwl_allt = np.append(gwl_spearht,gwl_spearft,axis=0)
 
 ### Calculate overshoot times
 os_yr = np.where((years_os == 2040))[0][0]
-os_10ye_yr = np.where((years_os_10ye == 2031))[0][0]
+os_AMOC_yr = np.where((years_os_AMOC == 2040))[0][0]
 
 ### Find year of selected GWL
 ssp_GWLt = findNearestValueIndex(gwl_spearft,selectGWL) + (years.shape[0] - len(gwl_spearft))
@@ -160,10 +114,10 @@ os_second_GWLt = findNearestValueIndex(gwl_ost[os_yr:],selectGWL)+(len(years_os)
 os_first_GWL = os_first_GWLt
 os_second_GWL = os_second_GWLt
 
-os_10ye_first_GWLt = findNearestValueIndex(gwl_os_10yet[:os_yr],selectGWL) # need to account for further warming after 2031 to reach 1.5C
-os_10ye_second_GWLt = findNearestValueIndex(gwl_os_10yet[os_yr:],selectGWL)+(len(years_os_10ye)-len(years_os_10ye[os_yr:])) # need to account for further warming after 2031 to reach 1.5C
-os_10ye_first_GWL = os_10ye_first_GWLt
-os_10ye_second_GWL = os_10ye_second_GWLt 
+os_AMOC_first_GWLt = findNearestValueIndex(gwl_os_AMOCt[:os_yr],selectGWL) # need to account for further warming after 2031 to reach 1.5C
+os_AMOC_second_GWLt = findNearestValueIndex(gwl_os_AMOCt[os_yr:],selectGWL)+(len(years_os_AMOC)-len(years_os_AMOC[os_yr:])) # need to account for further warming after 2031 to reach 1.5C
+os_AMOC_first_GWL = os_AMOC_first_GWLt
+os_AMOC_second_GWL = os_AMOC_second_GWLt - (len(years_os_AMOC)-len(years_os_AMOC2))
 
 ###############################################################################
 ###############################################################################
@@ -187,34 +141,34 @@ data_os = Dataset(filename_os)
 count90_os = data_os.variables[varcount][:]
 data_os.close()
 
-### Read in SPEAR_MED_SSP534OS_10ye
+### Read in SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv
 directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
-name_os10ye = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP534OS_10ye' + '.nc'
-filename_os10ye = directorydatah + name_os10ye
-data_os10ye = Dataset(filename_os10ye)
-count90_os10ye = data_os10ye.variables[varcount][:]
-data_os10ye.close()
+name_osAMOC = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv' + '.nc'
+filename_osAMOC = directorydatah + name_osAMOC
+data_osAMOC = Dataset(filename_osAMOC)
+count90_osAMOC = data_osAMOC.variables[varcount][:]
+data_osAMOC.close()
 
 ### Epochs for +- years around selected GWL
 spear_am = count90
 spear_aosm = count90_os
-spear_aosm_10ye = count90_os10ye
+spear_aosm_AMOC = count90_osAMOC
 
 climatechange_GWL = np.nanmean(spear_am[:,ssp_GWLt-yrplus:ssp_GWLt+yrplus,:,:],axis=(0,1))
 os_GWL = np.nanmean(spear_aosm[:,os_second_GWLt-yrplus:os_second_GWLt+yrplus,:,:],axis=(0,1))
-os_10ye_GWL = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWLt-yrplus:os_10ye_second_GWLt+yrplus,:,:],axis=(0,1))
+os_AMOC_GWL = np.nanmean(spear_aosm_AMOC[:,os_AMOC_second_GWL-yrplus:os_AMOC_second_GWL+yrplus,:,:],axis=(0,1))
 
 ### Differences at selected GWL
 diff_os = os_GWL - climatechange_GWL
-diff_os_10ye = os_10ye_GWL - climatechange_GWL
+diff_os_AMOC = os_AMOC_GWL - climatechange_GWL
 
 ### Calculate statistical significance (FDR)
 alpha_f = 0.05
 varx_os = np.nanmean(spear_am[:,ssp_GWL-yrplus:ssp_GWL+yrplus,:,:],axis=(1))
 vary_os = np.nanmean(spear_aosm[:,os_second_GWL-yrplus:os_second_GWL+yrplus,:,:],axis=(1))
-vary_os_10ye = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWL-yrplus:os_10ye_second_GWL+yrplus,:,:],axis=(1))
+vary_os_AMOC = np.nanmean(spear_aosm_AMOC[:,os_AMOC_second_GWL-yrplus:os_AMOC_second_GWL+yrplus,:,:],axis=(1))
 pval_os = UT.calc_FDR_ttest(varx_os,vary_os,alpha_f)
-pval_os_10ye = UT.calc_FDR_ttest(varx_os,vary_os_10ye,alpha_f)
+pval_os_AMOC = UT.calc_FDR_ttest(varx_os,vary_os_AMOC,alpha_f)
 
 ###############################################################################
 ###############################################################################
@@ -223,7 +177,7 @@ pval_os_10ye = UT.calc_FDR_ttest(varx_os,vary_os_10ye,alpha_f)
 lon2,lat2 = np.meshgrid(lonus,latus)
 
 ### Select map type
-style = 'US'
+style = 'global'
 
 if style == 'ortho':
     m = Basemap(projection='ortho',lon_0=270,
@@ -263,9 +217,7 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='darkgrey',linewidth=1)
-m.drawstates(color='darkgrey',linewidth=0.5)
-m.drawcountries(color='darkgrey',linewidth=0.5)
+m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,climatechange_GWL,limit,
@@ -285,9 +237,7 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='darkgrey',linewidth=1)
-m.drawstates(color='darkgrey',linewidth=0.5)
-m.drawcountries(color='darkgrey',linewidth=0.5)
+m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,os_GWL,limit,
@@ -304,16 +254,14 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='darkgrey',linewidth=1)
-m.drawstates(color='darkgrey',linewidth=0.5)
-m.drawcountries(color='darkgrey',linewidth=0.5)
+m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
-cs = m.contourf(lon2,lat2,os_10ye_GWL,limit,
+cs = m.contourf(lon2,lat2,os_AMOC_GWL,limit,
                 extend='max',latlon=True)                        
 cs.set_cmap(cmap)
 
-plt.title(r'\textbf{(c); %s$^{\circ}$C [%s] for SSP5-3.4OS_10ye}' % (selectGWL,years_os[os_10ye_second_GWL]),fontsize=11,color='dimgrey')
+plt.title(r'\textbf{(c); %s$^{\circ}$C [%s] for SSP5-3.4OS_AMOC}' % (selectGWL,years_os[os_AMOC_second_GWLt]),fontsize=11,color='dimgrey')
 
 ###############################################################################
 ax = plt.subplot(235)
@@ -323,9 +271,7 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='darkgrey',linewidth=1)
-m.drawstates(color='darkgrey',linewidth=0.5)
-m.drawcountries(color='darkgrey',linewidth=0.5)
+m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs2 = m.contourf(lon2,lat2,diff_os,limit2,
@@ -349,21 +295,19 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='darkgrey',linewidth=1)
-m.drawstates(color='darkgrey',linewidth=0.5)
-m.drawcountries(color='darkgrey',linewidth=0.5)
+m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
-cs2 = m.contourf(lon2,lat2,diff_os_10ye,limit2,
+cs2 = m.contourf(lon2,lat2,diff_os_AMOC,limit2,
                 extend='both',latlon=True)   
 
 cmap = cmocean.cm.balance
 cs2.set_cmap(cmap) 
  
-pval_os_10ye[np.where(np.isnan(pval_os_10ye))] = 0.     
-pval_os_10ye[np.where(pval_os_10ye == 1)] = np.nan   
-pval_os_10ye[np.where(pval_os_10ye == 0)] = 1. 
-cs3 = m.contourf(lon2,lat2,pval_os_10ye,colors='None',hatches=['/////////'],latlon=True)                    
+pval_os_AMOC[np.where(np.isnan(pval_os_AMOC))] = 0.     
+pval_os_AMOC[np.where(pval_os_AMOC == 1)] = np.nan   
+pval_os_AMOC[np.where(pval_os_AMOC == 0)] = 1. 
+cs3 = m.contourf(lon2,lat2,pval_os_AMOC,colors='None',hatches=['/////////'],latlon=True)                  
 
 plt.title(r'\textbf{(e); (c) minus (a)}',fontsize=11,color='dimgrey')
 
@@ -388,4 +332,4 @@ cbar.outline.set_edgecolor('dimgrey')
 ### Save figure 
 plt.tight_layout()   
 fig.subplots_adjust(right=0.93)
-plt.savefig(directoryfigure + 'GWL-%s_HeatExtremes_%s_%s_%s-%s.png' % (selectGWLn,variq,seasons[0],varcount,variq),dpi=300)
+plt.savefig(directoryfigure + 'GWL-%s_HeatExtremes_Globe_%s_%s_%s-%s_AMOC.png' % (selectGWLn,variq,seasons[0],varcount,variq),dpi=300)

@@ -45,8 +45,14 @@ def readData(model,reg_name):
     elif model == 'SPEAR_MED_SSP534OS':
         years = np.arange(2011,2100+1)
         ENS = 30
+    elif model == 'SPEAR_MED_SSP245':
+        years = np.arange(2011,2100+1)
+        ENS = 30
     elif model == 'SPEAR_MED_SSP534OS_10ye':
         years = np.arange(2031,2100+1)
+        ENS = 9
+    elif model == 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv':
+        years = np.arange(2041,2100+1)
         ENS = 9
     
     if reg_name == 'US':
@@ -95,8 +101,14 @@ def calc_heatExtremes(datamask,model,lat,lon,baselineanom):
     elif model == 'SPEAR_MED_SSP534OS':
         years = np.arange(2011,2100+1)
         ENS = 30
+    elif model == 'SPEAR_MED_SSP245':
+        years = np.arange(2011,2100+1)
+        ENS = 30
     elif model == 'SPEAR_MED_SSP534OS_10ye':
         years = np.arange(2031,2100+1)
+        ENS = 9
+    elif model == 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv':
+        years = np.arange(2041,2100+1)
         ENS = 9
     
     if model == 'SPEAR_MED':
@@ -164,7 +176,7 @@ def calc_heatExtremes(datamask,model,lat,lon,baselineanom):
 ##############################################################################
 ##############################################################################
 def netcdfHEAT(lats,lons,count90v,count95v,count99v,freq90v,freq95v,freq99v,directory,model,reg_name,vari):
-    print('\n>>> Using netcdfLRP-integratedgradients function!')
+    print('\n>>> Using netcdfHEAT function!')
     
     from netCDF4 import Dataset
     import numpy as np
@@ -216,15 +228,21 @@ def netcdfHEAT(lats,lons,count90v,count95v,count99v,freq90v,freq95v,freq99v,dire
     ncfile.close()
     print('*Completed: Created netCDF4 File!')
 
-summer_os10ye,lat,lon,years_os10ye = readData('SPEAR_MED_SSP534OS_10ye',reg_name)
-summer_os,lat,lon,years_os = readData('SPEAR_MED_SSP534OS',reg_name)
+summer_osSSP245,lat,lon,years_osSSP245 = readData('SPEAR_MED_SSP245',reg_name)
+# summer_osAMOC,lat,lon,years_osAMOC = readData('SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',reg_name)
+# summer_os10ye,lat,lon,years_os10ye = readData('SPEAR_MED_SSP534OS_10ye',reg_name)
+# summer_os,lat,lon,years_os = readData('SPEAR_MED_SSP534OS',reg_name)
 summer,lat,lon,years = readData('SPEAR_MED',reg_name)
 
 climdist,count90sp,count95sp,count99sp,freq90sp,freq95sp,freq99sp = calc_heatExtremes(summer,'SPEAR_MED',lat,lon,np.nan)
-climdist_os10ye,count90_os10ye,count95_os10ye,count99_os10ye,freq90_os10ye,freq95_os10ye,freq99_os10ye = calc_heatExtremes(summer_os10ye,'SPEAR_MED_SSP534OS_10ye',lat,lon,climdist)
-climdist_os,count90_os,count95_os,count99_os,freq90_os,freq95_os,freq99_os = calc_heatExtremes(summer_os,'SPEAR_MED_SSP534OS',lat,lon,climdist)
+# climdist_os10ye,count90_os10ye,count95_os10ye,count99_os10ye,freq90_os10ye,freq95_os10ye,freq99_os10ye = calc_heatExtremes(summer_os10ye,'SPEAR_MED_SSP534OS_10ye',lat,lon,climdist)
+# climdist_os,count90_os,count95_os,count99_os,freq90_os,freq95_os,freq99_os = calc_heatExtremes(summer_os,'SPEAR_MED_SSP534OS',lat,lon,climdist)
+# climdist_osAMOC,count90_osAMOC,count95_osAMOC,count99_osAMOC,freq90_osAMOC,freq95_osAMOC,freq99_osAMOC = calc_heatExtremes(summer_osAMOC,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',lat,lon,climdist)
+climdist_osSSP245,count90_osSSP245,count95_osSSP245,count99_osSSP245,freq90_osSSP245,freq95_osSSP245,freq99_osSSP245 = calc_heatExtremes(summer_osSSP245,'SPEAR_MED_SSP245',lat,lon,climdist)
 
 ### Save data
-netcdfHEAT(lat,lon,count90sp,count95sp,count99sp,freq90sp,freq95sp,freq99sp,directorydata,'SPEAR_MED',reg_name,vari)
-netcdfHEAT(lat,lon,count90_os,count95_os,count95_os,freq90_os,freq95_os,freq99_os,directorydata,'SPEAR_MED_SSP534OS',reg_name,vari)
-netcdfHEAT(lat,lon,count90_os10ye,count95_os10ye,count99_os10ye,freq90_os10ye,freq95_os10ye,freq99_os10ye,directorydata,'SPEAR_MED_SSP534OS_10ye',reg_name,vari)
+# netcdfHEAT(lat,lon,count90sp,count95sp,count99sp,freq90sp,freq95sp,freq99sp,directorydata,'SPEAR_MED',reg_name,vari)
+# netcdfHEAT(lat,lon,count90_os,count95_os,count95_os,freq90_os,freq95_os,freq99_os,directorydata,'SPEAR_MED_SSP534OS',reg_name,vari)
+# netcdfHEAT(lat,lon,count90_os10ye,count95_os10ye,count99_os10ye,freq90_os10ye,freq95_os10ye,freq99_os10ye,directorydata,'SPEAR_MED_SSP534OS_10ye',reg_name,vari)
+# netcdfHEAT(lat,lon,count90_osAMOC,count95_osAMOC,count99_osAMOC,freq90_osAMOC,freq95_osAMOC,freq99_osAMOC,directorydata,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',reg_name,vari)
+netcdfHEAT(lat,lon,count90_osSSP245,count95_osSSP245,count99_osSSP245,freq90_osSSP245,freq95_osSSP245,freq99_osSSP245,directorydata,'SPEAR_MED_SSP245',reg_name,vari)

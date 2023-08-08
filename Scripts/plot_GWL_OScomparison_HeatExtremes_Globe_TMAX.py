@@ -1,8 +1,8 @@
 """
-Calculate trend for OS with daily TMAX
+Calculate trend for OS with daily TMAX with global maps
 
 Author    : Zachary M. Labe
-Date      : 25 July 2023
+Date      : 28 July 2023
 """
 
 from netCDF4 import Dataset
@@ -42,55 +42,8 @@ modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
 seasons = ['annual']
 slicemonthnamen = ['ANNUAL']
 monthlychoice = seasons[0]
-reg_name = 'US'
+reg_name = 'Globe'
 varcount = 'count95'
-
-### Calculate linear trends
-def calcTrend(data):
-    if data.ndim == 3:
-        slopes = np.empty((data.shape[1],data.shape[2]))
-        x = np.arange(data.shape[0])
-        for i in range(data.shape[1]):
-            for j in range(data.shape[2]):
-                mask = np.isfinite(data[:,i,j])
-                y = data[:,i,j]
-                
-                if np.sum(mask) == y.shape[0]:
-                    xx = x
-                    yy = y
-                else:
-                    xx = x[mask]
-                    yy = y[mask]      
-                if np.isfinite(np.nanmean(yy)):
-                    slopes[i,j],intercepts, \
-                    r_value,p_value,std_err = sts.linregress(xx,yy)
-                else:
-                    slopes[i,j] = np.nan
-    elif data.ndim == 4:
-        slopes = np.empty((data.shape[0],data.shape[2],data.shape[3]))
-        x = np.arange(data.shape[1])
-        for ens in range(data.shape[0]):
-            print('Ensemble member completed: %s!' % (ens+1))
-            for i in range(data.shape[2]):
-                for j in range(data.shape[3]):
-                    mask = np.isfinite(data[ens,:,i,j])
-                    y = data[ens,:,i,j]
-                    
-                    if np.sum(mask) == y.shape[0]:
-                        xx = x
-                        yy = y
-                    else:
-                        xx = x[mask]
-                        yy = y[mask]      
-                    if np.isfinite(np.nanmean(yy)):
-                        slopes[ens,i,j],intercepts, \
-                        r_value,p_value,std_err = sts.linregress(xx,yy)
-                    else:
-                        slopes[ens,i,j] = np.nan
-    
-    dectrend = slopes * 10.   
-    print('Completed: Finished calculating trends!')      
-    return dectrend
 
 ###############################################################################
 ###############################################################################
@@ -223,7 +176,7 @@ pval_os_10ye = UT.calc_FDR_ttest(varx_os,vary_os_10ye,alpha_f)
 lon2,lat2 = np.meshgrid(lonus,latus)
 
 ### Select map type
-style = 'US'
+style = 'global'
 
 if style == 'ortho':
     m = Basemap(projection='ortho',lon_0=270,
@@ -263,9 +216,7 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='darkgrey',linewidth=1)
-m.drawstates(color='darkgrey',linewidth=0.5)
-m.drawcountries(color='darkgrey',linewidth=0.5)
+m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,climatechange_GWL,limit,
@@ -285,9 +236,7 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='darkgrey',linewidth=1)
-m.drawstates(color='darkgrey',linewidth=0.5)
-m.drawcountries(color='darkgrey',linewidth=0.5)
+m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,os_GWL,limit,
@@ -304,9 +253,7 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='darkgrey',linewidth=1)
-m.drawstates(color='darkgrey',linewidth=0.5)
-m.drawcountries(color='darkgrey',linewidth=0.5)
+m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,os_10ye_GWL,limit,
@@ -323,9 +270,7 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='darkgrey',linewidth=1)
-m.drawstates(color='darkgrey',linewidth=0.5)
-m.drawcountries(color='darkgrey',linewidth=0.5)
+m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs2 = m.contourf(lon2,lat2,diff_os,limit2,
@@ -349,9 +294,7 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='darkgrey',linewidth=1)
-m.drawstates(color='darkgrey',linewidth=0.5)
-m.drawcountries(color='darkgrey',linewidth=0.5)
+m.drawcoastlines(color='dimgrey',linewidth=0.7)
 
 ### Make the plot continuous
 cs2 = m.contourf(lon2,lat2,diff_os_10ye,limit2,
@@ -388,4 +331,4 @@ cbar.outline.set_edgecolor('dimgrey')
 ### Save figure 
 plt.tight_layout()   
 fig.subplots_adjust(right=0.93)
-plt.savefig(directoryfigure + 'GWL-%s_HeatExtremes_%s_%s_%s-%s.png' % (selectGWLn,variq,seasons[0],varcount,variq),dpi=300)
+plt.savefig(directoryfigure + 'GWL-%s_HeatExtremes_Globe_%s_%s_%s-%s.png' % (selectGWLn,variq,seasons[0],varcount,variq),dpi=300)

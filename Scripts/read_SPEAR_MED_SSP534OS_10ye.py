@@ -345,7 +345,7 @@ def read_SPEAR_MED_SSP534OS_10ye(directory,vari,sliceperiod,sliceshape,slicenan,
         histmodel = ensshape[:,yearhistq,:,:]
     elif timeper == '10ye':
         yearhistq = np.where((time >= 1921) & (time <= 2030))[0]
-        print('FUTURE YEARS')
+        print('10ye')
         print(time[yearhistq])
         histmodel = ensshape[:,yearhistq,:,:]
     else:

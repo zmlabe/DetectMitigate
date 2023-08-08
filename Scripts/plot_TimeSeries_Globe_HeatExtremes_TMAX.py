@@ -1,8 +1,8 @@
 """
-Calculate timeseries of US means of TMAX 
+Calculate timeseries of Global means of T2M 
 
 Author    : Zachary M. Labe
-Date      : 24 July 2023
+Date      : 28 July 2023
 """
 
 from netCDF4 import Dataset
@@ -26,10 +26,9 @@ variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 9
 yearsh = np.arange(1921,2014+1,1)
-years = np.arange(1921,2100+1,1)
-years_os = np.arange(2011,2100+1,1)
-years_os_10ye = np.arange(2031,2100+1,1)
-years_amoc = np.arange(2041,2100+1,1)
+years = np.arange(1921,2100+1)
+years_os = np.arange(2011,2100+1)
+years_os_10ye = np.arange(2031,2100+1)
 
 ###############################################################################
 ###############################################################################
@@ -45,7 +44,7 @@ dataset_obs = 'ERA5_MEDS'
 seasons = ['JJA']
 slicemonthnamen = ['JJA']
 monthlychoice = seasons[0]
-reg_name = 'US'
+reg_name = 'Globe'
 
 ###############################################################################
 ###############################################################################
@@ -148,9 +147,9 @@ data_os10ye = Dataset(filename_os10ye)
 freq90_os10ye = data_os10ye.variables['freq90'][:]
 data_os10ye.close()
 
-### Read in SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv
+### Read in SPEAR_MED_SSP534OS_STRONGAMOC_1pSv
 directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
-name_osamoc= 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv' + '.nc'
+name_osamoc= 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP534OS_STRONGAMOC_1pSv' + '.nc'
 filename_osamoc = directorydatah + name_osamoc
 data_osamoc = Dataset(filename_osamoc)
 freq90_osamoc = data_osamoc.variables['freq90'][:]
@@ -207,12 +206,12 @@ ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0
 
 plt.plot(years,ave_avg*100.,linestyle='-',linewidth=2,color='maroon',zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
 
-plt.plot(years_os,ave_os_avg*100.,linestyle='-',linewidth=2,color='darkslategrey',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
-plt.plot(years_amoc,ave_os_amoc_avg*100.,linestyle='--',linewidth=1,color='darkslategrey',dashes=(1,0.3),zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}')
+plt.plot(years_os,ave_os_avg*100.,linestyle='-',linewidth=2,color='darkslategrey',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')   
+plt.plot(years_os,ave_os_amoc_avg*100.,linestyle='--',linewidth=1,color='darkslategrey',dashes=(1,0.3),zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_1pSv}')    
 
 plt.plot(years_os_10ye,ave_os_10ye_avg*100.,linestyle='-',linewidth=2,color='teal',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')    
 
-leg = plt.legend(shadow=False,fontsize=9,loc='upper center',
+leg = plt.legend(shadow=False,fontsize=12,loc='upper center',
       bbox_to_anchor=(0.5,1.02),fancybox=True,ncol=2,frameon=False,
       handlelength=1,handletextpad=0.5)
 for line,text in zip(leg.get_lines(), leg.get_texts()):
@@ -223,7 +222,7 @@ plt.yticks(np.round(np.arange(0,101,10),2),np.round(np.arange(0,101,10),2))
 plt.xlim([2015,2100])
 plt.ylim([10,80])
 
-plt.ylabel(r'\textbf{Frequency of Tx90 over CONUS [Percent]}',fontsize=7,color='k')
+plt.ylabel(r'\textbf{Frequency of T2M-Tx90 over Globe [Percent]}',fontsize=7,color='k')
 
 plt.tight_layout()
 plt.savefig(directoryfigure + 'TimeSeries_Tx90_%s_%s.png' % (seasons[0],reg_name),dpi=300)
@@ -259,9 +258,9 @@ data_os10ye = Dataset(filename_os10ye)
 freq95_os10ye = data_os10ye.variables['freq95'][:]
 data_os10ye.close()
 
-### Read in SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv
+### Read in SPEAR_MED_SSP534OS_STRONGAMOC_1pSv
 directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
-name_osamoc= 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv' + '.nc'
+name_osamoc= 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP534OS_STRONGAMOC_1pSv' + '.nc'
 filename_osamoc = directorydatah + name_osamoc
 data_osamoc = Dataset(filename_osamoc)
 freq95_osamoc = data_osamoc.variables['freq95'][:]
@@ -318,12 +317,12 @@ ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0
 
 plt.plot(years,ave_avg95*100.,linestyle='-',linewidth=2,color='maroon',zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
 
-plt.plot(years_os,ave_os_avg95*100.,linestyle='-',linewidth=2,color='darkslategrey',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
-plt.plot(years_amoc,ave_os_amoc_avg95*100.,linestyle='--',linewidth=2,color='darkslategrey',dashes=(1,0.3),zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}')  
+plt.plot(years_os,ave_os_avg95*100.,linestyle='-',linewidth=2,color='darkslategrey',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')   
+plt.plot(years_os,ave_os_amoc_avg95*100.,linestyle='--',linewidth=2,color='darkslategrey',dashes=(1,0.3),zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_1pSv}')   
 
 plt.plot(years_os_10ye,ave_os_10ye_avg95*100.,linestyle='-',linewidth=2,color='teal',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')    
 
-leg = plt.legend(shadow=False,fontsize=9,loc='upper center',
+leg = plt.legend(shadow=False,fontsize=12,loc='upper center',
       bbox_to_anchor=(0.5,1.02),fancybox=True,ncol=2,frameon=False,
       handlelength=1,handletextpad=0.5)
 for line,text in zip(leg.get_lines(), leg.get_texts()):
@@ -334,7 +333,7 @@ plt.yticks(np.round(np.arange(0,101,10),2),np.round(np.arange(0,101,10),2))
 plt.xlim([2015,2100])
 plt.ylim([0,80])
 
-plt.ylabel(r'\textbf{Frequency of Tx95 over CONUS [Percent]}',fontsize=7,color='k')
+plt.ylabel(r'\textbf{Frequency of Tx95 over Globe [Percent]}',fontsize=7,color='k')
 
 plt.tight_layout()
 plt.savefig(directoryfigure + 'TimeSeries_Tx95_%s_%s.png' % (seasons[0],reg_name),dpi=300)

@@ -115,6 +115,8 @@ spear_m,lats,lons = read_primary_dataset(variq,'SPEAR_MED',monthlychoice,'SSP585
 spear_h,lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
 spear_osm,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
 spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
+spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
+spear_osm_AMOC,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',monthlychoice,'SSP534OS_STRONGAMOC_p1Sv',lat_bounds,lon_bounds)
 lon2,lat2 = np.meshgrid(lons,lats)
 
 ### Calculate anomalies
@@ -122,15 +124,18 @@ yearq = np.where((years >= 2015) & (years <= 2029))[0]
 climo_spear = np.nanmean(spear_m[:,yearq,:,:],axis=1)
 climo_osspear = np.nanmean(spear_osm[:,yearq,:,:],axis=1)
 climo_os10yespear = np.nanmean(spear_osm_10ye[:,yearq,:,:],axis=1)
+climo_osAMOCspear = np.nanmean(spear_osm_AMOC[:,yearq,:,:],axis=1)
 
 spear_am = spear_m - climo_spear[:,np.newaxis,:,:]
 spear_aosm = spear_osm - climo_osspear[:,np.newaxis,:,:]
 spear_aosm_10ye = spear_osm_10ye - climo_os10yespear[:,np.newaxis,:,:]
+spear_aosm_AMOC = spear_osm_AMOC - climo_osAMOCspear[:,np.newaxis,:,:]
 
 ### Calculate global means
 ave_GLOBE = UT.calc_weightedAve(spear_am,lat2)
 ave_os_GLOBE = UT.calc_weightedAve(spear_aosm,lat2)
 ave_os_10ye_GLOBE = UT.calc_weightedAve(spear_aosm_10ye,lat2)
+ave_os_AMOC_GLOBE = UT.calc_weightedAve(spear_aosm_AMOC,lat2)
 
 ### Calculate ensemble mean and spread
 ave_GLOBE_avg = np.nanmean(ave_GLOBE,axis=0)
@@ -144,6 +149,10 @@ ave_os_GLOBE_max = np.nanmax(ave_os_GLOBE,axis=0)
 ave_os_10ye_GLOBE_avg = np.nanmean(ave_os_10ye_GLOBE,axis=0)
 ave_os_10ye_GLOBE_min = np.nanmin(ave_os_10ye_GLOBE,axis=0)
 ave_os_10ye_GLOBE_max = np.nanmax(ave_os_10ye_GLOBE,axis=0)
+
+ave_os_AMOC_GLOBE_avg = np.nanmean(ave_os_AMOC_GLOBE,axis=0)
+ave_os_AMOC_GLOBE_min = np.nanmin(ave_os_AMOC_GLOBE,axis=0)
+ave_os_AMOC_GLOBE_max = np.nanmax(ave_os_AMOC_GLOBE,axis=0)
 
 ###############################################################################
 ###############################################################################
@@ -186,11 +195,13 @@ plt.plot(years,ave_GLOBE_avg,linestyle='-',linewidth=2,color='maroon',
 
 plt.plot(years,ave_os_GLOBE_avg,linestyle='-',linewidth=2,color='darkslategrey',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
+plt.plot(years,ave_os_AMOC_GLOBE_avg,linestyle='--',dashes=(1,0.3),linewidth=1,color='darkslategrey',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}') 
 
 plt.plot(years,ave_os_10ye_GLOBE_avg,linestyle='-',linewidth=2,color='teal',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')    
 
-leg = plt.legend(shadow=False,fontsize=12,loc='upper center',
+leg = plt.legend(shadow=False,fontsize=9,loc='upper center',
       bbox_to_anchor=(0.5,1.02),fancybox=True,ncol=2,frameon=False,
       handlelength=1,handletextpad=0.5)
 for line,text in zip(leg.get_lines(), leg.get_texts()):
@@ -217,11 +228,13 @@ climoh_spear = np.nanmean(np.nanmean(spear_h[:,yearq,:,:],axis=1),axis=0)
 spear_am = spear_m - climoh_spear[np.newaxis,np.newaxis,:,:]
 spear_aosm = spear_osm - climoh_spear[np.newaxis,np.newaxis,:,:]
 spear_aosm_10ye = spear_osm_10ye - climoh_spear[np.newaxis,np.newaxis,:,:]
+spear_aosm_AMOC = spear_osm_AMOC - climoh_spear[np.newaxis,np.newaxis,:,:]
 
 ### Calculate global means
 ave_GLOBEh = UT.calc_weightedAve(spear_am,lat2)
 ave_os_GLOBEh = UT.calc_weightedAve(spear_aosm,lat2)
 ave_os_10ye_GLOBEh = UT.calc_weightedAve(spear_aosm_10ye,lat2)
+ave_os_AMOC_GLOBEh = UT.calc_weightedAve(spear_aosm_AMOC,lat2)
 
 ### Calculate ensemble mean and spread
 ave_GLOBE_avgh = np.nanmean(ave_GLOBEh,axis=0)
@@ -236,6 +249,10 @@ ave_os_10ye_GLOBE_avgh = np.nanmean(ave_os_10ye_GLOBEh,axis=0)
 ave_os_10ye_GLOBE_minh = np.nanmin(ave_os_10ye_GLOBEh,axis=0)
 ave_os_10ye_GLOBE_maxh = np.nanmax(ave_os_10ye_GLOBEh,axis=0)
 
+ave_os_AMOC_GLOBE_avgh = np.nanmean(ave_os_AMOC_GLOBEh,axis=0)
+ave_os_AMOC_GLOBE_minh = np.nanmin(ave_os_AMOC_GLOBEh,axis=0)
+ave_os_AMOC_GLOBE_maxh = np.nanmax(ave_os_AMOC_GLOBEh,axis=0)
+
 ### Calculate overshoot times
 os_yr = np.where((years == 2040))[0][0]
 os_10ye_yr = np.where((years == 2031))[0][0]
@@ -245,6 +262,7 @@ ssp_GWL_15 = findNearestValueIndex(ave_GLOBE_avgh,1.5)
 ssp_GWL_16 = findNearestValueIndex(ave_GLOBE_avgh,1.6)
 ssp_GWL_17 = findNearestValueIndex(ave_GLOBE_avgh,1.7)
 ssp_GWL_18 = findNearestValueIndex(ave_GLOBE_avgh,1.8)
+ssp_GWL_21 = findNearestValueIndex(ave_GLOBE_avgh,2.1)
 
 ### Plot historical baseline
 fig = plt.figure()
@@ -269,6 +287,8 @@ plt.axhline(y=1.7,color='k',linestyle='--',linewidth=1,clip_on=False,
             dashes=(1,0.3))
 plt.axhline(y=1.8,color='k',linestyle='--',linewidth=1,clip_on=False,
             dashes=(1,0.3))
+plt.axhline(y=2.1,color='k',linestyle='--',linewidth=1,clip_on=False,
+            dashes=(1,0.3))
 
 # plt.axvline(x=years[ssp_GWL_15],linestyle='--',linewidth=1,clip_on=False,
 #             dashes=(1,0.3),color='k')
@@ -283,12 +303,14 @@ plt.plot(years,ave_GLOBE_avgh,linestyle='-',linewidth=2,color='maroon',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
 
 plt.plot(years,ave_os_GLOBE_avgh,linestyle='-',linewidth=2,color='darkslategrey',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}') 
+plt.plot(years,ave_os_AMOC_GLOBE_avgh,linestyle='--',dashes=(1,0.3),linewidth=1,color='darkslategrey',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}')     
 
 plt.plot(years,ave_os_10ye_GLOBE_avgh,linestyle='-',linewidth=2,color='teal',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')    
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')   
 
-leg = plt.legend(shadow=False,fontsize=12,loc='upper center',
+leg = plt.legend(shadow=False,fontsize=9,loc='upper center',
       bbox_to_anchor=(0.5,1.02),fancybox=True,ncol=2,frameon=False,
       handlelength=1,handletextpad=0.5)
 for line,text in zip(leg.get_lines(), leg.get_texts()):

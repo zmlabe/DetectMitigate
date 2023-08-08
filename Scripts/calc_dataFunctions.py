@@ -478,6 +478,16 @@ def readFiles(variq,dataset,monthlychoice,scenario):
         numOfEnsSPSS10 = 9
         lat1,lon1,data = SPSS10.read_SPEAR_MED_SSP534OS_10ye(directorydataSPSS10,variq,monthlychoice,
                                                              sliceshapeSPSS10,slicenanSPSS10,numOfEnsSPSS10,'futureforcing')
+    elif dataset == 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv':
+        import read_SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv as SPSS10amoc
+        directorydataSPSS10amoc = '/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv/monthly/'
+        sliceyearSPSS10amoc = np.arange(1921,2100+1,1)
+        sliceshapeSPSS10amoc = 4
+        slicenanSPSS10amoc = 'nan'
+        levelSPSS10amoc = 'surface'
+        numOfEnsSPSS10amoc = 9
+        lat1,lon1,data = SPSS10amoc.read_SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv(directorydataSPSS10amoc,variq,monthlychoice,
+                                                                            sliceshapeSPSS10amoc,slicenanSPSS10amoc,numOfEnsSPSS10amoc,'futureforcing')
     elif dataset == 'SPEAR_MED_NATURAL':
         import read_SPEAR_MED_NATURAL as SPN
         directorydataSPN = '/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_NATURAL/monthly/'
@@ -653,7 +663,7 @@ def getRegion(data,lat1,lon1,lat_bounds,lon_bounds):
 # dataset = 'NClimGrid_MEDS'
 # monthlychoice = 'JJA'
 # scenario = 'SSP585'
-# data,lat1,lon1 = readFiles(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,scenario)
+# data,lat1,lon1 = readFiles(variq,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',monthlychoice,scenario)
 # # obs,lat1n,lon1n = readFiles(variq,'NClimGrid_MEDS',monthlychoice,scenario)
 
 # lon2,lat2 = np.meshgrid(lon1,lat1)
