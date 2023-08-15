@@ -488,6 +488,16 @@ def readFiles(variq,dataset,monthlychoice,scenario):
         numOfEnsSPSS10amoc = 9
         lat1,lon1,data = SPSS10amoc.read_SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv(directorydataSPSS10amoc,variq,monthlychoice,
                                                                             sliceshapeSPSS10amoc,slicenanSPSS10amoc,numOfEnsSPSS10amoc,'futureforcing')
+    elif dataset == 'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv':
+        import read_SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv as SPSS10amoc2
+        directorydataSPSS10amoc2 = '/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv/monthly/'
+        sliceyearSPSS10amoc2 = np.arange(1921,2100+1,1)
+        sliceshapeSPSS10amoc2 = 4
+        slicenanSPSS10amoc2 = 'nan'
+        levelSPSS10amoc2 = 'surface'
+        numOfEnsSPSS10amoc2 = 9
+        lat1,lon1,data = SPSS10amoc2.read_SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv(directorydataSPSS10amoc2,variq,monthlychoice,
+                                                                            sliceshapeSPSS10amoc2,slicenanSPSS10amoc2,numOfEnsSPSS10amoc2,'futureforcing')
     elif dataset == 'SPEAR_MED_NATURAL':
         import read_SPEAR_MED_NATURAL as SPN
         directorydataSPN = '/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_NATURAL/monthly/'

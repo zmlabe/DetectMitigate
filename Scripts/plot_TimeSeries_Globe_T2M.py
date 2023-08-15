@@ -112,27 +112,31 @@ def findNearestValueIndex(array,value):
 ### Get data
 lat_bounds,lon_bounds = UT.regions(reg_name)
 spear_m,lats,lons = read_primary_dataset(variq,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
+spear_ssp245,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP245',lat_bounds,lon_bounds)
 spear_h,lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
 spear_osm,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
 spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
 spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
-spear_osm_AMOC,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',monthlychoice,'SSP534OS_STRONGAMOC_p1Sv',lat_bounds,lon_bounds)
+spear_osm_AMOC,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv',monthlychoice,'SSP534OS_STRONGAMOC_p2Sv',lat_bounds,lon_bounds)
 lon2,lat2 = np.meshgrid(lons,lats)
 
 ### Calculate anomalies
 yearq = np.where((years >= 2015) & (years <= 2029))[0]
 climo_spear = np.nanmean(spear_m[:,yearq,:,:],axis=1)
+climo_spear_ssp245 = np.nanmean(spear_ssp245[:,yearq,:,:],axis=1)
 climo_osspear = np.nanmean(spear_osm[:,yearq,:,:],axis=1)
 climo_os10yespear = np.nanmean(spear_osm_10ye[:,yearq,:,:],axis=1)
 climo_osAMOCspear = np.nanmean(spear_osm_AMOC[:,yearq,:,:],axis=1)
 
 spear_am = spear_m - climo_spear[:,np.newaxis,:,:]
+spear_am_ssp245 = spear_ssp245 - climo_spear_ssp245[:,np.newaxis,:,:]
 spear_aosm = spear_osm - climo_osspear[:,np.newaxis,:,:]
 spear_aosm_10ye = spear_osm_10ye - climo_os10yespear[:,np.newaxis,:,:]
 spear_aosm_AMOC = spear_osm_AMOC - climo_osAMOCspear[:,np.newaxis,:,:]
 
 ### Calculate global means
 ave_GLOBE = UT.calc_weightedAve(spear_am,lat2)
+ave_ssp245_GLOBE  = UT.calc_weightedAve(spear_am_ssp245 ,lat2)
 ave_os_GLOBE = UT.calc_weightedAve(spear_aosm,lat2)
 ave_os_10ye_GLOBE = UT.calc_weightedAve(spear_aosm_10ye,lat2)
 ave_os_AMOC_GLOBE = UT.calc_weightedAve(spear_aosm_AMOC,lat2)
@@ -141,6 +145,10 @@ ave_os_AMOC_GLOBE = UT.calc_weightedAve(spear_aosm_AMOC,lat2)
 ave_GLOBE_avg = np.nanmean(ave_GLOBE,axis=0)
 ave_GLOBE_min = np.nanmin(ave_GLOBE,axis=0)
 ave_GLOBE_max = np.nanmax(ave_GLOBE,axis=0)
+
+ave_GLOBE_ssp245_avg = np.nanmean(ave_ssp245_GLOBE,axis=0)
+ave_GLOBE_ssp245_min = np.nanmin(ave_ssp245_GLOBE,axis=0)
+ave_GLOBE_ssp245_max = np.nanmax(ave_ssp245_GLOBE,axis=0)
 
 ave_os_GLOBE_avg = np.nanmean(ave_os_GLOBE,axis=0)
 ave_os_GLOBE_min = np.nanmin(ave_os_GLOBE,axis=0)
@@ -191,12 +199,14 @@ ax.tick_params(axis='y',labelsize=6,pad=1.5)
 ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
 
 plt.plot(years,ave_GLOBE_avg,linestyle='-',linewidth=2,color='maroon',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')  
+plt.plot(years,ave_GLOBE_ssp245_avg,linestyle='-',linewidth=1,color='salmon',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP245}')   
 
 plt.plot(years,ave_os_GLOBE_avg,linestyle='-',linewidth=2,color='darkslategrey',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
 plt.plot(years,ave_os_AMOC_GLOBE_avg,linestyle='--',dashes=(1,0.3),linewidth=1,color='darkslategrey',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}') 
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv}') 
 
 plt.plot(years,ave_os_10ye_GLOBE_avg,linestyle='-',linewidth=2,color='teal',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')    
@@ -216,7 +226,7 @@ plt.ylabel(r'\textbf{Near-Surface Temperature Anomaly [$^{\circ}$C; 2015-2029]}'
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M_AMOC-p2Sv.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -226,12 +236,14 @@ yearq = np.where((yearsh >= 1921) & (yearsh <= 1950))[0]
 climoh_spear = np.nanmean(np.nanmean(spear_h[:,yearq,:,:],axis=1),axis=0)
 
 spear_am = spear_m - climoh_spear[np.newaxis,np.newaxis,:,:]
+spear_am_ssp245 = spear_ssp245 - climoh_spear[np.newaxis,np.newaxis,:,:]
 spear_aosm = spear_osm - climoh_spear[np.newaxis,np.newaxis,:,:]
 spear_aosm_10ye = spear_osm_10ye - climoh_spear[np.newaxis,np.newaxis,:,:]
 spear_aosm_AMOC = spear_osm_AMOC - climoh_spear[np.newaxis,np.newaxis,:,:]
 
 ### Calculate global means
 ave_GLOBEh = UT.calc_weightedAve(spear_am,lat2)
+ave_GLOBEh_ssp245 = UT.calc_weightedAve(spear_am_ssp245,lat2)
 ave_os_GLOBEh = UT.calc_weightedAve(spear_aosm,lat2)
 ave_os_10ye_GLOBEh = UT.calc_weightedAve(spear_aosm_10ye,lat2)
 ave_os_AMOC_GLOBEh = UT.calc_weightedAve(spear_aosm_AMOC,lat2)
@@ -240,6 +252,10 @@ ave_os_AMOC_GLOBEh = UT.calc_weightedAve(spear_aosm_AMOC,lat2)
 ave_GLOBE_avgh = np.nanmean(ave_GLOBEh,axis=0)
 ave_GLOBE_minh = np.nanmin(ave_GLOBEh,axis=0)
 ave_GLOBE_maxh = np.nanmax(ave_GLOBEh,axis=0)
+
+ave_ssp245_GLOBE_avgh = np.nanmean(ave_GLOBEh_ssp245,axis=0)
+ave_ssp245_GLOBE_minh = np.nanmin(ave_GLOBEh_ssp245,axis=0)
+ave_ssp245_GLOBE_maxh = np.nanmax(ave_GLOBEh_ssp245,axis=0)
 
 ave_os_GLOBE_avgh = np.nanmean(ave_os_GLOBEh,axis=0)
 ave_os_GLOBE_minh = np.nanmin(ave_os_GLOBEh,axis=0)
@@ -300,12 +316,14 @@ plt.axhline(y=2.1,color='k',linestyle='--',linewidth=1,clip_on=False,
 #             dashes=(1,0.3),color='k')
 
 plt.plot(years,ave_GLOBE_avgh,linestyle='-',linewidth=2,color='maroon',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')   
+plt.plot(years,ave_ssp245_GLOBE_avgh,linestyle='-',linewidth=1,color='salmon',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP245}')  
 
 plt.plot(years,ave_os_GLOBE_avgh,linestyle='-',linewidth=2,color='darkslategrey',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}') 
 plt.plot(years,ave_os_AMOC_GLOBE_avgh,linestyle='--',dashes=(1,0.3),linewidth=1,color='darkslategrey',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}')     
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv}')     
 
 plt.plot(years,ave_os_10ye_GLOBE_avgh,linestyle='-',linewidth=2,color='teal',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')   
@@ -325,5 +343,5 @@ plt.ylabel(r'\textbf{Near-Surface Temperature Anomaly [$^{\circ}$C; 1921-1950]}'
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M_historicalbaseline.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M_historicalbaseline_AMOC-p2Sv.png',dpi=300)
 

@@ -26,10 +26,11 @@ variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 9
 yearsh = np.arange(1921,2014+1,1)
-years = np.arange(1921,2100+1,1)
-years_os = np.arange(2011,2100+1,1)
-years_os_10ye = np.arange(2031,2100+1,1)
-years_amoc = np.arange(2041,2100+1,1)
+years = np.arange(1921,2100+1)
+years_ssp245 = np.arange(2011,2100+1)
+years_os = np.arange(2011,2100+1)
+years_os_10ye = np.arange(2031,2100+1)
+years_os_amoc = np.arange(2041,2100+1)
 
 ###############################################################################
 ###############################################################################
@@ -132,6 +133,14 @@ lonus = data.variables['lon'][:]
 freq90 = data.variables['freq90'][:]
 data.close()
 
+### Read in SPEAR_MED_SSP245
+directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
+nameSSP245 = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP245' + '.nc'
+filenameSSP245 = directorydatah + nameSSP245
+dataSSP245 = Dataset(filenameSSP245)
+freq90SSP245 = dataSSP245.variables['freq90'][:]
+data.close()
+
 ### Read in SPEAR_MED_SSP534OS
 directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
 name_os = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP534OS' + '.nc'
@@ -159,12 +168,14 @@ data_osamoc.close()
 ### Calculate spatial averages
 lon2us,lat2us = np.meshgrid(lonus,latus)
 avg_freq90 = UT.calc_weightedAve(freq90,lat2us)
+avg_freq90SSP245 = UT.calc_weightedAve(freq90SSP245,lat2us)
 avg_freq90_os = UT.calc_weightedAve(freq90_os,lat2us)
 avg_freq90_os10ye = UT.calc_weightedAve(freq90_os10ye,lat2us)
 avg_freq90_osamoc = UT.calc_weightedAve(freq90_osamoc,lat2us)
 
 ### Calculate ensemble means
 ave_avg = np.nanmean(avg_freq90,axis=0)
+ave_avgSSP245 = np.nanmean(avg_freq90SSP245,axis=0)
 ave_os_avg = np.nanmean(avg_freq90_os,axis=0)
 ave_os_10ye_avg = np.nanmean(avg_freq90_os10ye,axis=0)
 ave_os_amoc_avg = np.nanmean(avg_freq90_osamoc,axis=0)
@@ -206,9 +217,10 @@ ax.tick_params(axis='y',labelsize=6,pad=1.5)
 ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
 
 plt.plot(years,ave_avg*100.,linestyle='-',linewidth=2,color='maroon',zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
+plt.plot(years_ssp245,ave_avgSSP245*100.,linestyle='-',linewidth=1,color='salmon',zorder=3,label=r'\textbf{SPEAR_MED_SSP245}')    
 
 plt.plot(years_os,ave_os_avg*100.,linestyle='-',linewidth=2,color='darkslategrey',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
-plt.plot(years_amoc,ave_os_amoc_avg*100.,linestyle='--',linewidth=1,color='darkslategrey',dashes=(1,0.3),zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}')
+plt.plot(years_os_amoc,ave_os_amoc_avg*100.,linestyle='--',linewidth=1,color='darkslategrey',dashes=(1,0.3),zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}')
 
 plt.plot(years_os_10ye,ave_os_10ye_avg*100.,linestyle='-',linewidth=2,color='teal',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')    
 
@@ -243,6 +255,14 @@ lonus = data.variables['lon'][:]
 freq95 = data.variables['freq95'][:]
 data.close()
 
+### Read in SPEAR_MED_SSP245
+directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
+nameSSP245 = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP245' + '.nc'
+filenameSSP245 = directorydatah + nameSSP245
+dataSSP245 = Dataset(filenameSSP245)
+freq95SSP245 = dataSSP245.variables['freq95'][:]
+data.close()
+
 ### Read in SPEAR_MED_SSP534OS
 directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
 name_os = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP534OS' + '.nc'
@@ -270,12 +290,14 @@ data_osamoc.close()
 ### Calculate spatial averages
 lon2us,lat2us = np.meshgrid(lonus,latus)
 avg_freq95 = UT.calc_weightedAve(freq95,lat2us)
+avg_freq95SSP245 = UT.calc_weightedAve(freq95SSP245,lat2us)
 avg_freq95_os = UT.calc_weightedAve(freq95_os,lat2us)
 avg_freq95_os10ye = UT.calc_weightedAve(freq95_os10ye,lat2us)
 avg_freq95_osamoc = UT.calc_weightedAve(freq95_osamoc,lat2us)
 
 ### Calculate ensemble means
 ave_avg95 = np.nanmean(avg_freq95,axis=0)
+ave_avg95SSP245 = np.nanmean(avg_freq95SSP245,axis=0)
 ave_os_avg95 = np.nanmean(avg_freq95_os,axis=0)
 ave_os_10ye_avg95 = np.nanmean(avg_freq95_os10ye,axis=0)
 ave_os_amoc_avg95 = np.nanmean(avg_freq95_osamoc,axis=0)
@@ -317,9 +339,10 @@ ax.tick_params(axis='y',labelsize=6,pad=1.5)
 ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
 
 plt.plot(years,ave_avg95*100.,linestyle='-',linewidth=2,color='maroon',zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
+plt.plot(years_ssp245,ave_avg95SSP245*100.,linestyle='-',linewidth=1,color='salmon',zorder=3,label=r'\textbf{SPEAR_MED_SSP245}')  
 
 plt.plot(years_os,ave_os_avg95*100.,linestyle='-',linewidth=2,color='darkslategrey',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
-plt.plot(years_amoc,ave_os_amoc_avg95*100.,linestyle='--',linewidth=2,color='darkslategrey',dashes=(1,0.3),zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}')  
+plt.plot(years_os_amoc,ave_os_amoc_avg95*100.,linestyle='--',linewidth=2,color='darkslategrey',dashes=(1,0.3),zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}')  
 
 plt.plot(years_os_10ye,ave_os_10ye_avg95*100.,linestyle='-',linewidth=2,color='teal',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')    
 

@@ -55,6 +55,9 @@ elif model == 'SPEAR_MED_SSP534OS_10ye':
 elif model == 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv':
     years = np.arange(2041,2100+1)
     ENS = 9
+elif model == 'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv':
+    years = np.arange(2041,2100+1)
+    ENS = 9
 
 ### Read in data files from server
 directorydata = '/work/Zachary.Labe/Data/SPEAR/%s/daily/' % model
