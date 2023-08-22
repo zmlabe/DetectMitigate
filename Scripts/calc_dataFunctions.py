@@ -478,6 +478,16 @@ def readFiles(variq,dataset,monthlychoice,scenario):
         numOfEnsSPSS10 = 9
         lat1,lon1,data = SPSS10.read_SPEAR_MED_SSP534OS_10ye(directorydataSPSS10,variq,monthlychoice,
                                                              sliceshapeSPSS10,slicenanSPSS10,numOfEnsSPSS10,'futureforcing')
+    elif dataset == 'SPEAR_MED_LM42p2_test':
+        import read_SPEAR_MED_LM42p2_test as LM42p2test
+        directorydataLM42p2test = '/work/Zachary.Labe/Data/'
+        sliceyearLM42p2test = np.arange(1921,2070+1,1)
+        sliceshapeLM42p2test = 4
+        slicenanLM42p2test = 'nan'
+        levelLM42p2test = 'surface'
+        numOfEnsLM42p2test = 3
+        lat1,lon1,data = LM42p2test.read_SPEAR_MED_LM42p2_test(directorydataLM42p2test,variq,monthlychoice,
+                                                             sliceshapeLM42p2test,slicenanLM42p2test,numOfEnsLM42p2test,'futureforcing')
     elif dataset == 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv':
         import read_SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv as SPSS10amoc
         directorydataSPSS10amoc = '/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv/monthly/'

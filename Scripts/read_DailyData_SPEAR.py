@@ -58,6 +58,9 @@ elif model == 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv':
 elif model == 'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv':
     years = np.arange(2041,2100+1)
     ENS = 9
+elif model == 'SPEAR_MED_LM42p2_test':
+    years = np.arange(1921,2070+1)
+    ENS = 3
 
 ### Read in data files from server
 directorydata = '/work/Zachary.Labe/Data/SPEAR/%s/daily/' % model
@@ -70,9 +73,12 @@ for e in range(ENS):
     
     ### Read in data
     ds = xr.open_mfdataset(glob_pattern,concat_dim="time",combine="nested",
-                           data_vars='minimal',coords='minimal',compat='override',
-                           parallel=True,chunks={'time':'6GB','latitude':1,'longitude':1},
-                           engine='netcdf4')
+                            data_vars='minimal',coords='minimal',compat='override',
+                            parallel=True,chunks={'time':'6GB','latitude':1,'longitude':1},
+                            engine='netcdf4')
+    # ds = xr.open_mfdataset(glob_pattern,concat_dim="time",combine="nested",
+    #                        data_vars='minimal',coords='minimal',compat='override',
+    #                        parallel=True,engine='netcdf4')
     lat1 = ds['lat'].to_numpy()
     lon1 = ds['lon'].to_numpy()
     

@@ -101,7 +101,7 @@ if variq == 'T2M':
     
     ### Calculate overshoot times
     os_yr = np.where((years == 2040))[0][0]
-    os_AMOC_yr = np.where((years == 2040))[0][0]
+    os_AMOC_yr = np.where((years == 2050))[0][0] # because of the GWL at the end of the 21st century
     
     ### Find year of selected GWL
     ssp_GWL = findNearestValueIndex(gwl_spearf,selectGWL)
@@ -110,8 +110,8 @@ if variq == 'T2M':
     os_first_GWL = findNearestValueIndex(gwl_os[:os_yr],selectGWL)
     os_second_GWL = findNearestValueIndex(gwl_os[os_yr:],selectGWL)+(len(years)-len(years[os_yr:]))
     
-    os_AMOC_first_GWL = findNearestValueIndex(gwl_os_AMOC[:os_yr],selectGWL) # need to account for further warming after 2031 to reach 1.5C
-    os_AMOC_second_GWL = findNearestValueIndex(gwl_os_AMOC[os_yr:],selectGWL)+(len(years)-len(years[os_yr:])) # need to account for further warming after 2031 to reach 1.5C
+    os_AMOC_first_GWL = findNearestValueIndex(gwl_os_AMOC[:os_AMOC_yr],selectGWL) # need to account for further warming after 2031 to reach 1.5C
+    os_AMOC_second_GWL = findNearestValueIndex(gwl_os_AMOC[os_AMOC_yr:],selectGWL)+(len(years)-len(years[os_AMOC_yr:])) # need to account for further warming after 2031 to reach 1.5C
     
     ### Epochs for +- years around selected GWL
     climatechange_GWL = np.nanmean(spear_am[:,ssp_GWL-yrplus:ssp_GWL+yrplus,:,:],axis=(0,1))
@@ -175,7 +175,7 @@ else:
     
     ### Calculate overshoot times
     os_yr = np.where((years == 2040))[0][0]
-    os_AMOC_yr = np.where((years == 2040))[0][0]
+    os_AMOC_yr = np.where((years == 2050))[0][0]
     
     ### Find year of selected GWL
     ssp_GWLt = findNearestValueIndex(gwl_spearft,selectGWL)
@@ -186,8 +186,8 @@ else:
     os_first_GWL = os_first_GWLt
     os_second_GWL = os_second_GWLt
     
-    os_AMOC_first_GWLt = findNearestValueIndex(gwl_os_AMOCt[:os_yr],selectGWL) # need to account for further warming after 2031 to reach 1.5C
-    os_AMOC_second_GWLt = findNearestValueIndex(gwl_os_AMOCt[os_yr:],selectGWL)+(len(years)-len(years[os_yr:])) # need to account for further warming after 2031 to reach 1.5C
+    os_AMOC_first_GWLt = findNearestValueIndex(gwl_os_AMOCt[:os_AMOC_yr],selectGWL) # need to account for further warming after 2031 to reach 1.5C
+    os_AMOC_second_GWLt = findNearestValueIndex(gwl_os_AMOCt[os_AMOC_yr:],selectGWL)+(len(years)-len(years[os_AMOC_yr:])) # need to account for further warming after 2031 to reach 1.5C
     os_AMOC_first_GWL = os_AMOC_first_GWLt
     os_AMOC_second_GWL = os_AMOC_second_GWLt 
     

@@ -44,7 +44,7 @@ seasons = ['annual']
 slicemonthnamen = ['ANNUAL']
 monthlychoice = seasons[0]
 reg_name = 'US'
-varcount = 'count90'
+varcount = 'count95'
 
 ### Calculate linear trends
 def calcTrend(data):
@@ -273,7 +273,7 @@ cs = m.contourf(lon2,lat2,climatechange_GWL,limit,
                   extend='max',latlon=True)
                 
 if any([variq == 'TMAX',variq == 'T2M']):
-    cmap = cmr.sunburst   
+    cmap = cmr.sunburst_r   
 cs.set_cmap(cmap)
 
 plt.title(r'\textbf{(a); %s$^{\circ}$C [%s] for SSP5-8.5}' % (selectGWL,years[ssp_GWL]),fontsize=11,color='dimgrey')

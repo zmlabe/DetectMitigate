@@ -1,8 +1,8 @@
 """
-Calculate trend for OS and find relative trend ratio
+Calculate GMST for lm42
 
 Author    : Zachary M. Labe
-Date      : 22 May 2023
+Date      : 18 August 2023
 """
 
 from netCDF4 import Dataset
@@ -42,8 +42,6 @@ directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/'
 letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 ###############################################################################
 ###############################################################################
-modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
-experimentnames = ['SSP5-34OS','SSP5-34OS_10ye','DIFFERENCE [a-b]']
 dataset_obs = 'ERA5_MEDS'
 seasons = ['annual']
 slicemonthnamen = ['ANNUAL']
@@ -109,9 +107,16 @@ def read_primary_dataset(variq,dataset,monthlychoice,scenario,lat_bounds,lon_bou
 ###############################################################################
 ###############################################################################
 ###############################################################################
+def findNearestValueIndex(array,value):
+    index = (np.abs(array-value)).argmin()
+    return index
+###############################################################################
+###############################################################################
+###############################################################################
 ### Get data
 lat_bounds,lon_bounds = UT.regions(reg_name)
 spear_m,lats,lons = read_primary_dataset(variq,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
+spear_ssp245,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP245',lat_bounds,lon_bounds)
 spear_h,lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
 spear_osm,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
 spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
@@ -124,77 +129,44 @@ lat,lon,spear_LM42_all = LM.read_SPEAR_MED_LM42p2_test('/work/Zachary.Labe/Data/
 ### Calculate anomalies
 yearq = np.where((years >= 2015) & (years <= 2029))[0]
 climo_spear = np.nanmean(spear_m[:,yearq,:,:],axis=1)
+climo_spear_ssp245 = np.nanmean(spear_ssp245[:,yearq,:,:],axis=1)
 climo_osspear = np.nanmean(spear_osm[:,yearq,:,:],axis=1)
 climo_os10yespear = np.nanmean(spear_osm_10ye[:,yearq,:,:],axis=1)
 climo_LM42 = np.nanmean(spear_LM42[:,yearq,:,:],axis=1)
 
 spear_am = spear_m - climo_spear[:,np.newaxis,:,:]
+spear_am_ssp245 = spear_ssp245 - climo_spear_ssp245[:,np.newaxis,:,:]
 spear_aosm = spear_osm - climo_osspear[:,np.newaxis,:,:]
 spear_aosm_10ye = spear_osm_10ye - climo_os10yespear[:,np.newaxis,:,:]
 spear_LM42m = spear_LM42 - climo_LM42[:,np.newaxis,:,:]
 
-### Hemispheres
-latq_NH = np.where((lats > 0))[0]
-lats_NH = lats[latq_NH]
-latq_SH = np.where((lats < 0))[0]
-lats_SH = lats[latq_SH]
-
-lon2_NH,lat2_NH = np.meshgrid(lons,lats_NH)
-lon2_SH,lat2_SH = np.meshgrid(lons,lats_SH)
-
-spear_m_NH = spear_am[:,:,latq_NH,:]
-spear_osm_NH = spear_aosm[:,:,latq_NH,:]
-spear_osm_10ye_NH = spear_aosm_10ye[:,:,latq_NH,:]
-spear_LM42_NH = spear_LM42m[:,:,latq_NH,:]
-
-spear_m_SH = spear_am[:,:,latq_SH,:]
-spear_osm_SH = spear_aosm[:,:,latq_SH,:]
-spear_osm_10ye_SH = spear_aosm_10ye[:,:,latq_SH,:]
-spear_LM42_SH = spear_LM42m[:,:,latq_SH,:]
-
 ### Calculate global means
-ave_NH = UT.calc_weightedAve(spear_m_NH,lat2_NH)
-ave_os_NH = UT.calc_weightedAve(spear_osm_NH,lat2_NH)
-ave_os_10ye_NH = UT.calc_weightedAve(spear_osm_10ye_NH,lat2_NH)
-ave_LM42_NH = UT.calc_weightedAve(spear_LM42_NH,lat2_NH)
-
-ave_SH = UT.calc_weightedAve(spear_m_SH,lat2_SH)
-ave_os_SH = UT.calc_weightedAve(spear_osm_SH,lat2_SH)
-ave_os_10ye_SH = UT.calc_weightedAve(spear_osm_10ye_SH,lat2_SH)
-ave_LM42_SH = UT.calc_weightedAve(spear_LM42_SH,lat2_SH)
+ave_GLOBE = UT.calc_weightedAve(spear_am,lat2)
+ave_ssp245_GLOBE  = UT.calc_weightedAve(spear_am_ssp245 ,lat2)
+ave_os_GLOBE = UT.calc_weightedAve(spear_aosm,lat2)
+ave_os_10ye_GLOBE = UT.calc_weightedAve(spear_aosm_10ye,lat2)
+ave_LM42_GLOBE = UT.calc_weightedAve(spear_LM42m,lat2)
 
 ### Calculate ensemble mean and spread
-ave_NH_avg = np.nanmean(ave_NH,axis=0)
-ave_NH_min = np.nanmin(ave_NH,axis=0)
-ave_NH_max = np.nanmax(ave_NH,axis=0)
+ave_GLOBE_avg = np.nanmean(ave_GLOBE,axis=0)
+ave_GLOBE_min = np.nanmin(ave_GLOBE,axis=0)
+ave_GLOBE_max = np.nanmax(ave_GLOBE,axis=0)
 
-ave_os_NH_avg = np.nanmean(ave_os_NH,axis=0)
-ave_os_NH_min = np.nanmin(ave_os_NH,axis=0)
-ave_os_NH_max = np.nanmax(ave_os_NH,axis=0)
+ave_GLOBE_ssp245_avg = np.nanmean(ave_ssp245_GLOBE,axis=0)
+ave_GLOBE_ssp245_min = np.nanmin(ave_ssp245_GLOBE,axis=0)
+ave_GLOBE_ssp245_max = np.nanmax(ave_ssp245_GLOBE,axis=0)
 
-ave_os_10ye_NH_avg = np.nanmean(ave_os_10ye_NH,axis=0)
-ave_os_10ye_NH_min = np.nanmin(ave_os_10ye_NH,axis=0)
-ave_os_10ye_NH_max = np.nanmax(ave_os_10ye_NH,axis=0)
+ave_os_GLOBE_avg = np.nanmean(ave_os_GLOBE,axis=0)
+ave_os_GLOBE_min = np.nanmin(ave_os_GLOBE,axis=0)
+ave_os_GLOBE_max = np.nanmax(ave_os_GLOBE,axis=0)
 
-ave_LM42_NH_avg = np.nanmean(ave_LM42_NH,axis=0)
-ave_LM42_NH_min = np.nanmin(ave_LM42_NH,axis=0)
-ave_LM42_NH_max = np.nanmax(ave_LM42_NH,axis=0)
+ave_os_10ye_GLOBE_avg = np.nanmean(ave_os_10ye_GLOBE,axis=0)
+ave_os_10ye_GLOBE_min = np.nanmin(ave_os_10ye_GLOBE,axis=0)
+ave_os_10ye_GLOBE_max = np.nanmax(ave_os_10ye_GLOBE,axis=0)
 
-ave_SH_avg = np.nanmean(ave_SH,axis=0)
-ave_SH_min = np.nanmin(ave_SH,axis=0)
-ave_SH_max = np.nanmax(ave_SH,axis=0)
-
-ave_os_SH_avg = np.nanmean(ave_os_SH,axis=0)
-ave_os_SH_min = np.nanmin(ave_os_SH,axis=0)
-ave_os_SH_max = np.nanmax(ave_os_SH,axis=0)
-
-ave_os_10ye_SH_avg = np.nanmean(ave_os_10ye_SH,axis=0)
-ave_os_10ye_SH_min = np.nanmin(ave_os_10ye_SH,axis=0)
-ave_os_10ye_SH_max = np.nanmax(ave_os_10ye_SH,axis=0)
-
-ave_LM42_SH_avg = np.nanmean(ave_LM42_SH,axis=0)
-ave_LM42_SH_min = np.nanmin(ave_LM42_SH,axis=0)
-ave_LM42_SH_max = np.nanmax(ave_LM42_SH,axis=0)
+ave_LM42_GLOBE_avg = np.nanmean(ave_LM42_GLOBE,axis=0)
+ave_LM42_GLOBE_min = np.nanmin(ave_LM42_GLOBE,axis=0)
+ave_LM42_GLOBE_max = np.nanmax(ave_LM42_GLOBE,axis=0)
 
 ###############################################################################
 ###############################################################################
@@ -232,27 +204,19 @@ ax.tick_params(axis='x',labelsize=6,pad=1.5)
 ax.tick_params(axis='y',labelsize=6,pad=1.5)
 ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
 
-plt.plot(years,ave_NH_avg,linestyle='-',linewidth=2,color='maroon',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
-plt.plot(years,ave_SH_avg,linestyle='--',linewidth=2,color='maroon',
-          clip_on=False,zorder=3,dashes=(1,0.7))
+plt.plot(years,ave_GLOBE_avg,linestyle='-',linewidth=2,color='maroon',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}') 
+plt.plot(years_LM42,ave_LM42_GLOBE_avg,linestyle='--',linewidth=1,color='maroon',dashes=(1,0.3),
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED-LM42_SSP585}')  
+plt.plot(years,ave_GLOBE_ssp245_avg,linestyle='-',linewidth=1,color='salmon',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP245}')   
 
-plt.plot(years_LM42,ave_LM42_NH_avg,linestyle='-',linewidth=1,color='r',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED-LM42_SSP585}')    
-plt.plot(years_LM42,ave_LM42_SH_avg,linestyle='--',linewidth=1,color='r',
-          clip_on=False,zorder=3,dashes=(1,0.7))
-
-plt.plot(years,ave_os_NH_avg,linestyle='-',linewidth=2,color='darkslategrey',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
-plt.plot(years,ave_os_SH_avg,linestyle='--',linewidth=2,color='darkslategrey',
-          clip_on=False,zorder=3,dashes=(1,0.7))
-
-plt.plot(years,ave_os_10ye_NH_avg,linestyle='-',linewidth=2,color='teal',
+plt.plot(years,ave_os_GLOBE_avg,linestyle='-',linewidth=2,color='darkslategrey',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')     
+plt.plot(years,ave_os_10ye_GLOBE_avg,linestyle='-',linewidth=2,color='teal',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')    
-plt.plot(years,ave_os_10ye_SH_avg,linestyle='--',linewidth=2,color='teal',
-          clip_on=False,zorder=3,dashes=(1,0.7))
 
-leg = plt.legend(shadow=False,fontsize=12,loc='upper center',
+leg = plt.legend(shadow=False,fontsize=9,loc='upper center',
       bbox_to_anchor=(0.5,1.02),fancybox=True,ncol=2,frameon=False,
       handlelength=1,handletextpad=0.5)
 for line,text in zip(leg.get_lines(), leg.get_texts()):
@@ -267,7 +231,7 @@ plt.ylabel(r'\textbf{Near-Surface Temperature Anomaly [$^{\circ}$C; 2015-2029]}'
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_Hemisphere_T2M_LM42.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M_LM42.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -278,82 +242,50 @@ yearq_LM42 = np.where((yearsh_LM42 >= 1921) & (yearsh_LM42 <= 1950))[0]
 climoh_spear = np.nanmean(np.nanmean(spear_h[:,yearq,:,:],axis=1),axis=0)
 climoh_LM42 = np.nanmean(np.nanmean(spear_LM42_all[:,yearq_LM42,:,:],axis=1),axis=0)
 
-spear_ah = spear_h - climoh_spear[np.newaxis,np.newaxis,:,:]
 spear_am = spear_m - climoh_spear[np.newaxis,np.newaxis,:,:]
+spear_am_ssp245 = spear_ssp245 - climoh_spear[np.newaxis,np.newaxis,:,:]
 spear_aosm = spear_osm - climoh_spear[np.newaxis,np.newaxis,:,:]
 spear_aosm_10ye = spear_osm_10ye - climoh_spear[np.newaxis,np.newaxis,:,:]
 spear_LM42m = spear_LM42 - climoh_LM42[np.newaxis,np.newaxis,:,:]
 
-### Calculate global average in SPEAR_MED
-lon2,lat2 = np.meshgrid(lons,lats)
-spear_ah_globeh = UT.calc_weightedAve(spear_ah,lat2)
-spear_am_globeh = UT.calc_weightedAve(spear_am,lat2)
-spear_osm_globeh = UT.calc_weightedAve(spear_aosm,lat2)
-spear_osm_10ye_globeh = UT.calc_weightedAve(spear_aosm_10ye,lat2)
+### Calculate global means
+ave_GLOBEh = UT.calc_weightedAve(spear_am,lat2)
+ave_GLOBEh_ssp245 = UT.calc_weightedAve(spear_am_ssp245,lat2)
+ave_os_GLOBEh = UT.calc_weightedAve(spear_aosm,lat2)
+ave_os_10ye_GLOBEh = UT.calc_weightedAve(spear_aosm_10ye,lat2)
 ave_LM42_GLOBEh = UT.calc_weightedAve(spear_LM42m,lat2)
 
-### Hemispheres
-latq_NH = np.where((lats > 0))[0]
-lats_NH = lats[latq_NH]
-latq_SH = np.where((lats < 0))[0]
-lats_SH = lats[latq_SH]
-
-lon2_NH,lat2_NH = np.meshgrid(lons,lats_NH)
-lon2_SH,lat2_SH = np.meshgrid(lons,lats_SH)
-
-spear_m_NH = spear_am[:,:,latq_NH,:]
-spear_osm_NH = spear_aosm[:,:,latq_NH,:]
-spear_osm_10ye_NH = spear_aosm_10ye[:,:,latq_NH,:]
-spear_LM42_NH = spear_LM42m[:,:,latq_NH,:]
-
-spear_m_SH = spear_am[:,:,latq_SH,:]
-spear_osm_SH = spear_aosm[:,:,latq_SH,:]
-spear_osm_10ye_SH = spear_aosm_10ye[:,:,latq_SH,:]
-spear_LM42_SH = spear_LM42m[:,:,latq_SH,:]
-
-### Calculate global means
-ave_NH = UT.calc_weightedAve(spear_m_NH,lat2_NH)
-ave_os_NH = UT.calc_weightedAve(spear_osm_NH,lat2_NH)
-ave_os_10ye_NH = UT.calc_weightedAve(spear_osm_10ye_NH,lat2_NH)
-ave_LM42_NH = UT.calc_weightedAve(spear_LM42_NH,lat2_NH)
-
-ave_SH = UT.calc_weightedAve(spear_m_SH,lat2_SH)
-ave_os_SH = UT.calc_weightedAve(spear_osm_SH,lat2_SH)
-ave_os_10ye_SH = UT.calc_weightedAve(spear_osm_10ye_SH,lat2_SH)
-ave_LM42_SH = UT.calc_weightedAve(spear_LM42_SH,lat2_SH)
-
 ### Calculate ensemble mean and spread
-ave_NH_avgh = np.nanmean(ave_NH,axis=0)
-ave_NH_minh = np.nanmin(ave_NH,axis=0)
-ave_NH_maxh = np.nanmax(ave_NH,axis=0)
+ave_GLOBE_avgh = np.nanmean(ave_GLOBEh,axis=0)
+ave_GLOBE_minh = np.nanmin(ave_GLOBEh,axis=0)
+ave_GLOBE_maxh = np.nanmax(ave_GLOBEh,axis=0)
 
-ave_os_NH_avgh = np.nanmean(ave_os_NH,axis=0)
-ave_os_NH_minh = np.nanmin(ave_os_NH,axis=0)
-ave_os_NH_maxh = np.nanmax(ave_os_NH,axis=0)
+ave_ssp245_GLOBE_avgh = np.nanmean(ave_GLOBEh_ssp245,axis=0)
+ave_ssp245_GLOBE_minh = np.nanmin(ave_GLOBEh_ssp245,axis=0)
+ave_ssp245_GLOBE_maxh = np.nanmax(ave_GLOBEh_ssp245,axis=0)
 
-ave_os_10ye_NH_avgh = np.nanmean(ave_os_10ye_NH,axis=0)
-ave_os_10ye_NH_minh = np.nanmin(ave_os_10ye_NH,axis=0)
-ave_os_10ye_NH_maxh = np.nanmax(ave_os_10ye_NH,axis=0)
+ave_os_GLOBE_avgh = np.nanmean(ave_os_GLOBEh,axis=0)
+ave_os_GLOBE_minh = np.nanmin(ave_os_GLOBEh,axis=0)
+ave_os_GLOBE_maxh = np.nanmax(ave_os_GLOBEh,axis=0)
 
-ave_LM42_NH_avgh = np.nanmean(ave_LM42_NH,axis=0)
-ave_LM42_NH_minh = np.nanmin(ave_LM42_NH,axis=0)
-ave_LM42_NH_maxh = np.nanmax(ave_LM42_NH,axis=0)
+ave_os_10ye_GLOBE_avgh = np.nanmean(ave_os_10ye_GLOBEh,axis=0)
+ave_os_10ye_GLOBE_minh = np.nanmin(ave_os_10ye_GLOBEh,axis=0)
+ave_os_10ye_GLOBE_maxh = np.nanmax(ave_os_10ye_GLOBEh,axis=0)
 
-ave_SH_avgh = np.nanmean(ave_SH,axis=0)
-ave_SH_minh = np.nanmin(ave_SH,axis=0)
-ave_SH_maxh = np.nanmax(ave_SH,axis=0)
+ave_LM42_GLOBE_avgh = np.nanmean(ave_LM42_GLOBEh,axis=0)
+ave_LM42_GLOBE_minh = np.nanmin(ave_LM42_GLOBEh,axis=0)
+ave_LM42_GLOBE_maxh = np.nanmax(ave_LM42_GLOBEh,axis=0)
 
-ave_os_SH_avgh = np.nanmean(ave_os_SH,axis=0)
-ave_os_SH_minh = np.nanmin(ave_os_SH,axis=0)
-ave_os_SH_max = np.nanmax(ave_os_SH,axis=0)
+### Calculate overshoot times
+os_yr = np.where((years == 2040))[0][0]
+os_10ye_yr = np.where((years == 2031))[0][0]
 
-ave_os_10ye_SH_avgh = np.nanmean(ave_os_10ye_SH,axis=0)
-ave_os_10ye_SH_minh = np.nanmin(ave_os_10ye_SH,axis=0)
-ave_os_10ye_SH_maxh = np.nanmax(ave_os_10ye_SH,axis=0)
-
-ave_LM42_SH_avgh = np.nanmean(ave_LM42_SH,axis=0)
-ave_LM42_SH_minh = np.nanmin(ave_LM42_SH,axis=0)
-ave_LM42_SH_maxh = np.nanmax(ave_LM42_SH,axis=0)
+### Find year of selected GWL
+ssp_GWL_15 = findNearestValueIndex(ave_GLOBE_avgh,1.5)
+ssp_GWL_16 = findNearestValueIndex(ave_GLOBE_avgh,1.6)
+ssp_GWL_17 = findNearestValueIndex(ave_GLOBE_avgh,1.7)
+ssp_GWL_18 = findNearestValueIndex(ave_GLOBE_avgh,1.8)
+ssp_GWL_21 = findNearestValueIndex(ave_GLOBE_avgh,2.1)
 
 ### Plot historical baseline
 fig = plt.figure()
@@ -369,53 +301,61 @@ ax.spines['left'].set_linewidth(2)
 ax.tick_params('both',length=4.,width=2,which='major',color='dimgrey')
 ax.tick_params(axis='x',labelsize=6,pad=1.5)
 ax.tick_params(axis='y',labelsize=6,pad=1.5)
-# ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
-# plt.axhline(y=1.2,color='dimgrey',linestyle='-',linewidth=2,clip_on=False)
+ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
+# plt.axhline(y=1.5,color='k',linestyle='--',linewidth=1,clip_on=False,
+#             dashes=(1,0.3))
+# plt.axhline(y=1.6,color='k',linestyle='--',linewidth=1,clip_on=False,
+#             dashes=(1,0.3))
+# plt.axhline(y=1.7,color='k',linestyle='--',linewidth=1,clip_on=False,
+#             dashes=(1,0.3))
+# plt.axhline(y=1.8,color='k',linestyle='--',linewidth=1,clip_on=False,
+#             dashes=(1,0.3))
+# plt.axhline(y=2.1,color='k',linestyle='--',linewidth=1,clip_on=False,
+#             dashes=(1,0.3))
 
-plt.plot(years,ave_NH_avgh,linestyle='-',linewidth=2,color='maroon',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
-plt.plot(years,ave_SH_avgh,linestyle='--',linewidth=2,color='maroon',
-          clip_on=False,zorder=3,dashes=(1,0.7))
+# plt.axvline(x=years[ssp_GWL_15],linestyle='--',linewidth=1,clip_on=False,
+#             dashes=(1,0.3),color='k')
+# plt.axvline(x=years[ssp_GWL_16],linestyle='--',linewidth=1,clip_on=False,
+#             dashes=(1,0.3),color='k')
+# plt.axvline(x=years[ssp_GWL_17],linestyle='--',linewidth=1,clip_on=False,
+#             dashes=(1,0.3),color='k')
+# plt.axvline(x=years[ssp_GWL_18],linestyle='--',linewidth=1,clip_on=False,
+#             dashes=(1,0.3),color='k')
 
-plt.plot(years_LM42,ave_LM42_NH_avgh,linestyle='-',linewidth=1,color='r',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED-LM42_SSP585}')    
-plt.plot(years_LM42,ave_LM42_SH_avgh,linestyle='--',linewidth=1,color='r',
-          clip_on=False,zorder=3,dashes=(1,0.7))
+plt.plot(years,ave_GLOBE_avgh,linestyle='-',linewidth=2,color='maroon',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')   
+plt.plot(years_LM42,ave_LM42_GLOBE_avgh,linestyle='--',linewidth=1,color='maroon',dashes=(1,0.3),
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED-LM42_SSP585}')  
+plt.plot(years,ave_ssp245_GLOBE_avgh,linestyle='-',linewidth=1,color='salmon',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP245}')  
 
-plt.plot(years,ave_os_NH_avgh,linestyle='-',linewidth=2,color='darkslategrey',
+plt.plot(years,ave_os_GLOBE_avgh,linestyle='-',linewidth=2,color='darkslategrey',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
-plt.plot(years,ave_os_SH_avgh,linestyle='--',linewidth=2,color='darkslategrey',
-          clip_on=False,zorder=3,dashes=(1,0.7))
 
-plt.plot(years,ave_os_10ye_NH_avgh,linestyle='-',linewidth=2,color='teal',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')    
-plt.plot(years,ave_os_10ye_SH_avgh,linestyle='--',linewidth=2,color='teal',
-          clip_on=False,zorder=3,dashes=(1,0.7))
+plt.plot(years,ave_os_10ye_GLOBE_avgh,linestyle='-',linewidth=2,color='teal',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')   
 
-plt.axhline(y=np.max(ave_os_10ye_NH_avgh),color='teal',linestyle='-',linewidth=0.5,clip_on=False)
-plt.axhline(y=np.max(ave_os_10ye_SH_avgh),color='teal',linestyle='-',linewidth=0.5,clip_on=False)
-
-leg = plt.legend(shadow=False,fontsize=12,loc='upper center',
+leg = plt.legend(shadow=False,fontsize=9,loc='upper center',
       bbox_to_anchor=(0.5,1.02),fancybox=True,ncol=2,frameon=False,
       handlelength=1,handletextpad=0.5)
 for line,text in zip(leg.get_lines(), leg.get_texts()):
     text.set_color(line.get_color())
 
 plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10))
-plt.yticks(np.round(np.arange(-18,18.1,1),2),np.round(np.arange(-18,18.1,1),2))
+plt.yticks(np.round(np.arange(-18,18.1,0.5),2),np.round(np.arange(-18,18.1,0.5),2))
 plt.xlim([2015,2100])
-plt.ylim([0,7])
+plt.ylim([0.5,5.5])
 
 plt.ylabel(r'\textbf{Near-Surface Temperature Anomaly [$^{\circ}$C; 1921-1950]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_Hemisphere_T2M_historicalbaseline_LM42.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M_historicalbaseline_LM42.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
 ###############################################################################
-### Calculate anomalies for historical baseline but for the historical era too
+### Calculate anomalies for historical baseline
 yearq = np.where((yearsh >= 1921) & (yearsh <= 1950))[0]
 yearq_LM42 = np.where((yearsh_LM42 >= 1921) & (yearsh_LM42 <= 1950))[0]
 climoh_spear = np.nanmean(np.nanmean(spear_h[:,yearq,:,:],axis=1),axis=0)
@@ -427,49 +367,18 @@ spear_all = np.append(spear_h,spear_m,axis=1)
 spear_am = spear_all - climoh_spear[np.newaxis,np.newaxis,:,:]
 spear_LM42m = spear_LM42_all - climoh_LM42[np.newaxis,np.newaxis,:,:]
 
-### Calculate global average in SPEAR_MED
-lon2,lat2 = np.meshgrid(lons,lats)
-spear_am_globeh = UT.calc_weightedAve(spear_am,lat2)
+### Calculate global means
+ave_GLOBEh = UT.calc_weightedAve(spear_am,lat2)
 ave_LM42_GLOBEh = UT.calc_weightedAve(spear_LM42m,lat2)
 
-### Hemispheres
-latq_NH = np.where((lats > 0))[0]
-lats_NH = lats[latq_NH]
-latq_SH = np.where((lats < 0))[0]
-lats_SH = lats[latq_SH]
-
-lon2_NH,lat2_NH = np.meshgrid(lons,lats_NH)
-lon2_SH,lat2_SH = np.meshgrid(lons,lats_SH)
-
-spear_m_NH = spear_am[:,:,latq_NH,:]
-spear_LM42_NH = spear_LM42m[:,:,latq_NH,:]
-
-spear_m_SH = spear_am[:,:,latq_SH,:]
-spear_LM42_SH = spear_LM42m[:,:,latq_SH,:]
-
-### Calculate global means
-ave_NH = UT.calc_weightedAve(spear_m_NH,lat2_NH)
-ave_LM42_NH = UT.calc_weightedAve(spear_LM42_NH,lat2_NH)
-
-ave_SH = UT.calc_weightedAve(spear_m_SH,lat2_SH)
-ave_LM42_SH = UT.calc_weightedAve(spear_LM42_SH,lat2_SH)
-
 ### Calculate ensemble mean and spread
-ave_NH_avgh = np.nanmean(ave_NH,axis=0)
-ave_NH_minh = np.nanmin(ave_NH,axis=0)
-ave_NH_maxh = np.nanmax(ave_NH,axis=0)
+ave_GLOBE_avgh = np.nanmean(ave_GLOBEh,axis=0)
+ave_GLOBE_minh = np.nanmin(ave_GLOBEh,axis=0)
+ave_GLOBE_maxh = np.nanmax(ave_GLOBEh,axis=0)
 
-ave_LM42_NH_avgh = np.nanmean(ave_LM42_NH,axis=0)
-ave_LM42_NH_minh = np.nanmin(ave_LM42_NH,axis=0)
-ave_LM42_NH_maxh = np.nanmax(ave_LM42_NH,axis=0)
-
-ave_SH_avgh = np.nanmean(ave_SH,axis=0)
-ave_SH_minh = np.nanmin(ave_SH,axis=0)
-ave_SH_maxh = np.nanmax(ave_SH,axis=0)
-
-ave_LM42_SH_avgh = np.nanmean(ave_LM42_SH,axis=0)
-ave_LM42_SH_minh = np.nanmin(ave_LM42_SH,axis=0)
-ave_LM42_SH_maxh = np.nanmax(ave_LM42_SH,axis=0)
+ave_LM42_GLOBE_avgh = np.nanmean(ave_LM42_GLOBEh,axis=0)
+ave_LM42_GLOBE_minh = np.nanmin(ave_LM42_GLOBEh,axis=0)
+ave_LM42_GLOBE_maxh = np.nanmax(ave_LM42_GLOBEh,axis=0)
 
 ### Plot historical baseline
 fig = plt.figure()
@@ -485,36 +394,27 @@ ax.spines['left'].set_linewidth(2)
 ax.tick_params('both',length=4.,width=2,which='major',color='dimgrey')
 ax.tick_params(axis='x',labelsize=6,pad=1.5)
 ax.tick_params(axis='y',labelsize=6,pad=1.5)
-# ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
-# plt.axhline(y=1.2,color='dimgrey',linestyle='-',linewidth=2,clip_on=False)
+ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
 
-plt.plot(yearsall,ave_NH_avgh,linestyle='-',linewidth=2,color='maroon',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
-plt.plot(yearsall,ave_SH_avgh,linestyle='--',linewidth=2,color='maroon',
-          clip_on=False,zorder=3,dashes=(1,0.7))
+plt.plot(yearsall,ave_GLOBE_avgh,linestyle='-',linewidth=2,color='maroon',
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')   
+plt.plot(yearsall_LM42,ave_LM42_GLOBE_avgh,linestyle='--',linewidth=1,color='maroon',dashes=(1,0.3),
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED-LM42_SSP585}')  
 
-plt.plot(yearsall_LM42,ave_LM42_NH_avgh,linestyle='-',linewidth=1,color='r',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED-LM42_SSP585}')    
-plt.plot(yearsall_LM42,ave_LM42_SH_avgh,linestyle='--',linewidth=1,color='r',
-          clip_on=False,zorder=3,dashes=(1,0.7))
-
-# plt.axhline(y=np.max(ave_os_10ye_NH_avgh),color='teal',linestyle='-',linewidth=0.5,clip_on=False)
-# plt.axhline(y=np.max(ave_os_10ye_SH_avgh),color='teal',linestyle='-',linewidth=0.5,clip_on=False)
-
-leg = plt.legend(shadow=False,fontsize=12,loc='upper center',
+leg = plt.legend(shadow=False,fontsize=9,loc='upper center',
       bbox_to_anchor=(0.5,1.02),fancybox=True,ncol=2,frameon=False,
       handlelength=1,handletextpad=0.5)
 for line,text in zip(leg.get_lines(), leg.get_texts()):
     text.set_color(line.get_color())
 
 plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10))
-plt.yticks(np.round(np.arange(-18,18.1,1),2),np.round(np.arange(-18,18.1,1),2))
-plt.xlim([1921,2100])
-plt.ylim([-1,7])
+plt.yticks(np.round(np.arange(-18,18.1,0.5),2),np.round(np.arange(-18,18.1,0.5),2))
+plt.xlim([1920,2100])
+plt.ylim([-0.5,5.5])
 
 plt.ylabel(r'\textbf{Near-Surface Temperature Anomaly [$^{\circ}$C; 1921-1950]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_Hemisphere_T2M_historicalbaseline_ALL_LM42.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M_historicalbaseline_ALL_LM42.png',dpi=300)
 
