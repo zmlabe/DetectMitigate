@@ -25,7 +25,7 @@ plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
 variablesall = ['LAI']
-monthlychoice  = 'JJA'
+monthlychoice  = 'OND'
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_LM42 = 3
@@ -59,26 +59,26 @@ def regrid(lat11,lon11,lat21,lon21,var,years):
         print('Completed: Year %s Regridding---' % (years[i]))
     return varn
 
-# ### Read in data
-# lat,lon,lai_s_all = SP.read_SPEAR_MED('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED/monthly/',variq,monthlychoice,4,np.nan,30,'all')
-# latl,lonl,lai_l = LL.read_SPEAR_MED_LM42p2_test('/work/Zachary.Labe/Data/',variq,monthlychoice,4,np.nan,3,'all')
+### Read in data
+lat,lon,lai_s_all = SP.read_SPEAR_MED('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED/monthly/',variq,monthlychoice,4,np.nan,30,'all')
+latl,lonl,lai_l = LL.read_SPEAR_MED_LM42p2_test('/work/Zachary.Labe/Data/',variq,monthlychoice,4,np.nan,3,'all')
 
-# ### Meshgrid
-# lon2,lat2 = np.meshgrid(lon,lat)
+### Meshgrid
+lon2,lat2 = np.meshgrid(lon,lat)
 
-# ### Only plot data to 2070
-# lai_s = lai_s_all[:,:len(years_LM42),:,:]
+### Only plot data to 2070
+lai_s = lai_s_all[:,:len(years_LM42),:,:]
 
-# ### Mask oceans
-# lai_s[np.where(lai_s == -1)] = np.nan
-# lai_l[np.where(lai_l == -1)] = np.nan
+### Mask oceans
+lai_s[np.where(lai_s == -1)] = np.nan
+lai_l[np.where(lai_l == -1)] = np.nan
 
-# ### Calculate ensemble mean
-# lai_ms = np.nanmean(lai_s[:,:,:,:],axis=0)
-# lai_ml = np.nanmean(lai_l[:,:,:,:],axis=0)
+### Calculate ensemble mean
+lai_ms = np.nanmean(lai_s[:,:,:,:],axis=0)
+lai_ml = np.nanmean(lai_l[:,:,:,:],axis=0)
 
-# ### Regrid 
-# lai_mlr = regrid(latl,lonl,lat,lon,lai_ml,years_LM42)
+### Regrid 
+lai_mlr = regrid(latl,lonl,lat,lon,lai_ml,years_LM42)
 
 ### Calculate differences
 diff = lai_mlr - lai_ms

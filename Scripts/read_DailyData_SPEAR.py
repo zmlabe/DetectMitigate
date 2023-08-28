@@ -31,6 +31,11 @@ variq = args.variq
 reg_name = args.reg_name
 model = args.model
 
+# vari = 'q'
+# variq = 'q_ref'
+# reg_name = 'US'
+# model = 'SPEAR_MED'
+
 print('ARGUMENTS ARE ---> %s, %s, %s, %s!' % (vari,variq,reg_name,model))
 
 resolution = 'MEDS' 
@@ -67,7 +72,7 @@ directorydata = '/work/Zachary.Labe/Data/SPEAR/%s/daily/' % model
 dataoutput = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
 directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/'
 
-for e in range(ENS):
+for e in range(27,30):
     glob_pattern = os.path.join(directorydata, '%s/raw/raw_%s/atmos_daily.*.%s.nc' % (vari,e+1,variq))
     print('<<<<<STARTED: Read in ---> raw_%s/atmos_daily.*.%s.nc' % (e+1,variq))
     
@@ -77,8 +82,8 @@ for e in range(ENS):
                             parallel=True,chunks={'time':'6GB','latitude':1,'longitude':1},
                             engine='netcdf4')
     # ds = xr.open_mfdataset(glob_pattern,concat_dim="time",combine="nested",
-    #                        data_vars='minimal',coords='minimal',compat='override',
-    #                        parallel=True,engine='netcdf4')
+    #                         data_vars='minimal',coords='minimal',compat='override',
+    #                         parallel=True,engine='netcdf4')
     lat1 = ds['lat'].to_numpy()
     lon1 = ds['lon'].to_numpy()
     

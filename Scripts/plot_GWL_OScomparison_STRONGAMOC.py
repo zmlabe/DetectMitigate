@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['PRECT']
+variablesall = ['SLP']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_AMOC = 9
@@ -42,7 +42,6 @@ seasons = ['annual']
 slicemonthnamen = ['ANNUAL']
 monthlychoice = seasons[0]
 reg_name = 'Globe'
-varcount = 'count90'
 
 ###############################################################################
 ###############################################################################
@@ -229,12 +228,17 @@ elif style == 'US':
                 area_thresh=10000)
     
 ### Colorbar limits
-if variq == 'T2M':
+if any([variq == 'T2M', variq == 'T850']):
     barlim = np.arange(-6,7,2)
     limit = np.arange(-6,6.1,0.1)
     barlim2 = np.arange(-1.5,1.6,0.5)
     limit2 = np.arange(-1.5,1.51,0.05)
 elif variq == 'PRECT':
+    barlim = np.arange(-2,2.1,0.5)
+    limit = np.arange(-2,2.01,0.05)
+    barlim2 = np.arange(-1,1.1,0.5)
+    limit2 = np.arange(-1,1.01,0.05)
+elif variq == 'SLP':
     barlim = np.arange(-2,2.1,0.5)
     limit = np.arange(-2,2.01,0.05)
     barlim2 = np.arange(-1,1.1,0.5)
@@ -248,7 +252,12 @@ elif any([variq == 'U200']):
     barlim = np.arange(-5,5.1,1)
     limit = np.arange(-5,5.01,0.1)
     barlim2 = np.arange(-5,5.1,1)
-    limit2 = np.arange(-5,5.01,0.1)    
+    limit2 = np.arange(-5,5.01,0.1)   
+elif any([variq == 'Z500']):
+    barlim = np.arange(-100,100.1,25)
+    limit = np.arange(-100,101,5)
+    barlim2 = np.arange(-100,100.1,25)
+    limit2 = np.arange(-100,101,5)
 elif any([variq == 'tau_x',variq == 'tau_y']):
     barlim = np.arange(-0.02,0.021,0.01)
     limit = np.arange(-0.02,0.0201,0.0001)
@@ -257,7 +266,13 @@ elif any([variq == 'tau_x',variq == 'tau_y']):
 if variq == 'PRECT':
     label = r'\textbf{PRECIPITATION CHANGE [mm/day]}' 
 elif variq == 'T2M':
-    label = r'\textbf{TEMPERATURE CHANGE [$^{\circ}$C]}' 
+    label = r'\textbf{T2M CHANGE [$^{\circ}$C]}' 
+elif variq == 'T850':
+    label = r'\textbf{T850 CHANGE [$^{\circ}$C]}' 
+elif variq == 'SLP':
+    label = r'\textbf{SLP CHANGE [hPa]}'
+elif variq == 'Z500':
+    label = r'\textbf{Z500 CHANGE [m]}' 
 elif variq == 'U200':
     label = r'\textbf{U200 CHANGE [m/s]}' 
 elif variq == 'U700':
@@ -282,11 +297,11 @@ m.drawcoastlines(color='dimgrey',linewidth=0.7)
 cs = m.contourf(lon2,lat2,climatechange_GWL,limit,
                   extend='max',latlon=True)
                 
-if variq == 'T2M':
+if any([variq == 'T2M', variq == 'T850']):
     cmap = cmocean.cm.balance    
 elif variq == 'PRECT':
     cmap = cmr.seasons_r    
-elif any([variq == 'U200',variq == 'U700',variq == 'tau_x',variq == 'tau_y']):
+elif any([variq == 'U200',variq == 'U700',variq == 'tau_x',variq == 'tau_y', variq == 'Z500', variq == 'SLP']):
     cmap = cmr.fusion_r  
 cs.set_cmap(cmap)
 
