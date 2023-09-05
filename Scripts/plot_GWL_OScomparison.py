@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['SLP']
+variablesall = ['Z200']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 9
@@ -295,7 +295,7 @@ elif any([variq == 'U200']):
     limit = np.arange(-5,5.01,0.1)
     barlim2 = np.arange(-5,5.1,1)
     limit2 = np.arange(-5,5.01,0.1)   
-elif any([variq == 'Z500']):
+elif any([variq == 'Z500', variq == 'Z200']):
     barlim = np.arange(-100,100.1,25)
     limit = np.arange(-100,101,5)
     barlim2 = np.arange(-100,100.1,25)
@@ -315,6 +315,8 @@ elif variq == 'SLP':
     label = r'\textbf{SLP CHANGE [hPa]}' 
 elif variq == 'Z500':
     label = r'\textbf{Z500 CHANGE [m]}' 
+elif variq == 'Z200':
+    label = r'\textbf{Z200 CHANGE [m]}' 
 elif variq == 'U200':
     label = r'\textbf{U200 CHANGE [m/s]}' 
 elif variq == 'U700':
@@ -349,7 +351,7 @@ if any([variq == 'T2M', variq == 'T850']):
     cmap = cmocean.cm.balance    
 elif variq == 'PRECT':
     cmap = cmr.seasons_r    
-elif any([variq == 'U200',variq == 'U700',variq == 'tau_x',variq == 'tau_y', variq == 'Z500', variq == 'SLP']):
+elif any([variq == 'U200',variq == 'U700',variq == 'tau_x',variq == 'tau_y', variq == 'Z500', variq == 'SLP', variq == 'Z200']):
     cmap = cmr.fusion_r  
 cs.set_cmap(cmap)
 

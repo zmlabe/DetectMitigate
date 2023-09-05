@@ -278,6 +278,11 @@ def read_SPEAR_MED_LM42p2_test(directory,vari,sliceperiod,sliceshape,slicenan,nu
         print(time[yearhistq])
         histmodel = ensshape[:,yearhistq,:,:]
     elif timeper == 'historical':
+        yearhistq = np.where((time >= 1921) & (time <= 2014))[0]
+        print('HISTORICAL YEARS')
+        print(time[yearhistq])
+        histmodel = ensshape[:,yearhistq,:,:]
+    elif timeper == 'historicalall':
         yearhistq = np.where((time >= 1921) & (time <= 2022))[0]
         print('HISTORICAL YEARS')
         print(time[yearhistq])

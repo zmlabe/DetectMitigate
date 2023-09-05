@@ -72,7 +72,7 @@ directorydata = '/work/Zachary.Labe/Data/SPEAR/%s/daily/' % model
 dataoutput = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
 directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/'
 
-for e in range(27,30):
+for e in range(ENS):
     glob_pattern = os.path.join(directorydata, '%s/raw/raw_%s/atmos_daily.*.%s.nc' % (vari,e+1,variq))
     print('<<<<<STARTED: Read in ---> raw_%s/atmos_daily.*.%s.nc' % (e+1,variq))
     
