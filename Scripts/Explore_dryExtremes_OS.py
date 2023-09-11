@@ -32,7 +32,7 @@ junedays = np.arange(0,30,1)
 julydays = np.arange(0,31,1)
 augustdays = np.arange(0,31,1)
 dayslength = len(junedays) + len(julydays) + len(augustdays)
-reg_name = 'US'
+reg_name = 'Globe'
 lat_bounds,lon_bounds = UT.regions(reg_name)
    
 def readData(model,reg_name):
