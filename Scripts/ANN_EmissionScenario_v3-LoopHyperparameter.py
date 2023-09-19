@@ -12,6 +12,7 @@ import sys
 import matplotlib.pyplot as plt
 import cmocean
 import numpy as np
+import random
 import calc_Utilities as UT
 import calc_dataFunctions as df
 import calc_SegmentData as FRAC
@@ -210,7 +211,7 @@ COUNTER = 3
 ### Create hyperparameter list
 # hiddenalltry = [[5],[20],[30],[100],[5,5],[20,20],[30,30],[100,100],[5,5,5],[20,20,20],[30,30,30],[100,100,100],[5,5,5,5],[20,20,20,20],[30,30,30,30],[100,100,100,100]]
 # hiddenalltry = [[5],[20],[100],[5,5],[30,30],[100,100],[5,5,5],[20,20,20],[100,100,100],[5,5,5,5],[30,30,30,30],[100,100,100,100]]
-hiddenalltry = [[100,100,100,100]]
+hiddenalltry = [[30,30,30,30]]
 
 for hh in range(len(hiddenalltry)):
     version = hh
@@ -321,6 +322,13 @@ for hh in range(len(hiddenalltry)):
                 keras.backend.clear_session()
                 model = keras.models.Sequential()
                 tf.random.set_seed(0)
+                
+                ### Check / use random seed
+                if random_network_seed == None:
+                    np.random.seed(None)
+                    random_network_seed = int(np.random.randint(1, 100000))
+                np.random.seed(random_network_seed)
+                random.seed(random_network_seed)
             
                 ### Input layer
                 model.add(Dense(hidden[0],input_shape=(input_shape,),
