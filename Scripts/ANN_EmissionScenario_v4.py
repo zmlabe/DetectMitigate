@@ -173,11 +173,11 @@ if variq == 'T2M':
     input_shape=np.shape(Xtrain)[1]
     output_shape=np.shape(Ytrain)[1]
 elif variq == 'PRECT':
-    hidden = [30,30,30]
+    hidden = [100]
     n_epochs = 1500
-    batch_size = 256
+    batch_size = 128
     lr_here = 0.0001
-    ridgePenalty = 0.8
+    ridgePenalty = 0.1
     actFun = 'relu'
     input_shape=np.shape(Xtrain)[1]
     output_shape=np.shape(Ytrain)[1]

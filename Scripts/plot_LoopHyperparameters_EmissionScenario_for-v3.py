@@ -108,6 +108,10 @@ for hh in range(len(hiddenalltry)):
                 if hh == 2:
                     if rp == 1:
                         best_f1.append(f1valq)
+            elif variq == 'PRECT':
+                if hh == 2:
+                    if rp == 2:
+                        best_f1.append(f1valq)
             
         acc_l.append(acc_c)
     acc_allv.append(acc_l)
@@ -168,21 +172,21 @@ for plo in range(len(hiddenalltry)):
     if any([plo==0,plo==4,plo==8]):
         plt.yticks(np.arange(0,101,5),list(map(str,np.round(np.arange(0,101,5),2))),
                     fontsize=6) 
-        plt.ylim([60,100])
+        plt.ylim([50,100])
     else:
         plt.yticks(np.arange(0,101,5),list(map(str,np.round(np.arange(0,101,5),2))),
                     fontsize=6) 
-        plt.ylim([60,100])
+        plt.ylim([50,100])
         ax.axes.yaxis.set_ticklabels([])
 
     if any([plo==8,plo==9,plo==10,plo==11]):
-        plt.text(-0.25,57,r'\textbf{%s}' % ridgePenaltyall[0],fontsize=5,color='dimgrey',
+        plt.text(-0.25,47,r'\textbf{%s}' % ridgePenaltyall[0],fontsize=5,color='dimgrey',
                   ha='left',va='center')
-        plt.text(0.81,57,r'\textbf{%s}' % ridgePenaltyall[1],fontsize=5,color='dimgrey',
+        plt.text(0.81,47,r'\textbf{%s}' % ridgePenaltyall[1],fontsize=5,color='dimgrey',
                   ha='left',va='center')
-        plt.text(1.87,57,r'\textbf{%s}' % ridgePenaltyall[2],fontsize=5,color='dimgrey',
+        plt.text(1.87,47,r'\textbf{%s}' % ridgePenaltyall[2],fontsize=5,color='dimgrey',
                   ha='left',va='center')
-        plt.text(2.97,57,r'\textbf{%s}' % ridgePenaltyall[3],fontsize=5,color='dimgrey',
+        plt.text(2.97,47,r'\textbf{%s}' % ridgePenaltyall[3],fontsize=5,color='dimgrey',
                   ha='left',va='center')
   
     ax.yaxis.grid(zorder=100,color='darkgrey',alpha=0.7,clip_on=False,linewidth=0.5)
@@ -194,7 +198,7 @@ for plo in range(len(hiddenalltry)):
         
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.07)
-plt.text(-7.2,51,r'\textbf{Ridge Regularization [L$_{2}$]}',fontsize=8,color='k',
+plt.text(-7.2,39,r'\textbf{Ridge Regularization [L$_{2}$]}',fontsize=8,color='k',
          ha='left',va='center')  
 plt.savefig(directoryfigure + 'validationAccuracy-%s_EmissionScenario_for-v3_LoopHyperparameters_%s_%s.png' % (variq,monthlychoice,reg_name),dpi=300)
 

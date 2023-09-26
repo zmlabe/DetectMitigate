@@ -108,6 +108,10 @@ for hh in range(len(hiddenalltry)):
                 if hh == 1:
                     if rp == 4:
                         best_f1.append(f1valq)
+            elif variq == 'PRECT':
+                if hh == 11:
+                    if rp == 2:
+                        best_f1.append(f1valq)
             
         acc_l.append(acc_c)
     acc_allv.append(acc_l)

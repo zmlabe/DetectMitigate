@@ -213,7 +213,7 @@ hiddenalltry = [[5],[20],[30],[100],[5,5],[20,20],[30,30],[100,100],[5,5,5],[20,
 
 #######
 #######
-hhtt = 12
+hhtt = 6
 #######
 #######
 for hh in range(1):
@@ -221,7 +221,7 @@ for hh in range(1):
     hiddenall = hiddenalltry[version]
     hiddenallstr = str(len(hiddenalltry[version])) + 'x' + str(hiddenalltry[version][0])
     # ridgePenaltyall = [0.001,0.01,0.05,0.1,0.2,0.5,1,5]
-    ridgePenaltyall = [0.001,0.01,0.05]
+    ridgePenaltyall = [0.1]
     random_network_seedall = []
     random_segment_seedall = []
     savenameall = []

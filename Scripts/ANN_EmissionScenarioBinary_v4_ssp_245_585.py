@@ -165,20 +165,20 @@ Xtrain,Ytrain,Xtest,Ytest,Xval,Yval,Xtrain_shape,Xtest_shape,Xval_shape,testIndi
 
 ### Model paramaters
 if variq == 'T2M':
-    hidden = [30,30,30]
+    hidden = [20]
     n_epochs = 1500
     batch_size = 128
     lr_here = 0.0001
-    ridgePenalty = 0.1
+    ridgePenalty = 0.2
     actFun = 'relu'
     input_shape=np.shape(Xtrain)[1]
     output_shape=np.shape(Ytrain)[1]
 elif variq == 'PRECT':
-    hidden = [30,30,30]
+    hidden = [100,100,100]
     n_epochs = 1500
     batch_size = 128
     lr_here = 0.0001
-    ridgePenalty = 0.1
+    ridgePenalty = 0.05
     actFun = 'relu'
     input_shape=np.shape(Xtrain)[1]
     output_shape=np.shape(Ytrain)[1]
