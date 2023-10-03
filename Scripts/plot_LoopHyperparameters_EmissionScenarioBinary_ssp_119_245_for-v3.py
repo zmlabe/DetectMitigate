@@ -44,7 +44,7 @@ num_of_class = len(scenarioall)
 lenOfPicks = len(modelGCMs)
 allDataLabels = modelGCMs
 monthlychoice = 'annual'
-variq = 'PRECT'
+variq = 'T2M'
 reg_name = 'Globe'
 lat_bounds,lon_bounds = UT.regions(reg_name)
 level = 'surface'
@@ -59,7 +59,7 @@ CONUS_only = False
 COUNTER = 5
 hiddenalltry = [[5],[20],[30],[100],[5,5],[20,20],[30,30],[100,100],[5,5,5],[20,20,20],[30,30,30],[100,100,100],[5,5,5,5],[20,20,20,20],[30,30,30,30],[100,100,100,100]]
 ridgePenaltyall = [0.001,0.01,0.05,0.1,0.2,0.5,1,5]
-letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m"]
+letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","o","p","q"]
 combinations = COUNTER * len(hiddenalltry) * len(ridgePenaltyall)
 
 ### Directories
@@ -68,6 +68,7 @@ directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/Scores/'
 
 ### Read in hyperparameters
 acc_allv = []
+best_f1 = []
 for hh in range(len(hiddenalltry)):
     version = hh
     hiddenall = hiddenalltry[version]
@@ -101,7 +102,17 @@ for hh in range(len(hiddenalltry)):
             recallvalq = scoreModel['recallval'][:] * 100.
             f1valq = scoreModel['f1_val'][:] * 100.
             
-            acc_c.append(accvalq )
+            acc_c.append(accvalq)
+            
+            if variq == 'T2M':
+                if hh == 5:
+                    if rp == 2:
+                        best_f1.append(f1valq)
+            elif variq == 'PRECT':
+                if hh == 11:
+                    if rp == 2:
+                        best_f1.append(f1valq)
+            
         acc_l.append(acc_c)
     acc_allv.append(acc_l)
     
@@ -112,14 +123,14 @@ acc_all = np.asarray(acc_allv)
 ###############################################################################
 ###############################################################################
 ### Graph for accuracy
-labels = [r'\textbf{1-LAYER$_{5}$}',r'\textbf{1-LAYER$_{20}$}',r'\textbf{1-LAYER$_{100}$}',
-          r'\textbf{2-LAYERS$_{5}$}',r'\textbf{2-LAYERS$_{30}$}',r'\textbf{2-LAYERS$_{100}$}',
-          r'\textbf{3-LAYERS$_{5}$}',r'\textbf{3-LAYERS$_{20}$}',r'\textbf{3-LAYERS$_{100}$}',
-          r'\textbf{4-LAYERS$_{5}$}',r'\textbf{4-LAYERS$_{30}$}',r'\textbf{4-LAYERS$_{100}$}']
+labels = [r'\textbf{1-LAYER$_{5}$}',r'\textbf{1-LAYER$_{20}$}',r'\textbf{1-LAYER$_{30}$}',r'\textbf{1-LAYER$_{100}$}',
+          r'\textbf{2-LAYERS$_{5}$}',r'\textbf{2-LAYERS$_{20}$}',r'\textbf{2-LAYERS$_{30}$}',r'\textbf{2-LAYERS$_{100}$}',
+          r'\textbf{3-LAYERS$_{5}$}',r'\textbf{3-LAYERS$_{20}$}',r'\textbf{3-LAYERS$_{30}$}',r'\textbf{3-LAYERS$_{100}$}',
+          r'\textbf{4-LAYERS$_{5}$}',r'\textbf{4-LAYERS$_{20}$}',r'\textbf{4-LAYERS$_{30}$}',r'\textbf{4-LAYERS$_{100}$}']
 
-fig = plt.figure(figsize=(8,5))
+fig = plt.figure(figsize=(9,6))
 for plo in range(len(hiddenalltry)):
-    ax = plt.subplot(3,4,plo+1)
+    ax = plt.subplot(4,4,plo+1)
     
     plotdata = acc_all[plo,:,:].transpose()
     
@@ -158,36 +169,44 @@ for plo in range(len(hiddenalltry)):
         x = np.random.normal(positionsq[i], 0.04, size=len(y))
         plt.plot(x, y,color='darkred', alpha=0.7,zorder=10,marker='.',linewidth=0,markersize=5,markeredgewidth=0)
      
-    if any([plo==0,plo==4,plo==8]):
+    if any([plo==0,plo==4,plo==8,plo==12]):
         plt.yticks(np.arange(0,101,5),list(map(str,np.round(np.arange(0,101,5),2))),
                     fontsize=6) 
-        plt.ylim([60,100])
+        plt.ylim([80,100])
     else:
         plt.yticks(np.arange(0,101,5),list(map(str,np.round(np.arange(0,101,5),2))),
                     fontsize=6) 
-        plt.ylim([60,100])
+        plt.ylim([80,100])
         ax.axes.yaxis.set_ticklabels([])
 
-    if any([plo==8,plo==9,plo==10,plo==11]):
-        plt.text(-0.25,57,r'\textbf{%s}' % ridgePenaltyall[0],fontsize=5,color='dimgrey',
+    if any([plo==12,plo==13,plo==14,plo==15]):
+        plt.text(-0.25,77,r'\textbf{%s}' % ridgePenaltyall[0],fontsize=5,color='dimgrey',
                   ha='left',va='center')
-        plt.text(0.81,57,r'\textbf{%s}' % ridgePenaltyall[1],fontsize=5,color='dimgrey',
+        plt.text(0.75,77,r'\textbf{%s}' % ridgePenaltyall[1],fontsize=5,color='dimgrey',
                   ha='left',va='center')
-        plt.text(1.87,57,r'\textbf{%s}' % ridgePenaltyall[2],fontsize=5,color='dimgrey',
+        plt.text(1.78,77,r'\textbf{%s}' % ridgePenaltyall[2],fontsize=5,color='dimgrey',
                   ha='left',va='center')
-        plt.text(2.97,57,r'\textbf{%s}' % ridgePenaltyall[3],fontsize=5,color='dimgrey',
+        plt.text(2.8,77,r'\textbf{%s}' % ridgePenaltyall[3],fontsize=5,color='dimgrey',
+                  ha='left',va='center')
+        plt.text(3.8,77,r'\textbf{%s}' % ridgePenaltyall[4],fontsize=5,color='dimgrey',
+                  ha='left',va='center')
+        plt.text(4.9,77,r'\textbf{%s}' % ridgePenaltyall[5],fontsize=5,color='dimgrey',
+                  ha='left',va='center')
+        plt.text(5.9,77,r'\textbf{%s}' % ridgePenaltyall[6],fontsize=5,color='dimgrey',
+                  ha='left',va='center')
+        plt.text(6.9,77,r'\textbf{%s}' % ridgePenaltyall[7],fontsize=5,color='dimgrey',
                   ha='left',va='center')
   
     ax.yaxis.grid(zorder=100,color='darkgrey',alpha=0.7,clip_on=False,linewidth=0.5)
     plt.title(r'%s' % labels[plo],fontsize=11,color='dimgrey')
     plt.text(-0.5,101,r'\textbf{[%s]}' % letters[plo],color='k',fontsize=6)
     
-    if any([plo==0,plo==4,plo==8]):
+    if any([plo==0,plo==4,plo==8,plo==12]):
         plt.ylabel(r'\textbf{Accuracy [\%]}',color='k',fontsize=7)
         
 plt.tight_layout()
-plt.subplots_adjust(bottom=0.07)
-plt.text(-7.2,51,r'\textbf{Ridge Regularization [L$_{2}$]}',fontsize=8,color='k',
+plt.subplots_adjust(hspace=0.7,bottom=0.08)
+plt.text(-15,71,r'\textbf{Ridge Regularization [L$_{2}$] -- SSP119 or SSP245}',fontsize=8,color='k',
          ha='left',va='center')  
-plt.savefig(directoryfigure + 'validationAccuracy-%s_EmissionScenario_for-v3_LoopHyperparameters_%s_%s.png' % (variq,monthlychoice,reg_name),dpi=300)
+plt.savefig(directoryfigure + 'validationAccuracy-%s_EmissionScenarioBinary_ssp_119_245_for-v3_LoopHyperparameters_%s_%s.png' % (variq,monthlychoice,reg_name),dpi=300)
 

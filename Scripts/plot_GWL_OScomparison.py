@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['Z200']
+variablesall = ['PRECT']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 9
@@ -109,7 +109,7 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-selectGWL = 1.7
+selectGWL = 1.8
 selectGWLn = '%s' % (int(selectGWL*10))
 yrplus = 3
 

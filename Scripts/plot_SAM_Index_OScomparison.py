@@ -27,7 +27,7 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['SLP']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 yearsf = np.arange(2015,2100+1)
 yearsh = np.arange(1921,2014+1,1)
 yearsall = np.arange(1921,2100+1,1)
@@ -109,18 +109,18 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-# lat1,lon1,spear = SPM.read_SPEAR_MED('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED/monthly/',variq,'none',5,np.nan,30,'all')
-# lat1,lon1,spear_os = SPSS.read_SPEAR_MED_Scenario('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED/monthly/','SSP534OS',variq,'none',5,np.nan,30,'futureforcing')
-# lat1,lon1,spear_os_10ye = SPSS10.read_SPEAR_MED_SSP534OS_10ye('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_SSP534OS_10ye/monthly/',variq,'none',5,np.nan,9,'futureforcing')
+lat1,lon1,spear = SPM.read_SPEAR_MED('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED/monthly/',variq,'none',5,np.nan,30,'all')
+lat1,lon1,spear_os = SPSS.read_SPEAR_MED_Scenario('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED/monthly/','SSP534OS',variq,'none',5,np.nan,30,'futureforcing')
+lat1,lon1,spear_os_10ye = SPSS10.read_SPEAR_MED_SSP534OS_10ye('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_SSP534OS_10ye/monthly/',variq,'none',5,np.nan,30,'futureforcing')
 
-# ### Calculate annual means
-# spear_yr = np.nanmean(spear,axis=2)
-# spear_os_yr = np.nanmean(spear_os,axis=2)
-# spear_os_10ye_yr = np.nanmean(spear_os_10ye,axis=2)
+### Calculate annual means
+spear_yr = np.nanmean(spear,axis=2)
+spear_os_yr = np.nanmean(spear_os,axis=2)
+spear_os_10ye_yr = np.nanmean(spear_os_10ye,axis=2)
 
-# ### Calculate SAM index 
-# latq_40s = np.where((lat1 >= -40.25) & (lat1 <= -39.75))[0]
-# latq_65s = np.where((lat1 >= -65.25) & (lat1 <= -64.75))[0]
+### Calculate SAM index 
+latq_40s = np.where((lat1 >= -40.25) & (lat1 <= -39.75))[0]
+latq_65s = np.where((lat1 >= -65.25) & (lat1 <= -64.75))[0]
 
 ### Calculate zonal means at -40 and -65
 spear_40 = np.nanmean(spear_yr[:,:,latq_40s,:],axis=(2,3))
@@ -140,11 +140,11 @@ std_65_sam = np.nanstd(spear_65[:,base],axis=1)
 
 spear_40z = (spear_40-climo_40_sam[:,np.newaxis])/std_40_sam[:,np.newaxis]
 spear_os_40z = (spear_os_40-climo_40_sam[:,np.newaxis])/std_40_sam[:,np.newaxis]
-spear_os_10ye_40z = (spear_os_10ye_40-climo_40_sam[:9,np.newaxis])/std_40_sam[:9,np.newaxis]
+spear_os_10ye_40z = (spear_os_10ye_40-climo_40_sam[:,np.newaxis])/std_40_sam[:,np.newaxis]
 
 spear_65z = (spear_65-climo_65_sam[:,np.newaxis])/std_65_sam[:,np.newaxis]
 spear_os_65z = (spear_os_65-climo_65_sam[:,np.newaxis])/std_65_sam[:,np.newaxis]
-spear_os_10ye_65z = (spear_os_10ye_65-climo_65_sam[:9,np.newaxis])/std_65_sam[:9,np.newaxis]
+spear_os_10ye_65z = (spear_os_10ye_65-climo_65_sam[:,np.newaxis])/std_65_sam[:,np.newaxis]
 
 ### Calculate inde
 spear_samz = sts.zscore(spear_40z - spear_65z,axis=1)

@@ -475,7 +475,7 @@ def readFiles(variq,dataset,monthlychoice,scenario):
         sliceshapeSPSS10 = 4
         slicenanSPSS10 = 'nan'
         levelSPSS10 = 'surface'
-        numOfEnsSPSS10 = 9
+        numOfEnsSPSS10 = 30
         lat1,lon1,data = SPSS10.read_SPEAR_MED_SSP534OS_10ye(directorydataSPSS10,variq,monthlychoice,
                                                              sliceshapeSPSS10,slicenanSPSS10,numOfEnsSPSS10,'futureforcing')
     elif dataset == 'SPEAR_MED_LM42p2_test':
@@ -682,8 +682,8 @@ def getRegion(data,lat1,lon1,lat_bounds,lon_bounds):
 # variq = 'T2M'
 # dataset = 'NClimGrid_MEDS'
 # monthlychoice = 'JJA'
-# scenario = 'SSP585'
-# data,lat1,lon1 = readFiles(variq,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',monthlychoice,scenario)
+# scenario = 'SSP534OS'
+# data,lat1,lon1 = readFiles(variq,'SPEAR_MED_Scenario',monthlychoice,scenario)
 # # obs,lat1n,lon1n = readFiles(variq,'NClimGrid_MEDS',monthlychoice,scenario)
 
 # lon2,lat2 = np.meshgrid(lon1,lat1)

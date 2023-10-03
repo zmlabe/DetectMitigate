@@ -27,7 +27,7 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['PRECT']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 yearsf = np.arange(2015,2100+1)
 yearsh = np.arange(1921,2014+1,1)
 yearsall = np.arange(1921,2100+1,1)
@@ -118,7 +118,7 @@ yrplus = 3
 
 lat1,lon1,spear = SPM.read_SPEAR_MED('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED/monthly/',variq,'none',5,np.nan,30,'all')
 lat1,lon1,spear_os = SPSS.read_SPEAR_MED_Scenario('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED/monthly/','SSP534OS',variq,'none',5,np.nan,30,'futureforcing')
-lat1,lon1,spear_os_10ye = SPSS10.read_SPEAR_MED_SSP534OS_10ye('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_SSP534OS_10ye/monthly/',variq,'none',5,np.nan,9,'futureforcing')
+lat1,lon1,spear_os_10ye = SPSS10.read_SPEAR_MED_SSP534OS_10ye('/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_SSP534OS_10ye/monthly/',variq,'none',5,np.nan,30,'futureforcing')
 
 ### Calculate dry season (December-January-February)
 spear_djf = np.empty((spear.shape[0],spear.shape[1]-1,lat1.shape[0],lon1.shape[0]))

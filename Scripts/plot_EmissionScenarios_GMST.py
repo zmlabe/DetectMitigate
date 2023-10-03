@@ -61,7 +61,7 @@ yearsobs = np.arange(1929+window,2021+1,1)
 ###############################################################################
 ###############################################################################
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 lentime = len(yearsall)
 ###############################################################################
 ###############################################################################
@@ -93,62 +93,62 @@ def regrid(lat11,lon11,lat21,lon21,var):
     print('Completed: Regridding---')
     return z
 
-# ### Loop in all climate models
-# data_all = []
-# for no in range(len(modelGCMs)):
-#     dataset = modelGCMs[no]
-#     scenario = scenarioall[no]
-#     data_allq,lats,lons = read_primary_dataset(variq,dataset,monthlychoice,scenario,lat_bounds,lon_bounds)
-#     data_all.append(data_allq)
-# data = np.asarray(data_all)
+### Loop in all climate models
+data_all = []
+for no in range(len(modelGCMs)):
+    dataset = modelGCMs[no]
+    scenario = scenarioall[no]
+    data_allq,lats,lons = read_primary_dataset(variq,dataset,monthlychoice,scenario,lat_bounds,lon_bounds)
+    data_all.append(data_allq)
+data = np.asarray(data_all)
 
-# ### Calculate historical baseline for calculating anomalies (and ensemble mean)
-# historical = data[0]
-# historicalyrs = yearsall[0]
+### Calculate historical baseline for calculating anomalies (and ensemble mean)
+historical = data[0]
+historicalyrs = yearsall[0]
 
-# yearhq = np.where((historicalyrs >= baseline.min()) & (historicalyrs <= baseline.max()))[0]
-# historicalc = np.nanmean(np.nanmean(historical[:,yearhq,:,:],axis=1),axis=0)
+yearhq = np.where((historicalyrs >= baseline.min()) & (historicalyrs <= baseline.max()))[0]
+historicalc = np.nanmean(np.nanmean(historical[:,yearhq,:,:],axis=1),axis=0)
 
-# ### Calculate anomalies
-# data_anom = []
-# for no in range(len(modelGCMs)):
-#     anomq = data[no] - historicalc[np.newaxis,np.newaxis,:,:]
-#     data_anom.append(anomq)
+### Calculate anomalies
+data_anom = []
+for no in range(len(modelGCMs)):
+    anomq = data[no] - historicalc[np.newaxis,np.newaxis,:,:]
+    data_anom.append(anomq)
 
-# ### Calculate global average
-# lon2,lat2 = np.meshgrid(lons,lats)
-# aveall = []
-# maxens = []
-# minens = []
-# meanens = []
-# medianens = []
-# for no in range(len(modelGCMs)):
-#     aveallq = UT.calc_weightedAve(data_anom[no],lat2)
+### Calculate global average
+lon2,lat2 = np.meshgrid(lons,lats)
+aveall = []
+maxens = []
+minens = []
+meanens = []
+medianens = []
+for no in range(len(modelGCMs)):
+    aveallq = UT.calc_weightedAve(data_anom[no],lat2)
 
-#     maxensq = np.nanmax(aveallq,axis=0)
-#     minensq = np.nanmin(aveallq,axis=0)
-#     meanensq = np.nanmean(aveallq,axis=0)
-#     medianensq = np.nanmedian(aveallq,axis=0)
+    maxensq = np.nanmax(aveallq,axis=0)
+    minensq = np.nanmin(aveallq,axis=0)
+    meanensq = np.nanmean(aveallq,axis=0)
+    medianensq = np.nanmedian(aveallq,axis=0)
     
-#     aveall.append(aveallq)
-#     maxens.append(maxensq)
-#     minens.append(minensq)
-#     meanens.append(meanensq)
-#     medianens.append(medianensq)
+    aveall.append(aveallq)
+    maxens.append(maxensq)
+    minens.append(minensq)
+    meanens.append(meanensq)
+    medianens.append(medianensq)
 
-# ### Read in observations from GISTEMPv4 and regrid onto SPEAR
-# latobs1,lonobs1,varobs = B.read_BEST('/work/Zachary.Labe/Data/BEST/',
-#                                       monthlychoice,yearsobs,3,False,np.nan)
-# lonobs2,latobs2 = np.meshgrid(lonobs1,latobs1)
+### Read in observations from GISTEMPv4 and regrid onto SPEAR
+latobs1,lonobs1,varobs = B.read_BEST('/work/Zachary.Labe/Data/BEST/',
+                                      monthlychoice,yearsobs,3,False,np.nan)
+lonobs2,latobs2 = np.meshgrid(lonobs1,latobs1)
 
-# newobs = np.empty((varobs.shape[0],lats.shape[0],lons.shape[0]))
-# for i in range(varobs.shape[0]):
-#     newobs[i,:,:] = regrid(latobs1,lonobs1,lats,lons,varobs[i,:,:])  
+newobs = np.empty((varobs.shape[0],lats.shape[0],lons.shape[0]))
+for i in range(varobs.shape[0]):
+    newobs[i,:,:] = regrid(latobs1,lonobs1,lats,lons,varobs[i,:,:])  
 
-# yearhqo = np.where((yearsobs >= baseline.min()) & (yearsobs <= baseline.max()))[0]
-# climobs = np.nanmean(newobs[yearhqo,:,:],axis=0)
-# anomobs = newobs - climobs
-# aveobs = UT.calc_weightedAve(anomobs,lat2)
+yearhqo = np.where((yearsobs >= baseline.min()) & (yearsobs <= baseline.max()))[0]
+climobs = np.nanmean(newobs[yearhqo,:,:],axis=0)
+anomobs = newobs - climobs
+aveobs = UT.calc_weightedAve(anomobs,lat2)
 
 ###############################################################################
 ###############################################################################

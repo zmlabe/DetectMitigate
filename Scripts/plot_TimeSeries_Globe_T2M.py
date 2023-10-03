@@ -24,7 +24,7 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['T2M']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 years = np.arange(2015,2100+1)
 yearsh = np.arange(1921,2014+1,1)
 
@@ -116,8 +116,7 @@ spear_ssp245,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthly
 spear_h,lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
 spear_osm,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
 spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
-spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
-spear_osm_AMOC,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv',monthlychoice,'SSP534OS_STRONGAMOC_p2Sv',lat_bounds,lon_bounds)
+spear_osm_AMOC,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',monthlychoice,'SSP534OS_STRONGAMOC_p1Sv',lat_bounds,lon_bounds)
 lon2,lat2 = np.meshgrid(lons,lats)
 
 ### Calculate anomalies
@@ -206,7 +205,7 @@ plt.plot(years,ave_GLOBE_ssp245_avg,linestyle='-',linewidth=1,color='salmon',
 plt.plot(years,ave_os_GLOBE_avg,linestyle='-',linewidth=2,color='darkslategrey',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
 plt.plot(years,ave_os_AMOC_GLOBE_avg,linestyle='--',dashes=(1,0.3),linewidth=1,color='darkslategrey',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv}') 
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}') 
 
 plt.plot(years,ave_os_10ye_GLOBE_avg,linestyle='-',linewidth=2,color='teal',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')    
@@ -226,7 +225,7 @@ plt.ylabel(r'\textbf{Near-Surface Temperature Anomaly [$^{\circ}$C; 2015-2029]}'
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M_AMOC-p2Sv.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M_AMOC-p1Sv.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -323,7 +322,7 @@ plt.plot(years,ave_ssp245_GLOBE_avgh,linestyle='-',linewidth=1,color='salmon',
 plt.plot(years,ave_os_GLOBE_avgh,linestyle='-',linewidth=2,color='darkslategrey',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}') 
 plt.plot(years,ave_os_AMOC_GLOBE_avgh,linestyle='--',dashes=(1,0.3),linewidth=1,color='darkslategrey',
-          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv}')     
+          clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv}')     
 
 plt.plot(years,ave_os_10ye_GLOBE_avgh,linestyle='-',linewidth=2,color='teal',
           clip_on=False,zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS_10ye}')   
@@ -343,5 +342,5 @@ plt.ylabel(r'\textbf{Near-Surface Temperature Anomaly [$^{\circ}$C; 1921-1950]}'
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M_historicalbaseline_AMOC-p2Sv.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_Globe_T2M_historicalbaseline_AMOC-p1Sv.png',dpi=300)
 

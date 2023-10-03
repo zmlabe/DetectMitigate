@@ -24,7 +24,7 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['PRECT']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 years = np.arange(2015,2100+1)
 
 ###############################################################################
@@ -145,7 +145,7 @@ avechange_os_10ye = ave_os2_10ye - ave_os1_10ye
 ### Calculate anomaly for relative change to global mean
 os_ratio = change_os - avechange_os
 os_10ye_ratio = change_os_10ye - avechange_os_10ye
-sys.exit()
+
 ###############################################################################
 ###############################################################################
 ###############################################################################

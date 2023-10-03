@@ -308,14 +308,14 @@ def netcdfmeanJJA(lats,lons,meanJJA,model,reg_name,vari):
     print('*Completed: Created netCDF4 File!')
      
 ### Save data
-netcdfmeanJJA(lat,lon,tmax_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'TMAX')
-netcdfmeanJJA(lat,lon,q_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'q')
+# netcdfmeanJJA(lat,lon,tmax_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'TMAX')
+# netcdfmeanJJA(lat,lon,q_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'q')
 
-netcdfmeanJJA(lat,lon,tmax_meanJJA_spear,'SPEAR_MED',reg_name,'TMAX')
-netcdfmeanJJA(lat,lon,q_meanJJA_spear,'SPEAR_MED',reg_name,'q')
+# netcdfmeanJJA(lat,lon,tmax_meanJJA_spear,'SPEAR_MED',reg_name,'TMAX')
+# netcdfmeanJJA(lat,lon,q_meanJJA_spear,'SPEAR_MED',reg_name,'q')
 
-netcdfmeanJJA(lat,lon,tmax_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'TMAX')
-netcdfmeanJJA(lat,lon,q_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'q')
+# netcdfmeanJJA(lat,lon,tmax_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'TMAX')
+# netcdfmeanJJA(lat,lon,q_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'q')
 
 netcdfmeanJJA(lat,lon,tmax_meanJJA_os10ye,'SPEAR_MED_SSP534OS_10ye',reg_name,'TMAX')
 netcdfmeanJJA(lat,lon,q_meanJJA_os10ye,'SPEAR_MED_SSP534OS_10ye',reg_name,'q')

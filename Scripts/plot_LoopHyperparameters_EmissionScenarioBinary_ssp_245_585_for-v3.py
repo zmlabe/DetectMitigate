@@ -44,7 +44,7 @@ num_of_class = len(scenarioall)
 lenOfPicks = len(modelGCMs)
 allDataLabels = modelGCMs
 monthlychoice = 'annual'
-variq = 'T2M'
+variq = 'PRECT'
 reg_name = 'Globe'
 lat_bounds,lon_bounds = UT.regions(reg_name)
 level = 'surface'
@@ -206,7 +206,7 @@ for plo in range(len(hiddenalltry)):
         
 plt.tight_layout()
 plt.subplots_adjust(hspace=0.7,bottom=0.08)
-plt.text(-13,71,r'\textbf{Ridge Regularization [L$_{2}$]}',fontsize=8,color='k',
+plt.text(-15,71,r'\textbf{Ridge Regularization [L$_{2}$] -- SSP245 or SSP585}',fontsize=8,color='k',
          ha='left',va='center')  
 plt.savefig(directoryfigure + 'validationAccuracy-%s_EmissionScenarioBinary_ssp_245_585_for-v3_LoopHyperparameters_%s_%s.png' % (variq,monthlychoice,reg_name),dpi=300)
 

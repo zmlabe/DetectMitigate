@@ -24,10 +24,10 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['TMAX']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 yearsh = np.arange(1921,2014+1,1)
 years = np.arange(1921,2100+1)
-years_os = np.arange(2011,2100+1)
+years_os = np.arange(2015,2100+1)
 years_os_10ye = np.arange(2031,2100+1)
 
 ###############################################################################
@@ -176,7 +176,7 @@ filename = directorydatah + name
 data = Dataset(filename)
 latus = data.variables['lat'][:]
 lonus = data.variables['lon'][:]
-count90 = data.variables[varcount][:]
+count90 = data.variables[varcount][:,:,:,:]
 data.close()
 
 ### Read in SPEAR_MED_SSP534OS
@@ -184,7 +184,7 @@ directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
 name_os = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP534OS' + '.nc'
 filename_os = directorydatah + name_os
 data_os = Dataset(filename_os)
-count90_os = data_os.variables[varcount][:]
+count90_os = data_os.variables[varcount][:,4:,:,:] # Need to start in 2015, not 2011
 data_os.close()
 
 ### Read in SPEAR_MED_SSP534OS_10ye
@@ -198,7 +198,7 @@ data_os10ye.close()
 ### Epochs for +- years around selected GWL
 spear_am = count90
 spear_aosm = count90_os
-spear_aosm_10ye = count90_os10ye
+spear_aosm_10ye = np.append(count90_os[:,:(count90_os.shape[1]-count90_os10ye.shape[1]),:,:],count90_os10ye[:,:,:,:],axis=1)
 
 climatechange_GWL = np.nanmean(spear_am[:,ssp_GWLt-yrplus:ssp_GWLt+yrplus,:,:],axis=(0,1))
 os_GWL = np.nanmean(spear_aosm[:,os_second_GWLt-yrplus:os_second_GWLt+yrplus,:,:],axis=(0,1))

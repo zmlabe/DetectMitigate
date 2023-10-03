@@ -24,7 +24,7 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['q']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 yearsh = np.arange(1921,2014+1,1)
 years = np.arange(1921,2100+1)
 years_ssp245 = np.arange(2011,2100+1)

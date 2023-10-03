@@ -23,7 +23,7 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['T2M']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 years = np.arange(2011,2100+1)
 yearsall = np.arange(1921,2010+1,1)
 yearstotal = np.arange(1921,2100+1,1)

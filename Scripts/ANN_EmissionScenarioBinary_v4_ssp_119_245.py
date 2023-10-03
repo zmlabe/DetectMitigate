@@ -51,7 +51,7 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 
 ### Directories
 directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/'
-directoryoutput = '/home/Zachary.Labe/Research/DetectMitigate/Data/BinaryChoice/'
+directoryoutput = '/work/Zachary.Labe/Research/DetectMitigate/Data/BinaryChoice/'
 
 ###############################################################################
 ###############################################################################
@@ -104,7 +104,7 @@ lentime = len(yearsall)
 ###############################################################################
 ###############################################################################
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 dataset_inference = True
 ###############################################################################
 ###############################################################################
@@ -165,20 +165,20 @@ Xtrain,Ytrain,Xtest,Ytest,Xval,Yval,Xtrain_shape,Xtest_shape,Xval_shape,testIndi
 
 ### Model paramaters
 if variq == 'T2M':
-    hidden = [30,30,30]
+    hidden = [20,20]
     n_epochs = 1500
     batch_size = 128
     lr_here = 0.0001
-    ridgePenalty = 0.1
+    ridgePenalty = 0.05
     actFun = 'relu'
     input_shape=np.shape(Xtrain)[1]
     output_shape=np.shape(Ytrain)[1]
 elif variq == 'PRECT':
-    hidden = [30,30,30]
+    hidden = [100,100,100]
     n_epochs = 1500
     batch_size = 128
     lr_here = 0.0001
-    ridgePenalty = 0.1
+    ridgePenalty = 0.05
     actFun = 'relu'
     input_shape=np.shape(Xtrain)[1]
     output_shape=np.shape(Ytrain)[1]
@@ -750,7 +750,7 @@ for ensIn in range(numOfEns):
 ###############################################################
 ###############################################################
 ###############################################################
-### Try all 9 ensemble members for SPEAR SSP534OS_10ye
+### Try all 30 ensemble members for SPEAR SSP534OS_10ye
 ensembleMembers_10ye_all = []
 testingEnsembleMemberS_10ye_all = []
 ypred_overshoot_10ye_all = []

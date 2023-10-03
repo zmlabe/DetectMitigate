@@ -50,7 +50,7 @@ def readData(model,reg_name):
         ENS = 30
     elif model == 'SPEAR_MED_SSP534OS_10ye':
         years = np.arange(2031,2100+1)
-        ENS = 9
+        ENS = 30
     elif model == 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv':
         years = np.arange(2041,2100+1)
         ENS = 9
@@ -112,7 +112,7 @@ def calc_MoistExtremes(datamask,model,lat,lon,baselineanom):
         ENS = 30
     elif model == 'SPEAR_MED_SSP534OS_10ye':
         years = np.arange(2031,2100+1)
-        ENS = 9
+        ENS = 30
     elif model == 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv':
         years = np.arange(2041,2100+1)
         ENS = 9
@@ -245,20 +245,20 @@ def netcdfMoist(lats,lons,count90v,count95v,count99v,freq90v,freq95v,freq99v,dir
 # summer_osAMOC2,lat,lon,years_osAMOC2 = readData('SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv',reg_name)
 # summer_osAMOC,lat,lon,years_osAMOC = readData('SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',reg_name)
 summer_os10ye,lat,lon,years_os10ye = readData('SPEAR_MED_SSP534OS_10ye',reg_name)
-summer_os,lat,lon,years_os = readData('SPEAR_MED_SSP534OS',reg_name)
+# summer_os,lat,lon,years_os = readData('SPEAR_MED_SSP534OS',reg_name)
 summer,lat,lon,years = readData('SPEAR_MED',reg_name)
 
 climdist,count90sp,count95sp,count99sp,freq90sp,freq95sp,freq99sp = calc_MoistExtremes(summer,'SPEAR_MED',lat,lon,np.nan)
 climdist_os10ye,count90_os10ye,count95_os10ye,count99_os10ye,freq90_os10ye,freq95_os10ye,freq99_os10ye = calc_MoistExtremes(summer_os10ye,'SPEAR_MED_SSP534OS_10ye',lat,lon,climdist)
-climdist_os,count90_os,count95_os,count99_os,freq90_os,freq95_os,freq99_os = calc_MoistExtremes(summer_os,'SPEAR_MED_SSP534OS',lat,lon,climdist)
+# climdist_os,count90_os,count95_os,count99_os,freq90_os,freq95_os,freq99_os = calc_MoistExtremes(summer_os,'SPEAR_MED_SSP534OS',lat,lon,climdist)
 # climdist_osAMOC,count90_osAMOC,count95_osAMOC,count99_osAMOC,freq90_osAMOC,freq95_osAMOC,freq99_osAMOC = calc_MoistExtremes(summer_osAMOC,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',lat,lon,climdist)
 # climdist_osAMOC2,count90_osAMOC2,count95_osAMOC2,count99_osAMOC2,freq90_osAMOC2,freq95_osAMOC2,freq99_osAMOC2 = calc_MoistExtremes(summer_osAMOC2,'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv',lat,lon,climdist)
 # climdist_osSSP245,count90_osSSP245,count95_osSSP245,count99_osSSP245,freq90_osSSP245,freq95_osSSP245,freq99_osSSP245 = calc_MoistExtremes(summer_osSSP245,'SPEAR_MED_SSP245',lat,lon,climdist)
 # climdist_LM42p2_test,count90_LM42p2_test,count95_LM42p2_test,count99_LM42p2_test,freq90_LM42p2_test,freq95_LM42p2_test,freq99_LM42p2_test = calc_MoistExtremes(summer_LM42p2_test,'SPEAR_MED_LM42p2_test',lat,lon,np.nan)
 
 ### Save data
-netcdfMoist(lat,lon,count90sp,count95sp,count99sp,freq90sp,freq95sp,freq99sp,directorydata,'SPEAR_MED',reg_name,vari)
-netcdfMoist(lat,lon,count90_os,count95_os,count95_os,freq90_os,freq95_os,freq99_os,directorydata,'SPEAR_MED_SSP534OS',reg_name,vari)
+# netcdfMoist(lat,lon,count90sp,count95sp,count99sp,freq90sp,freq95sp,freq99sp,directorydata,'SPEAR_MED',reg_name,vari)
+# netcdfMoist(lat,lon,count90_os,count95_os,count95_os,freq90_os,freq95_os,freq99_os,directorydata,'SPEAR_MED_SSP534OS',reg_name,vari)
 netcdfMoist(lat,lon,count90_os10ye,count95_os10ye,count99_os10ye,freq90_os10ye,freq95_os10ye,freq99_os10ye,directorydata,'SPEAR_MED_SSP534OS_10ye',reg_name,vari)
 # netcdfMoist(lat,lon,count90_osAMOC,count95_osAMOC,count99_osAMOC,freq90_osAMOC,freq95_osAMOC,freq99_osAMOC,directorydata,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',reg_name,vari)
 # netcdfMoist(lat,lon,count90_osAMOC2,count95_osAMOC2,count99_osAMOC2,freq90_osAMOC2,freq95_osAMOC2,freq99_osAMOC2,directorydata,'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv',reg_name,vari)

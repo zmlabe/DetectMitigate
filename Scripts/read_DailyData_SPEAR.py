@@ -56,7 +56,7 @@ elif model == 'SPEAR_MED_SSP245':
     ENS = 30
 elif model == 'SPEAR_MED_SSP534OS_10ye':
     years = np.arange(2031,2100+1)
-    ENS = 9
+    ENS = 30
 elif model == 'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv':
     years = np.arange(2041,2100+1)
     ENS = 9

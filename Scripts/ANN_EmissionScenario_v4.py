@@ -62,7 +62,7 @@ dataset_obs = 'ERA5_MEDS'
 lenOfPicks = len(modelGCMs)
 allDataLabels = modelGCMs
 monthlychoice = 'annual'
-variq = 'PRECT'
+variq = 'T2M'
 reg_name = 'Globe'
 level = 'surface'
 ###############################################################################

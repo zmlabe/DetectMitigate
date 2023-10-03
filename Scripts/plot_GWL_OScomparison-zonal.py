@@ -24,7 +24,7 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['PRECT']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 years = np.arange(2015,2100+1)
 yearsh = np.arange(1921,2014+1,1)
 yearsall = np.arange(1921,2100+1,1)
@@ -109,7 +109,7 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-selectGWL = 1.5
+selectGWL = 1.8
 selectGWLn = '%s' % (int(selectGWL*10))
 yrplus = 3
 

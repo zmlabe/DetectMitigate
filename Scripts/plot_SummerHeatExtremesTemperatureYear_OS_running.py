@@ -27,9 +27,9 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['TMAX']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 years = np.arange(2015,2100+1)
-rolling_years = 30 # years
+rolling_years = 5 # years
 
 ###############################################################################
 ###############################################################################

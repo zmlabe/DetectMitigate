@@ -73,7 +73,7 @@ def read_SPEAR_MED_SSP534OS_10ye(directory,vari,sliceperiod,sliceshape,slicenan,
 
     ###########################################################################
     ### Read in data
-    lat,lon,membersvar1 = SC.read_SPEAR_MED_Scenario(directoryScenario,'SSP534OS',vari,'none',5,slicenan,9,'10ye')
+    lat,lon,membersvar1 = SC.read_SPEAR_MED_Scenario(directoryScenario,'SSP534OS',vari,'none',5,slicenan,30,'10ye')
     
     membersvar2 = []
     for i,ensmember in enumerate(ens):
@@ -365,7 +365,7 @@ def read_SPEAR_MED_SSP534OS_10ye(directory,vari,sliceperiod,sliceshape,slicenan,
 # sliceperiod = 'annual'
 # sliceshape = 4
 # slicenan = 'nan'
-# numOfEns = 9
+# numOfEns = 30
 # timeper = 'all'
 # lat,lon,var = read_SPEAR_MED_SSP534OS_10ye(directory,vari,sliceperiod,sliceshape,slicenan,numOfEns,timeper)
 
