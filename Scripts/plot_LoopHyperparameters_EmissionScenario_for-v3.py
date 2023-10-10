@@ -44,7 +44,7 @@ num_of_class = len(scenarioall)
 lenOfPicks = len(modelGCMs)
 allDataLabels = modelGCMs
 monthlychoice = 'annual'
-variq = 'T2M'
+variq = 'PRECT'
 reg_name = 'Globe'
 lat_bounds,lon_bounds = UT.regions(reg_name)
 level = 'surface'
@@ -106,7 +106,7 @@ for hh in range(len(hiddenalltry)):
             
             if variq == 'T2M':
                 if hh == 2:
-                    if rp == 1:
+                    if rp == 2:
                         best_f1.append(f1valq)
             elif variq == 'PRECT':
                 if hh == 2:

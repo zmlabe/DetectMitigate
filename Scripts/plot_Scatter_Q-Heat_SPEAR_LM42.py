@@ -38,7 +38,7 @@ julydays = np.arange(0,31,1)
 augustdays = np.arange(0,31,1)
 dayslength = len(junedays) + len(julydays) + len(augustdays)
 
-reg_name = 'US'
+reg_name = 'Globe'
 lat_bounds,lon_bounds = UT.regions(reg_name)
 
 directoryjune = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/June/'
@@ -202,19 +202,30 @@ for s in range(numOfEns_os10ye):
 ###############################################################################   
 ### Mask over the United States
 lon2,lat2 = np.meshgrid(lon,lat)
-data_obsnan = np.full([1,lat.shape[0],lon.shape[0]],np.nan)
 
-tmax_lm42_mask,data_obsnan = dSS.mask_CONUS(tmax_lm42,data_obsnan,'MEDS',lat_bounds,lon_bounds)
-q_lm42_mask,data_obsnan = dSS.mask_CONUS(q_lm42,data_obsnan,'MEDS',lat_bounds,lon_bounds)
-
-tmax_spear_mask,data_obsnan = dSS.mask_CONUS(tmax_spear,data_obsnan,'MEDS',lat_bounds,lon_bounds)
-q_spear_mask,data_obsnan = dSS.mask_CONUS(q_spear,data_obsnan,'MEDS',lat_bounds,lon_bounds)
-
-tmax_os_mask,data_obsnan = dSS.mask_CONUS(tmax_os,data_obsnan,'MEDS',lat_bounds,lon_bounds)
-q_os_mask,data_obsnan = dSS.mask_CONUS(q_os,data_obsnan,'MEDS',lat_bounds,lon_bounds)
-
-tmax_os10ye_mask,data_obsnan = dSS.mask_CONUS(tmax_os10ye,data_obsnan,'MEDS',lat_bounds,lon_bounds)
-q_os10ye_mask,data_obsnan = dSS.mask_CONUS(q_os10ye,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+if reg_name == 'US':
+    data_obsnan = np.full([1,lat.shape[0],lon.shape[0]],np.nan)
+    
+    tmax_lm42_mask,data_obsnan = dSS.mask_CONUS(tmax_lm42,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    q_lm42_mask,data_obsnan = dSS.mask_CONUS(q_lm42,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    
+    tmax_spear_mask,data_obsnan = dSS.mask_CONUS(tmax_spear,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    q_spear_mask,data_obsnan = dSS.mask_CONUS(q_spear,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    
+    tmax_os_mask,data_obsnan = dSS.mask_CONUS(tmax_os,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    q_os_mask,data_obsnan = dSS.mask_CONUS(q_os,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    
+    tmax_os10ye_mask,data_obsnan = dSS.mask_CONUS(tmax_os10ye,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    q_os10ye_mask,data_obsnan = dSS.mask_CONUS(q_os10ye,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+else:
+    tmax_lm42_mask = tmax_lm42
+    q_lm42_mask = q_lm42
+    tmax_spear_mask = tmax_spear
+    q_spear_mask = q_spear
+    tmax_os_mask = tmax_os
+    q_os_mask = q_os
+    tmax_os10ye_mask = tmax_os10ye
+    q_os10ye_mask = q_os10ye
 
 ##############################################################################
 ##############################################################################
@@ -308,14 +319,14 @@ def netcdfmeanJJA(lats,lons,meanJJA,model,reg_name,vari):
     print('*Completed: Created netCDF4 File!')
      
 ### Save data
-# netcdfmeanJJA(lat,lon,tmax_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'TMAX')
-# netcdfmeanJJA(lat,lon,q_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'q')
+netcdfmeanJJA(lat,lon,tmax_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'TMAX')
+netcdfmeanJJA(lat,lon,q_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'q')
 
-# netcdfmeanJJA(lat,lon,tmax_meanJJA_spear,'SPEAR_MED',reg_name,'TMAX')
-# netcdfmeanJJA(lat,lon,q_meanJJA_spear,'SPEAR_MED',reg_name,'q')
+netcdfmeanJJA(lat,lon,tmax_meanJJA_spear,'SPEAR_MED',reg_name,'TMAX')
+netcdfmeanJJA(lat,lon,q_meanJJA_spear,'SPEAR_MED',reg_name,'q')
 
-# netcdfmeanJJA(lat,lon,tmax_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'TMAX')
-# netcdfmeanJJA(lat,lon,q_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'q')
+netcdfmeanJJA(lat,lon,tmax_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'TMAX')
+netcdfmeanJJA(lat,lon,q_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'q')
 
 netcdfmeanJJA(lat,lon,tmax_meanJJA_os10ye,'SPEAR_MED_SSP534OS_10ye',reg_name,'TMAX')
 netcdfmeanJJA(lat,lon,q_meanJJA_os10ye,'SPEAR_MED_SSP534OS_10ye',reg_name,'q')

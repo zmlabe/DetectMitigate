@@ -62,7 +62,7 @@ dataset_obs = 'ERA5_MEDS'
 lenOfPicks = len(modelGCMs)
 allDataLabels = modelGCMs
 monthlychoice = 'annual'
-variq = 'T2M'
+variq = 'PRECT'
 reg_name = 'Globe'
 level = 'surface'
 ###############################################################################
@@ -104,7 +104,7 @@ lentime = len(yearsall)
 ###############################################################################
 ###############################################################################
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 dataset_inference = True
 ###############################################################################
 ###############################################################################
@@ -168,7 +168,7 @@ if variq == 'T2M':
     n_epochs = 1500
     batch_size = 128
     lr_here = 0.0001
-    ridgePenalty = 0.01
+    ridgePenalty = 0.1
     actFun = 'relu'
     input_shape=np.shape(Xtrain)[1]
     output_shape=np.shape(Ytrain)[1]
@@ -334,7 +334,7 @@ ypred_pickobs = np.argmax(ypred_obs,axis=1)
 ###############################################################################
 ###############################################################################
 ### Start saving everything, including the ANN
-dirname = '/work/Zachary.Labe/Research/DetectMitigate/savedModels'
+dirname = '/work/Zachary.Labe/Research/DetectMitigate/savedModels/'
 savename = 'ANNv4_EmissionScenario_' + variq + '_' + reg_name + '_' + monthlychoice + '_' + actFun + '_L2_'+ str(ridgePenalty)+ '_LR_' + str(lr_here)+ '_Batch'+ str(batch_size)+ '_Iters' + str(n_epochs) + '_' + str(len(hidden)) + 'x' + str(hidden[0]) + '_SegSeed' + str(random_segment_seed) + '_NetSeed'+ str(random_network_seed) 
 
 modelwrite = dirname + savename + '.h5'
