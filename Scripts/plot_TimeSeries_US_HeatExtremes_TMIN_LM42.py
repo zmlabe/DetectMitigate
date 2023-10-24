@@ -1,5 +1,5 @@
 """
-Calculate timeseries of US means of TMAX 
+Calculate timeseries of US means of TMIN 
 
 Author    : Zachary M. Labe
 Date      : 24 July 2023
@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['TMAX']
+variablesall = ['TMIN']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 30
@@ -132,13 +132,13 @@ lonus = data.variables['lon'][:]
 freq90 = data.variables['freq90'][:]
 data.close()
 
-### Read in SPEAR_MED_SSP245
-directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
-nameSSP245 = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP245' + '.nc'
-filenameSSP245 = directorydatah + nameSSP245
-dataSSP245 = Dataset(filenameSSP245)
-freq90SSP245 = dataSSP245.variables['freq90'][:]
-data.close()
+# ### Read in SPEAR_MED_SSP245
+# directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
+# nameSSP245 = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP245' + '.nc'
+# filenameSSP245 = directorydatah + nameSSP245
+# dataSSP245 = Dataset(filenameSSP245)
+# freq90SSP245 = dataSSP245.variables['freq90'][:]
+# data.close()
 
 ### Read in SPEAR_MED_SSP534OS
 directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
@@ -167,14 +167,14 @@ data_LM42.close()
 ### Calculate spatial averages
 lon2us,lat2us = np.meshgrid(lonus,latus)
 avg_freq90 = UT.calc_weightedAve(freq90,lat2us)
-avg_freq90SSP245 = UT.calc_weightedAve(freq90SSP245,lat2us)
+# avg_freq90SSP245 = UT.calc_weightedAve(freq90SSP245,lat2us)
 avg_freq90_os = UT.calc_weightedAve(freq90_os,lat2us)
 avg_freq90_os10ye = UT.calc_weightedAve(freq90_os10ye,lat2us)
 avg_freq90_LM42 = UT.calc_weightedAve(freq90_LM42,lat2us)
 
 ### Calculate ensemble means
 ave_avg = np.nanmean(avg_freq90,axis=0)
-ave_avgSSP245 = np.nanmean(avg_freq90SSP245,axis=0)
+# ave_avgSSP245 = np.nanmean(avg_freq90SSP245,axis=0)
 ave_os_avg = np.nanmean(avg_freq90_os,axis=0)
 ave_os_10ye_avg = np.nanmean(avg_freq90_os10ye,axis=0)
 ave_LM42_avg = np.nanmean(avg_freq90_LM42,axis=0)
@@ -216,7 +216,7 @@ ax.tick_params(axis='y',labelsize=6,pad=1.5)
 ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
 
 plt.plot(years,ave_avg*100.,linestyle='-',linewidth=2,color='maroon',zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
-plt.plot(years_ssp245,ave_avgSSP245*100.,linestyle='-',linewidth=1,color='salmon',zorder=3,label=r'\textbf{SPEAR_MED_SSP245}')    
+# plt.plot(years_ssp245,ave_avgSSP245*100.,linestyle='-',linewidth=1,color='salmon',zorder=3,label=r'\textbf{SPEAR_MED_SSP245}')    
 
 plt.plot(years_os,ave_os_avg*100.,linestyle='-',linewidth=2,color='darkslategrey',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
 
@@ -235,15 +235,15 @@ plt.yticks(np.round(np.arange(0,101,10),2),np.round(np.arange(0,101,10),2))
 plt.xlim([2015,2100])
 plt.ylim([10,80])
 
-plt.ylabel(r'\textbf{Frequency of Tx90 over CONUS [Percent]}',fontsize=7,color='k')
+plt.ylabel(r'\textbf{Frequency of Tn90 over CONUS [Percent]}',fontsize=7,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_Tx90_%s_%s_LM42.png' % (seasons[0],reg_name),dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_Tn90_%s_%s_LM42.png' % (seasons[0],reg_name),dpi=300)
 
 ###############################################################################
 ###############################################################################
 ############################################################################### 
-### Calculate Tx95
+### Calculate Tn95
 
 ### Read in SPEAR_MED
 directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
@@ -255,13 +255,13 @@ lonus = data.variables['lon'][:]
 freq95 = data.variables['freq95'][:]
 data.close()
 
-### Read in SPEAR_MED_SSP245
-directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
-nameSSP245 = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP245' + '.nc'
-filenameSSP245 = directorydatah + nameSSP245
-dataSSP245 = Dataset(filenameSSP245)
-freq95SSP245 = dataSSP245.variables['freq95'][:]
-data.close()
+# ### Read in SPEAR_MED_SSP245
+# directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
+# nameSSP245 = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP245' + '.nc'
+# filenameSSP245 = directorydatah + nameSSP245
+# dataSSP245 = Dataset(filenameSSP245)
+# freq95SSP245 = dataSSP245.variables['freq95'][:]
+# data.close()
 
 ### Read in SPEAR_MED_SSP534OS
 directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
@@ -290,14 +290,14 @@ data_LM42.close()
 ### Calculate spatial averages
 lon2us,lat2us = np.meshgrid(lonus,latus)
 avg_freq95 = UT.calc_weightedAve(freq95,lat2us)
-avg_freq95SSP245 = UT.calc_weightedAve(freq95SSP245,lat2us)
+# avg_freq95SSP245 = UT.calc_weightedAve(freq95SSP245,lat2us)
 avg_freq95_os = UT.calc_weightedAve(freq95_os,lat2us)
 avg_freq95_os10ye = UT.calc_weightedAve(freq95_os10ye,lat2us)
 avg_freq95_LM42 = UT.calc_weightedAve(freq95_LM42,lat2us)
 
 ### Calculate ensemble means
 ave_avg95 = np.nanmean(avg_freq95,axis=0)
-ave_avg95SSP245 = np.nanmean(avg_freq95SSP245,axis=0)
+# ave_avg95SSP245 = np.nanmean(avg_freq95SSP245,axis=0)
 ave_os_avg95 = np.nanmean(avg_freq95_os,axis=0)
 ave_os_10ye_avg95 = np.nanmean(avg_freq95_os10ye,axis=0)
 ave_LM42_avg95 = np.nanmean(avg_freq95_LM42,axis=0)
@@ -339,7 +339,7 @@ ax.tick_params(axis='y',labelsize=6,pad=1.5)
 ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
 
 plt.plot(years,ave_avg95*100.,linestyle='-',linewidth=2,color='maroon',zorder=3,label=r'\textbf{SPEAR_MED_SSP585}')    
-plt.plot(years_ssp245,ave_avg95SSP245*100.,linestyle='-',linewidth=1,color='salmon',zorder=3,label=r'\textbf{SPEAR_MED_SSP245}')  
+# plt.plot(years_ssp245,ave_avg95SSP245*100.,linestyle='-',linewidth=1,color='salmon',zorder=3,label=r'\textbf{SPEAR_MED_SSP245}')  
 
 plt.plot(years_os,ave_os_avg95*100.,linestyle='-',linewidth=2,color='darkslategrey',zorder=3,label=r'\textbf{SPEAR_MED_SSP534OS}')    
 
@@ -358,7 +358,7 @@ plt.yticks(np.round(np.arange(0,101,10),2),np.round(np.arange(0,101,10),2))
 plt.xlim([2015,2100])
 plt.ylim([0,80])
 
-plt.ylabel(r'\textbf{Frequency of Tx95 over CONUS [Percent]}',fontsize=7,color='k')
+plt.ylabel(r'\textbf{Frequency of Tn95 over CONUS [Percent]}',fontsize=7,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_Tx95_%s_%s_LM42.png' % (seasons[0],reg_name),dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_Tn95_%s_%s_LM42.png' % (seasons[0],reg_name),dpi=300)

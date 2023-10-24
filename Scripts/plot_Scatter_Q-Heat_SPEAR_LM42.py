@@ -20,7 +20,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['TMAX']
+variablesall = ['TMIN']
 months = 'JJA'
 lenmon = 3
 variq = variablesall[0]
@@ -49,21 +49,21 @@ directoryaugust = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/Augus
 ###############################################################################
 ###############################################################################
 ### Read in SPEAR_MED_LM42
-tmax_lm42 = np.full((numOfEns_LM42,years_LM42.shape[0],dayslength,70,144),np.nan)
+TMIN_lm42 = np.full((numOfEns_LM42,years_LM42.shape[0],dayslength,70,144),np.nan)
 q_lm42 = np.full((numOfEns_LM42,years_LM42.shape[0],dayslength,70,144),np.nan)
 for s in range(numOfEns_LM42):
-    data = Dataset(directoryjune + 'June_TMAX_US_SPEAR_MED_LM42p2_test_ens%s.nc' % str(s+1).zfill(2))
+    data = Dataset(directoryjune + 'June_TMIN_US_SPEAR_MED_LM42p2_test_ens%s.nc' % str(s+1).zfill(2))
     lat = data.variables['lat'][:]
     lon = data.variables['lon'][:]
-    tmax_june = data.variables['t_ref_max'][:].reshape(len(years_LM42),len(junedays),lat.shape[0],lon.shape[0])
+    TMIN_june = data.variables['t_ref_min'][:].reshape(len(years_LM42),len(junedays),lat.shape[0],lon.shape[0])
     data.close()
     
-    data = Dataset(directoryjuly + 'July_TMAX_US_SPEAR_MED_LM42p2_test_ens%s.nc' % str(s+1).zfill(2))
-    tmax_july = data.variables['t_ref_max'][:].reshape(len(years_LM42),len(julydays),lat.shape[0],lon.shape[0])
+    data = Dataset(directoryjuly + 'July_TMIN_US_SPEAR_MED_LM42p2_test_ens%s.nc' % str(s+1).zfill(2))
+    TMIN_july = data.variables['t_ref_min'][:].reshape(len(years_LM42),len(julydays),lat.shape[0],lon.shape[0])
     data.close()
     
-    data = Dataset(directoryaugust + 'August_TMAX_US_SPEAR_MED_LM42p2_test_ens%s.nc' % str(s+1).zfill(2))
-    tmax_august = data.variables['t_ref_max'][:].reshape(len(years_LM42),len(augustdays),lat.shape[0],lon.shape[0])
+    data = Dataset(directoryaugust + 'August_TMIN_US_SPEAR_MED_LM42p2_test_ens%s.nc' % str(s+1).zfill(2))
+    TMIN_august = data.variables['t_ref_min'][:].reshape(len(years_LM42),len(augustdays),lat.shape[0],lon.shape[0])
     data.close()
     
     ###########################################################################
@@ -80,28 +80,28 @@ for s in range(numOfEns_LM42):
     data.close()
     
     ###########################################################################
-    tmax_lm42[s,:,:,:,:] = np.concatenate([tmax_june,tmax_july,tmax_august],axis=1)
+    TMIN_lm42[s,:,:,:,:] = np.concatenate([TMIN_june,TMIN_july,TMIN_august],axis=1)
     q_lm42[s,:,:,:,:] = np.concatenate([q_june,q_july,q_august],axis=1)
     
 ###############################################################################
 ###############################################################################
 ###############################################################################    
 ### Read in SPEAR_MED
-tmax_spear = np.full((numOfEns,years.shape[0],dayslength,70,144),np.nan)
+TMIN_spear = np.full((numOfEns,years.shape[0],dayslength,70,144),np.nan)
 q_spear = np.full((numOfEns,years.shape[0],dayslength,70,144),np.nan)
 for s in range(numOfEns_os):
-    data = Dataset(directoryjune + 'June_TMAX_US_SPEAR_MED_ens%s.nc' % str(s+1).zfill(2))
+    data = Dataset(directoryjune + 'June_TMIN_US_SPEAR_MED_ens%s.nc' % str(s+1).zfill(2))
     lat = data.variables['lat'][:]
     lon = data.variables['lon'][:]
-    tmax_june = data.variables['t_ref_max'][:].reshape(len(years),len(junedays),lat.shape[0],lon.shape[0])
+    TMIN_june = data.variables['t_ref_min'][:].reshape(len(years),len(junedays),lat.shape[0],lon.shape[0])
     data.close()
     
-    data = Dataset(directoryjuly + 'July_TMAX_US_SPEAR_MED_ens%s.nc' % str(s+1).zfill(2))
-    tmax_july = data.variables['t_ref_max'][:].reshape(len(years),len(julydays),lat.shape[0],lon.shape[0])
+    data = Dataset(directoryjuly + 'July_TMIN_US_SPEAR_MED_ens%s.nc' % str(s+1).zfill(2))
+    TMIN_july = data.variables['t_ref_min'][:].reshape(len(years),len(julydays),lat.shape[0],lon.shape[0])
     data.close()
     
-    data = Dataset(directoryaugust + 'August_TMAX_US_SPEAR_MED_ens%s.nc' % str(s+1).zfill(2))
-    tmax_august = data.variables['t_ref_max'][:].reshape(len(years),len(augustdays),lat.shape[0],lon.shape[0])
+    data = Dataset(directoryaugust + 'August_TMIN_US_SPEAR_MED_ens%s.nc' % str(s+1).zfill(2))
+    TMIN_august = data.variables['t_ref_min'][:].reshape(len(years),len(augustdays),lat.shape[0],lon.shape[0])
     data.close()
     
     ###########################################################################
@@ -118,28 +118,28 @@ for s in range(numOfEns_os):
     data.close()
     
     ###########################################################################
-    tmax_spear[s,:,:,:,:] = np.concatenate([tmax_june,tmax_july,tmax_august],axis=1)
+    TMIN_spear[s,:,:,:,:] = np.concatenate([TMIN_june,TMIN_july,TMIN_august],axis=1)
     q_spear[s,:,:,:,:] = np.concatenate([q_june,q_july,q_august],axis=1)
 
 ###############################################################################
 ###############################################################################
 ###############################################################################    
 ### Read in SPEAR_MED_SSP534OS
-tmax_os = np.full((numOfEns_os,years_os.shape[0],dayslength,70,144),np.nan)
+TMIN_os = np.full((numOfEns_os,years_os.shape[0],dayslength,70,144),np.nan)
 q_os = np.full((numOfEns_os,years_os.shape[0],dayslength,70,144),np.nan)
 for s in range(numOfEns_os):
-    data = Dataset(directoryjune + 'June_TMAX_US_SPEAR_MED_SSP534OS_ens%s.nc' % str(s+1).zfill(2))
+    data = Dataset(directoryjune + 'June_TMIN_US_SPEAR_MED_SSP534OS_ens%s.nc' % str(s+1).zfill(2))
     lat = data.variables['lat'][:]
     lon = data.variables['lon'][:]
-    tmax_june = data.variables['t_ref_max'][:].reshape(len(years_os),len(junedays),lat.shape[0],lon.shape[0])
+    TMIN_june = data.variables['t_ref_min'][:].reshape(len(years_os),len(junedays),lat.shape[0],lon.shape[0])
     data.close()
     
-    data = Dataset(directoryjuly + 'July_TMAX_US_SPEAR_MED_SSP534OS_ens%s.nc' % str(s+1).zfill(2))
-    tmax_july = data.variables['t_ref_max'][:].reshape(len(years_os),len(julydays),lat.shape[0],lon.shape[0])
+    data = Dataset(directoryjuly + 'July_TMIN_US_SPEAR_MED_SSP534OS_ens%s.nc' % str(s+1).zfill(2))
+    TMIN_july = data.variables['t_ref_min'][:].reshape(len(years_os),len(julydays),lat.shape[0],lon.shape[0])
     data.close()
     
-    data = Dataset(directoryaugust + 'August_TMAX_US_SPEAR_MED_SSP534OS_ens%s.nc' % str(s+1).zfill(2))
-    tmax_august = data.variables['t_ref_max'][:].reshape(len(years_os),len(augustdays),lat.shape[0],lon.shape[0])
+    data = Dataset(directoryaugust + 'August_TMIN_US_SPEAR_MED_SSP534OS_ens%s.nc' % str(s+1).zfill(2))
+    TMIN_august = data.variables['t_ref_min'][:].reshape(len(years_os),len(augustdays),lat.shape[0],lon.shape[0])
     data.close()
     
     ###########################################################################
@@ -156,28 +156,28 @@ for s in range(numOfEns_os):
     data.close()
     
     ###########################################################################
-    tmax_os[s,:,:,:,:] = np.concatenate([tmax_june,tmax_july,tmax_august],axis=1)
+    TMIN_os[s,:,:,:,:] = np.concatenate([TMIN_june,TMIN_july,TMIN_august],axis=1)
     q_os[s,:,:,:,:] = np.concatenate([q_june,q_july,q_august],axis=1)
     
 ###############################################################################
 ###############################################################################
 ###############################################################################    
 ### Read in SPEAR_MED_SSP534OS_10ye
-tmax_os10ye = np.full((numOfEns_os10ye,years_os10ye.shape[0],dayslength,70,144),np.nan)
+TMIN_os10ye = np.full((numOfEns_os10ye,years_os10ye.shape[0],dayslength,70,144),np.nan)
 q_os10ye = np.full((numOfEns_os10ye,years_os10ye.shape[0],dayslength,70,144),np.nan)
 for s in range(numOfEns_os10ye):
-    data = Dataset(directoryjune + 'June_TMAX_US_SPEAR_MED_SSP534OS_10ye_ens%s.nc' % str(s+1).zfill(2))
+    data = Dataset(directoryjune + 'June_TMIN_US_SPEAR_MED_SSP534OS_10ye_ens%s.nc' % str(s+1).zfill(2))
     lat = data.variables['lat'][:]
     lon = data.variables['lon'][:]
-    tmax_june = data.variables['t_ref_max'][:].reshape(len(years_os10ye),len(junedays),lat.shape[0],lon.shape[0])
+    TMIN_june = data.variables['t_ref_min'][:].reshape(len(years_os10ye),len(junedays),lat.shape[0],lon.shape[0])
     data.close()
     
-    data = Dataset(directoryjuly + 'July_TMAX_US_SPEAR_MED_SSP534OS_10ye_ens%s.nc' % str(s+1).zfill(2))
-    tmax_july = data.variables['t_ref_max'][:].reshape(len(years_os10ye),len(julydays),lat.shape[0],lon.shape[0])
+    data = Dataset(directoryjuly + 'July_TMIN_US_SPEAR_MED_SSP534OS_10ye_ens%s.nc' % str(s+1).zfill(2))
+    TMIN_july = data.variables['t_ref_min'][:].reshape(len(years_os10ye),len(julydays),lat.shape[0],lon.shape[0])
     data.close()
     
-    data = Dataset(directoryaugust + 'August_TMAX_US_SPEAR_MED_SSP534OS_10ye_ens%s.nc' % str(s+1).zfill(2))
-    tmax_august = data.variables['t_ref_max'][:].reshape(len(years_os10ye),len(augustdays),lat.shape[0],lon.shape[0])
+    data = Dataset(directoryaugust + 'August_TMIN_US_SPEAR_MED_SSP534OS_10ye_ens%s.nc' % str(s+1).zfill(2))
+    TMIN_august = data.variables['t_ref_min'][:].reshape(len(years_os10ye),len(augustdays),lat.shape[0],lon.shape[0])
     data.close()
     
     ###########################################################################
@@ -194,7 +194,7 @@ for s in range(numOfEns_os10ye):
     data.close()
     
     ###########################################################################
-    tmax_os10ye[s,:,:,:,:] = np.concatenate([tmax_june,tmax_july,tmax_august],axis=1)
+    TMIN_os10ye[s,:,:,:,:] = np.concatenate([TMIN_june,TMIN_july,TMIN_august],axis=1)
     q_os10ye[s,:,:,:,:] = np.concatenate([q_june,q_july,q_august],axis=1)
 
 ###############################################################################
@@ -206,35 +206,35 @@ lon2,lat2 = np.meshgrid(lon,lat)
 if reg_name == 'US':
     data_obsnan = np.full([1,lat.shape[0],lon.shape[0]],np.nan)
     
-    tmax_lm42_mask,data_obsnan = dSS.mask_CONUS(tmax_lm42,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    TMIN_lm42_mask,data_obsnan = dSS.mask_CONUS(TMIN_lm42,data_obsnan,'MEDS',lat_bounds,lon_bounds)
     q_lm42_mask,data_obsnan = dSS.mask_CONUS(q_lm42,data_obsnan,'MEDS',lat_bounds,lon_bounds)
     
-    tmax_spear_mask,data_obsnan = dSS.mask_CONUS(tmax_spear,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    TMIN_spear_mask,data_obsnan = dSS.mask_CONUS(TMIN_spear,data_obsnan,'MEDS',lat_bounds,lon_bounds)
     q_spear_mask,data_obsnan = dSS.mask_CONUS(q_spear,data_obsnan,'MEDS',lat_bounds,lon_bounds)
     
-    tmax_os_mask,data_obsnan = dSS.mask_CONUS(tmax_os,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    TMIN_os_mask,data_obsnan = dSS.mask_CONUS(TMIN_os,data_obsnan,'MEDS',lat_bounds,lon_bounds)
     q_os_mask,data_obsnan = dSS.mask_CONUS(q_os,data_obsnan,'MEDS',lat_bounds,lon_bounds)
     
-    tmax_os10ye_mask,data_obsnan = dSS.mask_CONUS(tmax_os10ye,data_obsnan,'MEDS',lat_bounds,lon_bounds)
+    TMIN_os10ye_mask,data_obsnan = dSS.mask_CONUS(TMIN_os10ye,data_obsnan,'MEDS',lat_bounds,lon_bounds)
     q_os10ye_mask,data_obsnan = dSS.mask_CONUS(q_os10ye,data_obsnan,'MEDS',lat_bounds,lon_bounds)
 else:
-    tmax_lm42_mask = tmax_lm42
+    TMIN_lm42_mask = TMIN_lm42
     q_lm42_mask = q_lm42
-    tmax_spear_mask = tmax_spear
+    TMIN_spear_mask = TMIN_spear
     q_spear_mask = q_spear
-    tmax_os_mask = tmax_os
+    TMIN_os_mask = TMIN_os
     q_os_mask = q_os
-    tmax_os10ye_mask = tmax_os10ye
+    TMIN_os10ye_mask = TMIN_os10ye
     q_os10ye_mask = q_os10ye
 
 ##############################################################################
 ##############################################################################
 ##############################################################################
 ### Calculate means for JJA
-tmax_meanJJA_lm42 = np.nanmean(tmax_lm42_mask[:,:,:,:,:],axis=2)
-tmax_meanJJA_spear = np.nanmean(tmax_spear_mask[:,:,:,:,:],axis=2)
-tmax_meanJJA_os = np.nanmean(tmax_os_mask[:,:,:,:,:],axis=2)
-tmax_meanJJA_os10ye = np.nanmean(tmax_os10ye_mask[:,:,:,:,:],axis=2)
+TMIN_meanJJA_lm42 = np.nanmean(TMIN_lm42_mask[:,:,:,:,:],axis=2)
+TMIN_meanJJA_spear = np.nanmean(TMIN_spear_mask[:,:,:,:,:],axis=2)
+TMIN_meanJJA_os = np.nanmean(TMIN_os_mask[:,:,:,:,:],axis=2)
+TMIN_meanJJA_os10ye = np.nanmean(TMIN_os10ye_mask[:,:,:,:,:],axis=2)
 
 q_meanJJA_lm42 = np.nanmean(q_lm42_mask[:,:,:,:,:],axis=2)
 q_meanJJA_spear = np.nanmean(q_spear_mask[:,:,:,:,:],axis=2)
@@ -251,10 +251,10 @@ yearsq_spear = np.where((years >= 2015) & (years <= 2070))[0]
 yearsq_os = np.where((years_os >= 2015) & (years_os <= 2070))[0]
 yearsq_os10ye = np.where((years_os10ye >= 2015) & (years_os10ye <= 2070))[0]
 
-tmax_meanJJA_lm42_fut = tmax_meanJJA_lm42[:,yearsq_lm42,:,:]
-tmax_meanJJA_spear_fut = tmax_meanJJA_spear[:,yearsq_spear,:,:]
-tmax_meanJJA_os_fut = tmax_meanJJA_os[:,yearsq_os,:,:]
-tmax_meanJJA_os10ye_fut = tmax_meanJJA_os10ye[:,yearsq_os10ye,:,:]
+TMIN_meanJJA_lm42_fut = TMIN_meanJJA_lm42[:,yearsq_lm42,:,:]
+TMIN_meanJJA_spear_fut = TMIN_meanJJA_spear[:,yearsq_spear,:,:]
+TMIN_meanJJA_os_fut = TMIN_meanJJA_os[:,yearsq_os,:,:]
+TMIN_meanJJA_os10ye_fut = TMIN_meanJJA_os10ye[:,yearsq_os10ye,:,:]
 
 q_meanJJA_lm42_fut = q_meanJJA_lm42[:,yearsq_lm42,:,:]
 q_meanJJA_spear_fut = q_meanJJA_spear[:,yearsq_spear,:,:]
@@ -265,10 +265,10 @@ q_meanJJA_os10ye_fut = q_meanJJA_os10ye[:,yearsq_os10ye,:,:]
 ##############################################################################
 ##############################################################################
 ### Calculate ensemble means
-tmax_ensmean_lm42 = np.nanmean(tmax_meanJJA_lm42_fut,axis=0)
-tmax_ensmean_spear = np.nanmean(tmax_meanJJA_spear_fut,axis=0)
-tmax_ensmean_os = np.nanmean(tmax_meanJJA_os_fut,axis=0)
-tmax_ensmean_os10ye = np.nanmean(tmax_meanJJA_os10ye_fut,axis=0)
+TMIN_ensmean_lm42 = np.nanmean(TMIN_meanJJA_lm42_fut,axis=0)
+TMIN_ensmean_spear = np.nanmean(TMIN_meanJJA_spear_fut,axis=0)
+TMIN_ensmean_os = np.nanmean(TMIN_meanJJA_os_fut,axis=0)
+TMIN_ensmean_os10ye = np.nanmean(TMIN_meanJJA_os10ye_fut,axis=0)
 
 q_ensmean_lm42 = np.nanmean(q_meanJJA_lm42_fut,axis=0)
 q_ensmean_spear = np.nanmean(q_meanJJA_spear_fut,axis=0)
@@ -319,14 +319,14 @@ def netcdfmeanJJA(lats,lons,meanJJA,model,reg_name,vari):
     print('*Completed: Created netCDF4 File!')
      
 ### Save data
-netcdfmeanJJA(lat,lon,tmax_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'TMAX')
-netcdfmeanJJA(lat,lon,q_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'q')
+netcdfmeanJJA(lat,lon,TMIN_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'TMIN')
+# netcdfmeanJJA(lat,lon,q_meanJJA_lm42,'SPEAR_MED_LM42p2_test',reg_name,'q')
 
-netcdfmeanJJA(lat,lon,tmax_meanJJA_spear,'SPEAR_MED',reg_name,'TMAX')
-netcdfmeanJJA(lat,lon,q_meanJJA_spear,'SPEAR_MED',reg_name,'q')
+netcdfmeanJJA(lat,lon,TMIN_meanJJA_spear,'SPEAR_MED',reg_name,'TMIN')
+# netcdfmeanJJA(lat,lon,q_meanJJA_spear,'SPEAR_MED',reg_name,'q')
 
-netcdfmeanJJA(lat,lon,tmax_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'TMAX')
-netcdfmeanJJA(lat,lon,q_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'q')
+netcdfmeanJJA(lat,lon,TMIN_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'TMIN')
+# netcdfmeanJJA(lat,lon,q_meanJJA_os,'SPEAR_MED_SSP534OS',reg_name,'q')
 
-netcdfmeanJJA(lat,lon,tmax_meanJJA_os10ye,'SPEAR_MED_SSP534OS_10ye',reg_name,'TMAX')
-netcdfmeanJJA(lat,lon,q_meanJJA_os10ye,'SPEAR_MED_SSP534OS_10ye',reg_name,'q')
+netcdfmeanJJA(lat,lon,TMIN_meanJJA_os10ye,'SPEAR_MED_SSP534OS_10ye',reg_name,'TMIN')
+# netcdfmeanJJA(lat,lon,q_meanJJA_os10ye,'SPEAR_MED_SSP534OS_10ye',reg_name,'q')
