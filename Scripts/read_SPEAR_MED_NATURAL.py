@@ -262,6 +262,11 @@ def read_SPEAR_MED_NATURAL(directory,vari,sliceperiod,sliceshape,slicenan,numOfE
         print('ALL SIMULATION YEARS')
         print(time)
         histmodel = ensshape
+    elif timeper == 'historicalforcing':
+        yearhistq = np.where((time >= 1929) & (time <= 2014))[0]
+        print('HISTORICAL YEARS')
+        print(time[yearhistq])
+        histmodel = ensshape[:,yearhistq,:,:]
     elif timeper == 'futureforcing':
         yearhistq = np.where((time >= 2015) & (time <= 2100))[0]
         print('FUTURE YEARS')
@@ -269,7 +274,7 @@ def read_SPEAR_MED_NATURAL(directory,vari,sliceperiod,sliceshape,slicenan,numOfE
         histmodel = ensshape[:,yearhistq,:,:]
     elif timeper == 'alldet':
         yearhistq = np.where((time >= 1929) & (time <= 2100))[0]
-        print('HISTORICAL YEARS')
+        print('ALL YEARS')
         print(time[yearhistq])
         histmodel = ensshape[:,yearhistq,:,:]
     else:

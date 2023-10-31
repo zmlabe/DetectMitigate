@@ -1,5 +1,5 @@
 """
-Calculate manuscript figure of US TMIN extremes
+Calculate manuscript figure of US TMAX extremes
 
 Author    : Zachary M. Labe
 Date      : 10 October 2023
@@ -23,7 +23,7 @@ from sklearn.neighbors import KernelDensity
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['TMIN']
+variablesall = ['TMAX']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 9
@@ -32,7 +32,7 @@ years = np.arange(1921,2100+1)
 years_ssp245 = np.arange(2015,2100+1)
 years_os = np.arange(2015,2100+1)
 years_os10ye = np.arange(2031,2100+1)
-yearsall = [years,years_os,years_os10ye]
+yearsall = [years_ssp245,years,years_os,years_os10ye]
 
 minb = 1981
 maxb = 2010
@@ -102,13 +102,13 @@ lonus = data.variables['lon'][:]
 count90 = data.variables['count90'][:]
 data.close()
 
-# ### Read in SPEAR_MED_SSP245
-# directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
-# nameSSP245 = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP245' + '.nc'
-# filenameSSP245 = directorydatah + nameSSP245
-# dataSSP245 = Dataset(filenameSSP245)
-# count90SSP245 = dataSSP245.variables['count90'][:,-len(years_ssp245):,:,:]
-# data.close()
+### Read in SPEAR_MED_SSP245
+directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
+nameSSP245 = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'SPEAR_MED_SSP245' + '.nc'
+filenameSSP245 = directorydatah + nameSSP245
+dataSSP245 = Dataset(filenameSSP245)
+count90SSP245 = dataSSP245.variables['count90'][:,-len(years_ssp245):,:,:]
+data.close()
 
 ### Read in SPEAR_MED_SSP534OS
 directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
@@ -129,13 +129,13 @@ data_os10ye.close()
 ### Calculate spatial averages
 lon2us,lat2us = np.meshgrid(lonus,latus)
 avg_count90 = UT.calc_weightedAve(count90,lat2us)
-# avg_count90SSP245 = UT.calc_weightedAve(count90SSP245,lat2us)
+avg_count90SSP245 = UT.calc_weightedAve(count90SSP245,lat2us)
 avg_count90_os = UT.calc_weightedAve(count90_os,lat2us)
 avg_count90_os10ye = UT.calc_weightedAve(count90_os10ye,lat2us)
 
 ### Calculate ensemble means
 ave_avg = np.nanmean(avg_count90,axis=0)
-# ave_avgSSP245 = np.nanmean(avg_count90SSP245,axis=0)
+ave_avgSSP245 = np.nanmean(avg_count90SSP245,axis=0)
 ave_os_avg = np.nanmean(avg_count90_os,axis=0)
 ave_os_10ye_avg = np.nanmean(avg_count90_os10ye,axis=0)
 
@@ -143,8 +143,8 @@ ave_os_10ye_avg = np.nanmean(avg_count90_os10ye,axis=0)
 ssp585_max = np.nanmax(avg_count90,axis=0)
 ssp585_min = np.nanmin(avg_count90,axis=0)
 
-# ssp245_max = np.nanmax(avg_count90SSP245,axis=0)
-# ssp245_min = np.nanmin(avg_count90SSP245,axis=0)
+ssp245_max = np.nanmax(avg_count90SSP245,axis=0)
+ssp245_min = np.nanmin(avg_count90SSP245,axis=0)
 
 os_max = np.nanmax(avg_count90_os,axis=0)
 os_min = np.nanmin(avg_count90_os,axis=0)
@@ -153,10 +153,10 @@ os10ye_max = np.nanmax(avg_count90_os10ye,axis=0)
 os10ye_min = np.nanmin(avg_count90_os10ye,axis=0)
 
 ### Collect plots for timeseries
-meanens = [ave_avg,ave_os_avg,ave_os_10ye_avg]
-maxens = [ssp585_max,os_max,os10ye_max]
-minens = [ssp585_min,os_min,os10ye_min]
-scenarioalln = ['SSP5-8.5','SSP5-3.4OS','SSP5-3.4OS_10ye']
+meanens = [ave_avgSSP245,ave_avg,ave_os_avg,ave_os_10ye_avg]
+maxens = [ssp245_max,ssp585_max,os_max,os10ye_max]
+minens = [ssp245_min,ssp585_min,os_min,os10ye_min]
+scenarioalln = ['SSP2-4.5','SSP5-8.5','SSP5-3.4OS','SSP5-3.4OS_10ye']
 
 ###############################################################################
 ###############################################################################
@@ -171,21 +171,21 @@ yearq_os_end = np.where((years_os >= 2071) & (years_os <= 2100))[0]
 yearq_os10ye_end = np.where((years_os10ye >= 2071) & (years_os10ye <= 2100))[0]
 
 ssp585_end = avg_count90[:,yearq_end].ravel()
-# ssp245_end = avg_count90SSP245[:,yearq_ssp245_end].ravel()
+ssp245_end = avg_count90SSP245[:,yearq_ssp245_end].ravel()
 os_end = avg_count90_os[:,yearq_os_end].ravel()
 os10ye_end = avg_count90_os10ye[:,yearq_os10ye_end].ravel()
 
 ### Calculate frequency 
 climo_freq = (climoEpoch/dayslength) *100.
 ssp585_freq = (ssp585_end/dayslength) *100.
-# ssp245_freq = (ssp245_end/dayslength) *100.
+ssp245_freq = (ssp245_end/dayslength) *100.
 os_freq = (os_end/dayslength) *100.
 os10ye_freq = (os10ye_end/dayslength) *100.
 
 ### Calculate bandwidth for KDE
 climo_band = calcBandwidth(climo_freq)
 ssp585_band = calcBandwidth(ssp585_freq)
-# ssp245_band = calcBandwidth(ssp245_freq)
+ssp245_band = calcBandwidth(ssp245_freq)
 os_band = calcBandwidth(os_freq)
 os10ye_band = calcBandwidth(os10ye_freq)
 
@@ -197,8 +197,8 @@ climo_kde[np.where(climo_kde <= 0.0001)] = np.nan
 ssp585_kde = kde_sklearn(ssp585_freq,grid,ssp585_band)
 ssp585_kde[np.where(ssp585_kde <= 0.0001)] = np.nan
 
-# ssp245_kde = kde_sklearn(ssp245_freq,grid,ssp245_band)
-# ssp245_kde[np.where(ssp245_kde <= 0.0001)] = np.nan
+ssp245_kde = kde_sklearn(ssp245_freq,grid,ssp245_band)
+ssp245_kde[np.where(ssp245_kde <= 0.0001)] = np.nan
 
 os_kde = kde_sklearn(os_freq,grid,os_band)
 os_kde[np.where(os_kde <= 0.0001)] = np.nan
@@ -206,8 +206,8 @@ os_kde[np.where(os_kde <= 0.0001)] = np.nan
 os10ye_kde = kde_sklearn(os10ye_freq,grid,os10ye_band)
 os10ye_kde[np.where(os10ye_kde <= 0.0001)] = np.nan
 
-allpdfs = [climo_kde,ssp585_kde,os_kde,os10ye_kde]
-scenarioalln2 = ['1981-2010 SPEAR_MED','SSP5-8.5','SSP5-3.4OS','SSP5-3.4OS_10ye']
+allpdfs = [climo_kde,ssp585_kde,ssp245_kde,os_kde,os10ye_kde]
+scenarioalln2 = ['1981-2010 SPEAR_MED','SSP5-8.5','SSP2-4.5','SSP5-3.4OS','SSP5-3.4OS_10ye']
 
 ### Statistical tests
 overshoots_stat = sts.ks_2samp(os_freq,os10ye_freq,alternative='two-sided',method='auto')
@@ -250,11 +250,11 @@ ax.tick_params(axis='y',labelsize=6,pad=1.5)
 ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
 
 color = [cmr.dusk(0.01),cmr.sapphire(0.5),cmr.dusk(0.8)]
-for i,c in zip(range(0,len(meanens),1),color): 
+for i,c in zip(range(1,len(meanens),1),color): 
     if i == 0:
-        c = 'k'
+        c = 'dimgrey'
     plt.fill_between(x=yearsall[i],y1=minens[i],y2=maxens[i],facecolor=c,zorder=1,
-              alpha=0.4,edgecolor='none')
+             alpha=0.4,edgecolor='none')
     if scenarioalln[i] == 'SSP5-3.4OS_10ye':
         plt.plot(yearsall[i],meanens[i],linestyle='--',linewidth=2,color=c,
                  label=r'\textbf{%s}' % scenarioalln[i],zorder=2,dashes=(1,.3))
@@ -278,7 +278,7 @@ plt.ylim([0,80])
 
 plt.text(2015,81,r'\textbf{[a]}',fontsize=12,color='dimgrey')
 plt.xlabel(r'\textbf{Years}',fontsize=7,color='k')
-plt.ylabel(r'\textbf{Count of days over Tn90}',fontsize=7,color='k')
+plt.ylabel(r'\textbf{Count of days over Tx90}',fontsize=7,color='k')
 
 ###############################################################################
 ###############################################################################
@@ -318,8 +318,8 @@ plt.xlim([0,100])
 plt.ylim([0,0.1])
 
 plt.text(0,0.101,r'\textbf{[b]}',fontsize=12,color='dimgrey')
-plt.xlabel(r'\textbf{Frequency of Tn90 Days Per Summer}',fontsize=7,color='k')
+plt.xlabel(r'\textbf{Frequency of Tx90 Days Per Summer}',fontsize=7,color='k')
 plt.ylabel(r'\textbf{PDF}',fontsize=7,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'MSFigure_TimeSeries-US-TMIN_PDFs_v1.png',dpi=300)
+plt.savefig(directoryfigure + 'MSFigure_Heatwave_TimeSeries-US-TMAX_PDFs_v1.png',dpi=300)

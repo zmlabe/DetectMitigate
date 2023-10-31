@@ -418,7 +418,7 @@ def readFiles(variq,dataset,monthlychoice,scenario):
     elif dataset == 'SPEAR_MED_Historical':
         import read_SPEAR_MED_Historical as SPMh
         directorydataSPMh = '/work/Zachary.Labe/Data/SPEAR/SPEAR_MED/monthly/'
-        sliceyearSPMh = np.arange(1921,2100+1,1)
+        sliceyearSPMh = np.arange(1921,2014+1,1)
         if monthlychoice == 'none':
             sliceshapeSPMh = 5
         else:
@@ -536,6 +536,20 @@ def readFiles(variq,dataset,monthlychoice,scenario):
         scenario = 'natural'
         lat1,lon1,data = SPNa.read_SPEAR_MED_NATURAL(directorydataSPNa,variq,monthlychoice,
                                             sliceshapeSPNa,slicenanSPNa,numOfEnsSPNa,'alldet')
+    elif dataset == 'SPEAR_MED_NATURAL_Historical':
+        import read_SPEAR_MED_NATURAL as SPNa
+        directorydataSPNa = '/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_NATURAL/monthly/'
+        sliceyearSPNa = np.arange(1929,2014+1,1)
+        if monthlychoice == 'none':
+            sliceshapeSPNa = 5
+        else:
+            sliceshapeSPNa = 4
+        slicenanSPNa = 'nan'
+        levelSPNa = 'surface'
+        numOfEnsSPNa = 30
+        scenario = 'natural'
+        lat1,lon1,data = SPNa.read_SPEAR_MED_NATURAL(directorydataSPNa,variq,monthlychoice,
+                                            sliceshapeSPNa,slicenanSPNa,numOfEnsSPNa,'historicalforcing')
     elif dataset == 'SPEAR_MED_NOAER':
         import read_SPEAR_MED_NOAER as SPNO
         directorydataSPNO = '/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_NOAER/monthly/'
