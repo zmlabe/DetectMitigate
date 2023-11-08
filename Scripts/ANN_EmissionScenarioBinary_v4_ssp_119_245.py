@@ -62,7 +62,7 @@ dataset_obs = 'ERA5_MEDS'
 lenOfPicks = len(modelGCMs)
 allDataLabels = modelGCMs
 monthlychoice = 'annual'
-variq = 'PRECT'
+variq = 'T2M'
 reg_name = 'Globe'
 level = 'surface'
 ###############################################################################
@@ -338,30 +338,30 @@ dirname = '/home/Zachary.Labe/Research/DetectMitigate/SavedModels/'
 savename = 'ANNv4_EmissionScenarioBinary_ssp_119-245_' + variq + '_' + reg_name + '_' + monthlychoice + '_' + actFun + '_L2_'+ str(ridgePenalty)+ '_LR_' + str(lr_here)+ '_Batch'+ str(batch_size)+ '_Iters' + str(n_epochs) + '_' + str(len(hidden)) + 'x' + str(hidden[0]) + '_SegSeed' + str(random_segment_seed) + '_NetSeed'+ str(random_network_seed) 
 
 modelwrite = dirname + savename + '.h5'
-model.save_weights(modelwrite)
-np.savez(dirname + savename + '.npz',trainModels=trainIndices,testModels=testIndices,Xtrain=Xtrain,Ytrain=Ytrain,Xtest=Xtest,Ytest=Ytest,Xmean=Xmean,Xstd=Xstd,lats=lats,lons=lons)
+# model.save_weights(modelwrite)
+# np.savez(dirname + savename + '.npz',trainModels=trainIndices,testModels=testIndices,Xtrain=Xtrain,Ytrain=Ytrain,Xtest=Xtest,Ytest=Ytest,Xmean=Xmean,Xstd=Xstd,lats=lats,lons=lons)
 
 ###############################################################################
 ###############################################################################
 ###############################################################################
 ### Training/testing for saving output
-np.savetxt(directoryoutput + 'trainingEnsIndices_' + savename + '.txt',trainIndices)
-np.savetxt(directoryoutput + 'testingEnsIndices_' + savename + '.txt',testIndices)
-np.savetxt(directoryoutput + 'validationEnsIndices_' + savename + '.txt',valIndices)
+# np.savetxt(directoryoutput + 'trainingEnsIndices_' + savename + '.txt',trainIndices)
+# np.savetxt(directoryoutput + 'testingEnsIndices_' + savename + '.txt',testIndices)
+# np.savetxt(directoryoutput + 'validationEnsIndices_' + savename + '.txt',valIndices)
 
-np.savetxt(directoryoutput + 'trainingTrueLabels_' + savename + '.txt',actual_classtrain)
-np.savetxt(directoryoutput + 'testingTrueLabels_' + savename + '.txt',actual_classtest)
-np.savetxt(directoryoutput + 'validationTrueLabels_' + savename + '.txt',actual_classval)
+# np.savetxt(directoryoutput + 'trainingTrueLabels_' + savename + '.txt',actual_classtrain)
+# np.savetxt(directoryoutput + 'testingTrueLabels_' + savename + '.txt',actual_classtest)
+# np.savetxt(directoryoutput + 'validationTrueLabels_' + savename + '.txt',actual_classval)
 
-np.savetxt(directoryoutput + 'trainingPredictedLabels_' + savename + '.txt',ypred_picktrain)
-np.savetxt(directoryoutput + 'trainingPredictedConfidence_' + savename+ '.txt',ypred_train)
-np.savetxt(directoryoutput + 'testingPredictedLabels_' + savename+ '.txt',ypred_picktest)
-np.savetxt(directoryoutput + 'testingPredictedConfidence_' + savename+ '.txt',ypred_test)
-np.savetxt(directoryoutput + 'validationPredictedLabels_' + savename+ '.txt',ypred_pickval)
-np.savetxt(directoryoutput + 'validationPredictedConfidence_' + savename+ '.txt',ypred_val)
+# np.savetxt(directoryoutput + 'trainingPredictedLabels_' + savename + '.txt',ypred_picktrain)
+# np.savetxt(directoryoutput + 'trainingPredictedConfidence_' + savename+ '.txt',ypred_train)
+# np.savetxt(directoryoutput + 'testingPredictedLabels_' + savename+ '.txt',ypred_picktest)
+# np.savetxt(directoryoutput + 'testingPredictedConfidence_' + savename+ '.txt',ypred_test)
+# np.savetxt(directoryoutput + 'validationPredictedLabels_' + savename+ '.txt',ypred_pickval)
+# np.savetxt(directoryoutput + 'validationPredictedConfidence_' + savename+ '.txt',ypred_val)
 
-np.savetxt(directoryoutput + 'observationsPredictedLabels_' + savename+ '.txt',ypred_pickobs)
-np.savez(directoryoutput + 'observationsPredictedConfidence_' + savename+ '.npz',obsconf = ypred_obs,yearsobs = yearsobs)
+# np.savetxt(directoryoutput + 'observationsPredictedLabels_' + savename+ '.txt',ypred_pickobs)
+# np.savez(directoryoutput + 'observationsPredictedConfidence_' + savename+ '.npz',obsconf = ypred_obs,yearsobs = yearsobs)
 
 ###############################################################################
 ###############################################################################
@@ -376,11 +376,54 @@ def accuracyTotalTime(data_pred,data_true):
     accdata_pred = accuracy_score(data_truer,data_predr)
         
     return accdata_pred
+def precisionTotalTime(data_pred,data_true):
+    """
+    Compute precision for the entire time series
+    """
+    data_truer = data_true
+    data_predr = data_pred
+    precdata_pred = precision_score(data_truer,data_predr,average='macro')
+    
+    return precdata_pred
+def recallTotalTime(data_pred,data_true):
+    """
+    Compute recall for the entire time series
+    """
+    data_truer = data_true
+    data_predr = data_pred
+    recalldata_pred = recall_score(data_truer,data_predr,average='macro')
+    
+    return recalldata_pred
+def f1TotalTime(data_pred,data_true):
+    """
+    Compute f1 for the entire time series
+    """
+    data_truer = data_true
+    data_predr = data_pred
+    f1data_pred = f1_score(data_truer,data_predr,average='macro')
+    
+    return f1data_pred
 
 acctrain = accuracyTotalTime(ypred_picktrain,actual_classtrain)     
 acctest = accuracyTotalTime(ypred_picktest,actual_classtest)
 accval = accuracyTotalTime(ypred_pickval,actual_classval)
 print(acctrain,accval,acctest)
+print(variq)
+
+prectrain = precisionTotalTime(ypred_picktrain,actual_classtrain)     
+prectest = precisionTotalTime(ypred_picktest,actual_classtest)
+precval = precisionTotalTime(ypred_pickval,actual_classval)
+
+recalltrain = recallTotalTime(ypred_picktrain,actual_classtrain)     
+recalltest = recallTotalTime(ypred_picktest,actual_classtest)
+recallval = recallTotalTime(ypred_pickval,actual_classval)
+
+f1_train = f1TotalTime(ypred_picktrain,actual_classtrain)     
+f1_test = f1TotalTime(ypred_picktest,actual_classtest)
+f1_val = f1TotalTime(ypred_pickval,actual_classval)
+            
+print(prectest,recalltest,f1_test)
+print(variq)
 
 plt.figure()
 cm = confusion_matrix(actual_classtest,ypred_picktest)
@@ -407,7 +450,7 @@ spatialmean_mod = UT.calc_weightedAve(modeldata,lats2)
 spatialmean_modmean = np.nanmean(spatialmean_mod,axis=1)
 plt.figure()
 plt.plot(spatialmean_modmean.transpose())
-
+sys.exit()
 ##############################################################################
 ##############################################################################
 ##############################################################################

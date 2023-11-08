@@ -188,7 +188,7 @@ for ii in range(len(allvariables)):
                 plt.text(yearsall[i][np.argmax(meanens[i])]+1.8,np.nanmax(meanens[i]),r'\textbf{%s}' % yearsall[i][np.argmax(meanens[i])],fontsize=7.5,color='dimgrey')
         
         leg = plt.legend(shadow=False,fontsize=10,loc='upper center',
-              bbox_to_anchor=(0.17,0.84),fancybox=True,ncol=1,frameon=False,
+              bbox_to_anchor=(0.17,0.79),fancybox=True,ncol=1,frameon=False,
               handlelength=1,handletextpad=0.5)
         for line,text in zip(leg.get_lines(), leg.get_texts()):
             text.set_color(line.get_color())
@@ -199,8 +199,9 @@ for ii in range(len(allvariables)):
         plt.ylim([-0.5,5])
         
         plt.text(1930,5,r'\textbf{[a]}',fontsize=11,color='k')
+        plt.text(1930,4.5,r'\textbf{TEMPERATURE}',fontsize=16,color='dimgrey')
         plt.xlabel(r'\textbf{Years}',fontsize=9,color='k')
-        plt.ylabel(r'\textbf{Temperature Anomaly [$^{\circ}$C] Relative to 1951-1980}',
+        plt.ylabel(r'\textbf{Anomaly [$^{\circ}$C] Relative to 1951-1980}',
                    fontsize=9,color='k')
      
     elif ii == 1:
@@ -247,8 +248,9 @@ for ii in range(len(allvariables)):
         plt.ylim([-0.05,0.25])
         
         plt.text(1930,0.25,r'\textbf{[b]}',fontsize=11,color='k')
+        plt.text(1930,0.222,r'\textbf{PRECIPITATION}',fontsize=16,color='dimgrey')
         plt.xlabel(r'\textbf{Years}',fontsize=9,color='k')
-        plt.ylabel(r'\textbf{Precipitation Anomaly [mm/day] Relative to 1951-1980}',
+        plt.ylabel(r'\textbf{Anomaly [mm/day] Relative to 1951-1980}',
                    fontsize=9,color='k')
     
 plt.tight_layout()

@@ -54,21 +54,22 @@ def read_primary_dataset(variq,dataset,monthlychoice,scenario,lat_bounds,lon_bou
     print('\nOur dataset: ',dataset,' is shaped',data.shape)
     return datar,lats,lons 
 
-### Read in data
-lat_bounds,lon_bounds = UT.regions(reg_name)
-os_t2m,lats,lons = read_primary_dataset('T2M','SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
-os10ye_t2m,lats,lons = read_primary_dataset('T2M','SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
+# ### Read in data
+# lat_bounds,lon_bounds = UT.regions(reg_name)
+# os_t2m,lats,lons = read_primary_dataset('T2M','SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
+# os10ye_t2m,lats,lons = read_primary_dataset('T2M','SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
 
-os_precip,lats,lons = read_primary_dataset('PRECT','SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
-os10ye_precip,lats,lons = read_primary_dataset('PRECT','SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
+# os_precip,lats,lons = read_primary_dataset('PRECT','SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
+# os10ye_precip,lats,lons = read_primary_dataset('PRECT','SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
 
-lon2,lat2 = np.meshgrid(lons,lats)
+# lon2,lat2 = np.meshgrid(lons,lats)
 
 ### Calculate ensemble means
 os_t2m_mean = np.nanmean(os_t2m[:,:,:,:],axis=0)
-os10ye_t2m_mean = np.nanmean(os_t2m[:,:,:,:],axis=0)
+os10ye_t2m_mean = np.nanmean(os10ye_t2m[:,:,:,:],axis=0)
+
 os_precip_mean = np.nanmean(os_precip[:,:,:,:],axis=0)
-os10ye_precip_mean = np.nanmean(os_precip[:,:,:,:],axis=0)
+os10ye_precip_mean = np.nanmean(os10ye_precip[:,:,:,:],axis=0)
 
 fig = plt.figure(figsize=(10,4.5))
 transitionsLength = 6
@@ -87,6 +88,12 @@ for pp in range(transitionsLength):
         
         lrp_diff = lrp_2 - lrp_1
         lrp_diffmean = np.nanmean(lrp_diff,axis=0)
+        
+        ### Calculate statistical significance (FDR)
+        alpha_f = 0.05
+        varx_1 = np.nanmean(os_t2m[:,yearq_1-(sliceperiod-1):yearq_1+1,:,:],axis=1)
+        varx_2 = np.nanmean(os_t2m[:,yearq_2:yearq_2+sliceperiod,:,:],axis=1)
+        pval = UT.calc_FDR_ttest(varx_1[:,:,:],varx_2[:,:,:],alpha_f)
 ###############################################################################
     elif pp == 1:
         variq = 'T2M'
@@ -98,6 +105,12 @@ for pp in range(transitionsLength):
         
         lrp_diff = lrp_2 - lrp_1
         lrp_diffmean = np.nanmean(lrp_diff,axis=0)
+        
+        ### Calculate statistical significance (FDR)
+        alpha_f = 0.05
+        varx_1 = np.nanmean(os10ye_t2m[:,yearq_1-(sliceperiod-1):yearq_1+1,:,:],axis=1)
+        varx_2 = np.nanmean(os10ye_t2m[:,yearq_2:yearq_2+sliceperiod,:,:],axis=1)
+        pval = UT.calc_FDR_ttest(varx_1[:,:,:],varx_2[:,:,:],alpha_f)
 ###############################################################################        
     elif pp == 2:
         variq = 'T2M'
@@ -109,6 +122,12 @@ for pp in range(transitionsLength):
         
         lrp_diff = lrp_2 - lrp_1
         lrp_diffmean = np.nanmean(lrp_diff,axis=0)
+        
+        ### Calculate statistical significance (FDR)
+        alpha_f = 0.05
+        varx_1 = np.nanmean(os10ye_t2m[:,yearq_1-(sliceperiod-1):yearq_1+1,:,:],axis=1)
+        varx_2 = np.nanmean(os10ye_t2m[:,yearq_2:yearq_2+sliceperiod,:,:],axis=1)
+        pval = UT.calc_FDR_ttest(varx_1[:,:,:],varx_2[:,:,:],alpha_f)
 ###############################################################################       
     elif pp == 3:
         variq == 'PRECT'
@@ -120,6 +139,12 @@ for pp in range(transitionsLength):
         
         lrp_diff = lrp_2 - lrp_1
         lrp_diffmean = np.nanmean(lrp_diff,axis=0)
+        
+        ### Calculate statistical significance (FDR)
+        alpha_f = 0.05
+        varx_1 = np.nanmean(os_precip[:,yearq_1-(sliceperiod-1):yearq_1+1,:,:],axis=1)
+        varx_2 = np.nanmean(os_precip[:,yearq_2:yearq_2+sliceperiod,:,:],axis=1)
+        pval = UT.calc_FDR_ttest(varx_1[:,:,:],varx_2[:,:,:],alpha_f)
 ###############################################################################        
     elif pp == 4:
         variq = 'PRECT'
@@ -131,6 +156,12 @@ for pp in range(transitionsLength):
         
         lrp_diff = lrp_2 - lrp_1
         lrp_diffmean = np.nanmean(lrp_diff,axis=0)
+        
+        ### Calculate statistical significance (FDR)
+        alpha_f = 0.05
+        varx_1 = np.nanmean(os10ye_precip[:,yearq_1-(sliceperiod-1):yearq_1+1,:,:],axis=1)
+        varx_2 = np.nanmean(os10ye_precip[:,yearq_2:yearq_2+sliceperiod,:,:],axis=1)
+        pval = UT.calc_FDR_ttest(varx_1[:,:,:],varx_2[:,:,:],alpha_f)
 ###############################################################################        
     elif pp == 5:
         variq = 'PRECT'
@@ -142,14 +173,20 @@ for pp in range(transitionsLength):
         
         lrp_diff = lrp_2 - lrp_1
         lrp_diffmean = np.nanmean(lrp_diff,axis=0)
+        
+        ### Calculate statistical significance (FDR)
+        alpha_f = 0.05
+        varx_1 = np.nanmean(os10ye_precip[:,yearq_1-(sliceperiod-1):yearq_1+1,:,:],axis=1)
+        varx_2 = np.nanmean(os10ye_precip[:,yearq_2:yearq_2+sliceperiod,:,:],axis=1)
+        pval = UT.calc_FDR_ttest(varx_1[:,:,:],varx_2[:,:,:],alpha_f)
 ###############################################################################        
 
     ###############################################################################
     ###############################################################################
     ###############################################################################
     ### Plot subplot of LRP means OS
-    limitt = np.arange(-2,2.01,0.05)
-    barlimt = np.round(np.arange(-2,3,2),2)
+    limitt = np.arange(-1.5,1.55,0.05)
+    barlimt = np.round(np.arange(-1.5,1.6,0.5),2)
     labelt = r'\textbf{$^{\circ}$C}'
     
     limitp = np.arange(-0.5,0.501,0.01)
@@ -175,12 +212,14 @@ for pp in range(transitionsLength):
     m.drawcoastlines(color='dimgrey',linewidth=0.35)
        
     circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
-                      linewidth=0.7)
+                      linewidth=1)
     circle.set_clip_on(False)
     
     x,y = m(lon2,lat2)
     cs1 = m.contourf(lon2,lat2,var,limit,extend='both',latlon=True)
     cs1.set_cmap(cmap) 
+    
+    cs3 = m.contourf(lon2,lat2,pval,colors='none',hatches=['.....'],latlon=True)  
     
     plt.title(r'\textbf{%s-%s minus %s-%s}' % (min(years[yearq_2:yearq_2+sliceperiod]),max(years[yearq_2:yearq_2+sliceperiod]),min(years[yearq_1-(sliceperiod-1):yearq_1+1]),max(years[yearq_1-(sliceperiod-1):yearq_1+1])),fontsize=10,color='k')
 
@@ -206,7 +245,7 @@ for pp in range(transitionsLength):
         cbar_ax1 = fig.add_axes([0.92,0.16,0.013,0.25])                 
         cbar1 = fig.colorbar(cs1,cax=cbar_ax1,orientation='vertical',
                             extend='both',extendfrac=0.07,drawedges=False)
-        cbar1.set_label(label,fontsize=10,color='k',labelpad=5.5)  
+        cbar1.set_label(label,fontsize=10,color='k',labelpad=4)  
         cbar1.set_ticks(barlim)
         cbar1.set_ticklabels(list(map(str,barlim)))
         cbar1.ax.tick_params(axis='y', size=.01,labelsize=7)
@@ -222,4 +261,4 @@ ax1.annotate(r'\textbf{SPEAR_MED_SSP534OS_10ye}',xy=(0,0),xytext=(-0.02,2.7),
 plt.tight_layout()
 plt.subplots_adjust(wspace=0.02,hspace=0.06,bottom=0.1)
 
-plt.savefig(directoryfigure + 'MSFigure_ANN_Composites_Transitions.png',dpi=600)
+plt.savefig(directoryfigure + 'MSFigure_ANN_Composites_Transitions_v2.png',dpi=600)

@@ -143,16 +143,28 @@ fac = 0.80 # 0.70 training, 0.13 validation, 0.07 for testing
 random_segment_seed = 71541
 random_network_seed = 87750
 
-hidden = [30,30,30]
-n_epochs = 1500
-batch_size = 128
-lr_here = 0.0001
-ridgePenalty = 0.1
-actFun = 'relu'
+### Model paramaters for the same ANN equivalent
+if variq == 'T2M':
+    hidden = [100]
+    n_epochs = 1500
+    batch_size = 128
+    lr_here = 0.0001
+    ridgePenalty = 0.1
+    actFun = 'relu'
+elif variq == 'PRECT':
+    hidden = [100]
+    n_epochs = 1500
+    batch_size = 128
+    lr_here = 0.0001
+    ridgePenalty = 0.1
+    actFun = 'relu'
+else:
+    print(ValueError('WRONG VARIABLE NOT TUNED YET FOR ANN!'))
+    sys.exit()
 
 ### Read in data for training predictions and actual hiatuses
 dirname = '/work/Zachary.Labe/Research/DetectMitigate/Data/'
-savename = 'ANNv3_EmissionScenario_' + variq + '_' + reg_name + '_' + monthlychoice + '_' + actFun + '_L2_'+ str(ridgePenalty)+ '_LR_' + str(lr_here)+ '_Batch'+ str(batch_size)+ '_Iters' + str(n_epochs) + '_' + str(len(hidden)) + 'x' + str(hidden[0]) + '_SegSeed' + str(random_segment_seed) + '_NetSeed'+ str(random_network_seed) 
+savename = 'ANNv4_EmissionScenario_' + variq + '_' + reg_name + '_' + monthlychoice + '_' + actFun + '_L2_'+ str(ridgePenalty)+ '_LR_' + str(lr_here)+ '_Batch'+ str(batch_size)+ '_Iters' + str(n_epochs) + '_' + str(len(hidden)) + 'x' + str(hidden[0]) + '_SegSeed' + str(random_segment_seed) + '_NetSeed'+ str(random_network_seed) 
 
 trainindices = np.asarray(np.genfromtxt(dirname + 'trainingEnsIndices_' + savename + '.txt'),dtype=int)
 
@@ -209,7 +221,6 @@ def loadmodel(Xtrain,Xval,Ytrain,Yval,hidden,random_network_seed,n_epochs,batch_
     model = keras.models.Sequential()
     tf.random.set_seed(int(np.random.randint(1,100)))
     
-    random_network_seed = None
     if random_network_seed == None:
         np.random.seed(None)
         random_network_seed = int(np.random.randint(1, 100000))
@@ -312,10 +323,23 @@ def accuracyTotalTime(data_pred,data_true):
         
     return accdata_pred
 
+def f1TotalTime(data_pred,data_true):
+    """
+    Compute f1 for the entire time series
+    """
+    data_truer = data_true
+    data_predr = data_pred
+    f1data_pred = f1_score(data_truer,data_predr,average=None)
+    
+    return f1data_pred
+
 acctrain = accuracyTotalTime(ypred_picktrain,actual_classtrain)     
 acctest = accuracyTotalTime(ypred_picktest,actual_classtest)
 accval = accuracyTotalTime(ypred_pickval,actual_classval)
-print(acctrain,accval,acctest)
+
+f1_train = f1TotalTime(ypred_picktrain,actual_classtrain)     
+f1_test = f1TotalTime(ypred_picktest,actual_classtest)
+f1_val = f1TotalTime(ypred_pickval,actual_classval)
 
 plt.figure()
 cm = confusion_matrix(actual_classtest,ypred_picktest)
@@ -340,3 +364,6 @@ os_predict = model.predict(osdataS)
 os_pick = np.argmax(os_predict,axis=1)
 os_10ye_predict = model.predict(osdata_10yeS)
 os_10ye_pick = np.argmax(os_10ye_predict,axis=1)
+
+print('\n',acctrain,accval,acctest)
+print('\n',f1_test)
