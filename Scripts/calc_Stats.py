@@ -15,9 +15,9 @@ Usage
     [5] remove_observations_mean(data,data_obs,lats,lons)
     [6] calculate_anomalies(data,data_obs,lats,lons,baseline,yearsall)
     [7] remove_ensemble_mean(data,ravel_modelens,ravelmodeltime,rm_standard_dev,numOfEns)
-    [8] remove_ocean(data,data_obs)
+    [8] remove_ocean(data,data_obs,resolution)
     [9] mask_CONUS(data,data_obs,resolution)
-    [10] remove_land(data,data_obs)
+    [10] remove_land(data,data_obs,resolution)
     [11] standardize_data(Xtrain,Xtest)
     [12] standardize_dataVal(Xtrain,Xtest,Xval)
     [13] standardize_dataSEPARATE(Xtrain,Xtest):
@@ -197,7 +197,7 @@ def remove_ensemble_mean(data,ravel_modelens,ravelmodeltime,rm_standard_dev,numO
 
 ###############################################################################
 
-def remove_ocean(data,data_obs,lat_bounds,lon_bounds):
+def remove_ocean(data,data_obs,lat_bounds,lon_bounds,resolution):
     """
     Masks out the ocean for land_only == True
     """
@@ -206,15 +206,28 @@ def remove_ocean(data,data_obs,lat_bounds,lon_bounds):
     import numpy as np
     from netCDF4 import Dataset
     import calc_dataFunctions as df
+    import sys
     
     ### Read in land mask
-    directorydata = '/Users/zlabe/Data/masks/'
-    filename = 'lsmask_19x25.nc'
-    datafile = Dataset(directorydata + filename)
-    maskq = datafile.variables['nmask'][:]
-    lats = datafile.variables['latitude'][:]
-    lons = datafile.variables['longitude'][:]
-    datafile.close()
+    if resolution == 'LOWS':
+        directorydata = '/work/Zachary.Labe/Data/masks/'
+        filename = 'land_maskcoarse_SPEAR_LOW.nc'
+        datafile = Dataset(directorydata + filename)
+        maskq = datafile.variables['land_mask'][:]
+        lats = datafile.variables['lat'][:]
+        lons = datafile.variables['lon'][:]
+        datafile.close()
+    elif resolution == 'MEDS':
+        directorydata = '/work/Zachary.Labe/Data/masks/'
+        filename = 'land_maskcoarse_SPEAR_MED.nc'
+        datafile = Dataset(directorydata + filename)
+        maskq = datafile.variables['land_mask'][:]
+        lats = datafile.variables['lat'][:]
+        lons = datafile.variables['lon'][:]
+        datafile.close()
+    else:
+        print(ValueError('WRONG RESOLUTION SELECTED FOR MASK!'))
+        sys.exit()
     
     mask,lats,lons = df.getRegion(maskq,lats,lons,lat_bounds,lon_bounds)
     
@@ -293,10 +306,9 @@ def mask_CONUS(data,data_obs,resolution,lat_bounds,lon_bounds):
     print('<<<<<< COMPLETED: mask_CONUS()')
     return datamask,data_obsmask
 
-
 ###############################################################################
 
-def remove_land(data,data_obs,lat_bounds,lon_bounds):
+def remove_land(data,data_obs,lat_bounds,lon_bounds,resolution):
     """
     Masks out the ocean for ocean_only == True
     """
@@ -305,15 +317,28 @@ def remove_land(data,data_obs,lat_bounds,lon_bounds):
     import numpy as np
     from netCDF4 import Dataset
     import calc_dataFunctions as df
+    import sys
     
     ### Read in ocean mask
-    directorydata = '/Users/zlabe/Data/masks/'
-    filename = 'ocmask_19x25.nc'
-    datafile = Dataset(directorydata + filename)
-    maskq = datafile.variables['nmask'][:]
-    lats = datafile.variables['latitude'][:]
-    lons = datafile.variables['longitude'][:]
-    datafile.close()
+    if resolution == 'LOWS':
+        directorydata = '/work/Zachary.Labe/Data/masks/'
+        filename = 'ocean_maskcoarse_SPEAR_LOW.nc'
+        datafile = Dataset(directorydata + filename)
+        maskq = datafile.variables['ocean_mask'][:]
+        lats = datafile.variables['lat'][:]
+        lons = datafile.variables['lon'][:]
+        datafile.close()
+    elif resolution == 'MEDS':
+        directorydata = '/work/Zachary.Labe/Data/masks/'
+        filename = 'ocean_maskcoarse_SPEAR_MED.nc'
+        datafile = Dataset(directorydata + filename)
+        maskq = datafile.variables['ocean_mask'][:]
+        lats = datafile.variables['lat'][:]
+        lons = datafile.variables['lon'][:]
+        datafile.close()
+    else:
+        print(ValueError('WRONG RESOLUTION SELECTED FOR MASK!'))
+        sys.exit()
     
     mask,lats,lons = df.getRegion(maskq,lats,lons,lat_bounds,lon_bounds)
     
