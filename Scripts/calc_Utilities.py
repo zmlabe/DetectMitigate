@@ -1054,6 +1054,9 @@ def regions(name):
     elif name == 'NHExtra':
         lat_bounds = (30.,65.)
         lon_bounds = (0., 360.)  
+    elif name == 'NHnopole':
+        lat_bounds = (0.,60.)
+        lon_bounds = (0., 360.) 
     elif name == 'SHExtra':
         lat_bounds = (-65.,-30.)
         lon_bounds = (0., 360.)  
