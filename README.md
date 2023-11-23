@@ -18,4 +18,5 @@ Zachary Labe - [Research Website](https://zacklabe.com/) - [@ZLabe](https://twit
 
 
 ## Conferences/Presentations
++ **[2]** **Labe, Z.M.**, T.L. Delworth, N.C. Johnson, and W.F. Cooke. A data-driven approach to identifying key regions of change associated with future climate scenarios, *23rd Conference on Artificial Intelligence for Environmental Science*, Baltimore, MD (Jan 2024). [[Abstract]](https://ams.confex.com/ams/104ANNUAL/meetingapp.cgi/Paper/431300)
 + **[1]** **Labe, Z.M.** Using explainable AI to identify key regions of climate change in GFDL SPEAR large ensembles, *GFDL Lunchtime Seminar Series*, Princeton, NJ, USA (Mar 2023). [[Slides]](https://www.slideshare.net/ZacharyLabe/using-explainable-ai-to-identify-key-regions-of-climate-change-in-gfdl-spear-large-ensembles)
