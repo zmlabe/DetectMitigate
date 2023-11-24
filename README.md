@@ -11,7 +11,7 @@ Zachary Labe - [Research Website](https://zacklabe.com/) - [@ZLabe](https://twit
 + ```requirements.txt```: List of environments and modules associated with the most recent version of this project. A Python [Anaconda3 Distribution](https://docs.continuum.io/anaconda/) was used for our analysis. Tools including [NCL](https://www.ncl.ucar.edu/), [CDO](https://code.mpimet.mpg.de/projects/cdo), and [NCO](http://nco.sourceforge.net/) were also used for initial data processing.
 
 ## Data
-+ GFDL SPEAR: Seamless System for Prediction and EArth System Research : [[DATA]](https://www.gfdl.noaa.gov/spear_large_ensembles/)
++ GFDL SPEAR: Seamless System for Prediction and EArth System Research : [[GFDL PORTAL]](https://nomads.gfdl.noaa.gov/)[[RAW DATA]](https://www.gfdl.noaa.gov/spear_large_ensembles/)[[PROCESSED DATA]](https://zenodo.org/records/10083257)
     + Delworth, T. L., Cooke, W. F., Adcroft, A., Bushuk, M., Chen, J. H., Dunne, K. A., ... & Zhao, M. (2020). SPEAR: The next generation GFDL modeling system for seasonal to multidecadal prediction and projection. Journal of Advances in Modeling Earth Systems, 12(3), e2019MS001895. doi:10.1029/2019MS001895 [[PUBLICATION]](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019MS001895)
 
 ## Publications
