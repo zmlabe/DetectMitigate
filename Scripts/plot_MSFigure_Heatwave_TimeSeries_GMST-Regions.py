@@ -198,6 +198,11 @@ for ii in range(len(allregions)):
                 plt.axvline(x=2031,color=c,linewidth=1,linestyle=':',zorder=100)
                 plt.axvline(x=yearsall[i][np.argmax(meanens[i])],color=c,linewidth=2,linestyle='-',zorder=200)
                 
+            if i == 2:
+                plt.text(yearsall[i][np.argmax(meanens[i])],7.5,r'\textbf{Max [OS]}',fontsize=7,color=c,ha='center')
+            elif i == 3:
+                plt.text(yearsall[i][np.argmax(meanens[i])],7.5,r'\textbf{Max [OS_10ye]}',fontsize=7,color=c,ha='center')
+            
         # leg = plt.legend(shadow=False,fontsize=10,loc='upper center',
         #       bbox_to_anchor=(0.17,0.84),fancybox=True,ncol=1,frameon=False,
         #       handlelength=1,handletextpad=0.5)
@@ -207,10 +212,13 @@ for ii in range(len(allregions)):
         plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10),fontsize=9.2)
         plt.yticks(np.round(np.arange(-18,18.1,0.5),2),np.round(np.arange(-18,18.1,0.5),2),fontsize=9.2)
         plt.xlim([2015,2100])
-        plt.ylim([0,5])
+        plt.ylim([-0.5,7.5])
         
-        plt.text(2015,5,r'\textbf{[d]}',fontsize=11,color='k')
-        plt.ylabel(r'\textbf{Global Temperature Anomaly [$^{\circ}$C] Relative to 1921-1950}',
+        plt.text(2015,7.5,r'\textbf{[d]}',fontsize=11,color='k')
+        plt.text(2031,7.5,r'\textbf{OS_10ye}',fontsize=7,color='lightseagreen',ha='center')
+        plt.text(2040,7.5,r'\textbf{OS}',fontsize=7,color='darkslategrey',ha='center')
+        plt.text(2015,7,r'\textbf{GLOBAL}',fontsize=16,color='dimgrey')
+        plt.ylabel(r'\textbf{Temperature Anomaly [$^{\circ}$C] Relative to 1921-1950}',
                    fontsize=10,color='dimgrey')
         
     elif ii == 1:
@@ -261,7 +269,8 @@ for ii in range(len(allregions)):
         plt.ylim([-0.5,7.5])
         
         plt.text(2015,7.5,r'\textbf{[e]}',fontsize=11,color='k')
-        plt.ylabel(r'\textbf{CONUS Temperature Anomaly [$^{\circ}$C] Relative to 1981-2010}',
+        plt.text(2015,7,r'\textbf{CONUS}',fontsize=16,color='dimgrey')
+        plt.ylabel(r'\textbf{Temperature Anomaly [$^{\circ}$C] Relative to 1921-1950}',
                    fontsize=10,color='dimgrey')
 
 plt.tight_layout()
