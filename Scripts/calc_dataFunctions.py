@@ -478,6 +478,16 @@ def readFiles(variq,dataset,monthlychoice,scenario):
         numOfEnsSPSS10 = 30
         lat1,lon1,data = SPSS10.read_SPEAR_MED_SSP534OS_10ye(directorydataSPSS10,variq,monthlychoice,
                                                              sliceshapeSPSS10,slicenanSPSS10,numOfEnsSPSS10,'futureforcing')
+    elif dataset == 'SPEAR_MED_SSP370_OS2040a':
+        import read_SPEAR_MED_SSP370_OS2040a as SSP370OS2040a
+        directorydataSSP370OS2040a = '/work/Zachary.Labe/Data/SPEAR/SPEAR_MED_SSP370_OS2040a/monthly/'
+        sliceyearSSP370OS2040a = np.arange(1921,2100+1,1)
+        sliceshapeSSP370OS2040a = 4
+        slicenanSSP370OS2040a = 'nan'
+        levelSSP370OS2040a = 'surface'
+        numOfEnsSSP370OS2040a = 30
+        lat1,lon1,data = SSP370OS2040a.read_SPEAR_MED_SSP370_OS2040a(directorydataSSP370OS2040a,variq,monthlychoice,
+                                                             sliceshapeSSP370OS2040a,slicenanSSP370OS2040a,numOfEnsSSP370OS2040a,'futureforcing')
     elif dataset == 'SPEAR_MED_LM42p2_test':
         import read_SPEAR_MED_LM42p2_test as LM42p2test
         directorydataLM42p2test = '/work/Zachary.Labe/Data/'
@@ -687,17 +697,17 @@ def getRegion(data,lat1,lon1,lat_bounds,lon_bounds):
     print('>>>>>>>>>> Completed: getRegion function!')
     return datanew,latn,lonn   
 
-# ### Test functions - do not use!
-# import numpy as np
-# import matplotlib.pyplot as plt
-# import calc_Utilities as UT
-# import calc_Stats as SSS
+### Test functions - do not use!
+import numpy as np
+import matplotlib.pyplot as plt
+import calc_Utilities as UT
+import calc_Stats as SSS
 
-# variq = 'T2M'
+# variq = 'PRECT'
 # dataset = 'NClimGrid_MEDS'
 # monthlychoice = 'JJA'
-# scenario = 'SSP534OS'
-# data,lat1,lon1 = readFiles(variq,'SPEAR_MED_Scenario',monthlychoice,scenario)
+# scenario = 'SSP370_OS2040a'
+# data,lat1,lon1 = readFiles(variq,'SPEAR_MED_SSP370_OS2040a',monthlychoice,scenario)
 # # obs,lat1n,lon1n = readFiles(variq,'NClimGrid_MEDS',monthlychoice,scenario)
 
 # lon2,lat2 = np.meshgrid(lon1,lat1)
