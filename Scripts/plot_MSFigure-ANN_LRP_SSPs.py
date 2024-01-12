@@ -17,6 +17,7 @@ import palettable.cartocolors.qualitative as cc
 from sklearn.metrics import accuracy_score,confusion_matrix,precision_recall_fscore_support,plot_confusion_matrix,precision_score,recall_score,f1_score
 from sklearn.metrics import classification_report
 import cmasher as cmr
+import cmocean
 from scipy.ndimage import gaussian_filter
 
 ### Plotting defaults 
@@ -270,7 +271,8 @@ for r in range(lenOfPicks*2):
         rec = recalltest_precip[r-5]
         pre = prectest_precip[r-5]
         f1 = f1_test_precip[r-5]
-        cmap = cmr.waterlily
+        # cmap = cmr.waterlily
+        cmap = cmocean.cm.tarn
         variqname = 'Precipitation'
         label = r'\textbf{Relevance}'
         

@@ -16,6 +16,7 @@ import palettable.cubehelix as cm
 import palettable.cartocolors.qualitative as cc
 from sklearn.metrics import accuracy_score
 import cmasher as cmr
+import cmocean
 
 ### Plotting defaults 
 plt.rc('text',usetex=True)
@@ -284,7 +285,7 @@ def readDataOSLRP(variq,typeOfModel):
     return lrpreturn,count_sumpick,lat1,lon1
     
 ### Read in data for LRP and scores
-variq = 'T2M'
+variq = 'PRECT'
 lrp_os,count_os_sum,lat1,lon1 = readDataOSLRP(variq,'OS')
 lrp_os10ye,count_os10ye_sum,lat1,lon1 = readDataOSLRP(variq,'OS10ye')
 
@@ -314,7 +315,8 @@ for r in range(lenOfPicks*2):
     if variq == 'PRECT':
         variqname = 'Precipitation'
         label = r'\textbf{Relevance [N=%s Maps] -- %s}' % ((numOfEns*(years.shape[0])),variqname)
-        cmap = cmr.waterlily
+        cmap = cmocean.cm.tarn
+        # cmap = cmr.waterlily
     elif variq == 'T2M':
         variqname = 'Temperature'
         label = r'\textbf{Relevance [N=%s Maps] -- %s}' % ((numOfEns*(years.shape[0])),variqname)
