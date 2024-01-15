@@ -150,7 +150,11 @@ for f in range(len(variqa)):
         freq3.append(count3)
         freq4.append(count4)
         
-    allfreq = np.vstack([freq0,freq1,freq2,freq3,freq4])
+    ### ['historical','natural','SSP585','SSP119','SSP245']
+    ### [0,1,2,3,4]
+    ### better sort [1,0,2,4,3]
+    scenarioallnames = ['Natural','Historical','SSP5-8.5','SSP2-4.5','SSP1-1.9']
+    allfreq = np.vstack([freq1,freq0,freq2,freq4,freq3])
     
     ###############################################################################
     ###############################################################################
@@ -203,19 +207,19 @@ for f in range(len(variqa)):
         plt.axvline(x=np.where(years==2031)[0]+0.5,linewidth=2,color='lightseagreen',zorder=100,linestyle='--',dashes=(1,0.3))
        
     if f==0:
-        plt.vlines(x=np.where(years==2053)[0],ymin=2,ymax=5,linewidth=1,color='r',zorder=100)
-        plt.vlines(x=np.where(years==2063)[0],ymin=2,ymax=5,linewidth=1,color='r',zorder=100)
+        plt.vlines(x=np.where(years==2053)[0],ymin=2,ymax=4,linewidth=1,color='r',zorder=100)
+        plt.vlines(x=np.where(years==2063)[0],ymin=2,ymax=4,linewidth=1,color='r',zorder=100)
     elif f==1:
-        plt.vlines(x=np.where(years==2050)[0],ymin=2,ymax=5,linewidth=1,color='r',zorder=100)
-        plt.vlines(x=np.where(years==2064)[0],ymin=2,ymax=5,linewidth=1,color='r',zorder=100)
+        plt.vlines(x=np.where(years==2050)[0],ymin=2,ymax=4,linewidth=1,color='r',zorder=100)
+        plt.vlines(x=np.where(years==2064)[0],ymin=2,ymax=4,linewidth=1,color='r',zorder=100)
     elif f==2:
-        plt.vlines(x=np.where(years==2049)[0],ymin=2,ymax=5,linewidth=1,color='r',zorder=100)
-        plt.vlines(x=np.where(years==2056)[0],ymin=2,ymax=5,linewidth=1,color='r',zorder=100)
+        plt.vlines(x=np.where(years==2049)[0],ymin=2,ymax=4,linewidth=1,color='r',zorder=100)
+        plt.vlines(x=np.where(years==2056)[0],ymin=2,ymax=4,linewidth=1,color='r',zorder=100)
         plt.vlines(x=np.where(years==2074)[0],ymin=3,ymax=5,linewidth=1,color='r',zorder=100)
         plt.vlines(x=np.where(years==2084)[0],ymin=3,ymax=5,linewidth=1,color='r',zorder=100)
     elif f==3:
-        plt.vlines(x=np.where(years==2046)[0],ymin=2,ymax=5,linewidth=1,color='r',zorder=100)
-        plt.vlines(x=np.where(years==2051)[0],ymin=2,ymax=5,linewidth=1,color='r',zorder=100)
+        plt.vlines(x=np.where(years==2046)[0],ymin=2,ymax=4,linewidth=1,color='r',zorder=100)
+        plt.vlines(x=np.where(years==2051)[0],ymin=2,ymax=4,linewidth=1,color='r',zorder=100)
         plt.vlines(x=np.where(years==2073)[0],ymin=3,ymax=5,linewidth=1,color='r',zorder=100)
         plt.vlines(x=np.where(years==2086)[0],ymin=3,ymax=5,linewidth=1,color='r',zorder=100)
     
@@ -256,4 +260,4 @@ plt.text(15+1.1,-0.55,r'$\bf{\circ \rightarrow}$',fontsize=10,color=cc,va='cente
 plt.text(25+1.1,-0.55,r'$\bf{\bullet \rightarrow}$',fontsize=10,color=cc,va='center',ha='center')
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.2,hspace=0.55,wspace=0.04,right=0.99)
-plt.savefig(directoryfigure + 'MSFigure_ANN_HeatMaps_OS.png',dpi=600)
+plt.savefig(directoryfigure + 'MSFigure_ANN_HeatMaps_OS_v2.png',dpi=600)
