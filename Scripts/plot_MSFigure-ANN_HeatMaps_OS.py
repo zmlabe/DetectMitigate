@@ -152,7 +152,7 @@ for f in range(len(variqa)):
         
     ### ['historical','natural','SSP585','SSP119','SSP245']
     ### [0,1,2,3,4]
-    ### better sort [1,0,2,4,3]
+    ### better sort [1,0,2,4,3] in order of transitions for visual clarity
     scenarioallnames = ['Natural','Historical','SSP5-8.5','SSP2-4.5','SSP1-1.9']
     allfreq = np.vstack([freq1,freq0,freq2,freq4,freq3])
     
@@ -224,9 +224,9 @@ for f in range(len(variqa)):
         plt.vlines(x=np.where(years==2086)[0],ymin=3,ymax=5,linewidth=1,color='r',zorder=100)
     
     if any([f==0,f==1]):
-        plt.title(r'\textbf{[%s] SPEAR_MED_SSP5-3.34OS -- %s}' % (letters[f],variq),fontsize=13,color='k')
+        plt.title(r'\textbf{[%s] SPEAR_MED_SSP5-3.4OS -- %s}' % (letters[f],variq),fontsize=13,color='k')
     else: 
-        plt.title(r'\textbf{[%s] SPEAR_MED_SSP5-3.34OS_10ye -- %s}' % (letters[f],variq),fontsize=13,color='k')
+        plt.title(r'\textbf{[%s] SPEAR_MED_SSP5-3.4OS_10ye -- %s}' % (letters[f],variq),fontsize=13,color='k')
     
     for i in range(allfreq.shape[0]):
         for j in range(allfreq.shape[1]):

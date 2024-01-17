@@ -43,7 +43,7 @@ level = 'surface'
 ###############################################################################
 timeper = ['historicalforcing','futureforcing','futureforcing','futureforcing','futureforcing','futureforcing','futureforcing']
 scenarioall = ['historical','natural','SSP585','SSP119','SSP245','SSP534OS','SSP534OS_10ye']
-scenarioallnames = ['Historical','Natural','SSP5-8.5','SSP1-1.9','SSP2-4.5','SSP5-3.4OS','SSP5-3.34OS_10ye']
+scenarioallnames = ['Historical','Natural','SSP5-8.5','SSP1-1.9','SSP2-4.5','SSP5-3.4OS','SSP5-3.4OS_10ye']
 ###############################################################################
 ###############################################################################
 land_only = False
