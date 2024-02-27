@@ -1,9 +1,10 @@
 """
 Calculate a map of the warmest year for the ensemble mean in the overshoot runs
-for the count of summer temperature extremes but with running mean
+for the count of summer temperature extremes but with no running mean and including
+a threshold forward looking
 
 Author    : Zachary M. Labe
-Date      : 31 July 2023
+Date      : 20 February 2024
 """
 
 from netCDF4 import Dataset
@@ -29,7 +30,6 @@ variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 30
 years = np.arange(2015,2100+1)
-rolling_years = 10 # years
 
 ###############################################################################
 ###############################################################################
@@ -46,6 +46,7 @@ slicemonthnamen = ['JJA']
 monthlychoice = seasons[0]
 reg_name = 'Globe'
 varcount = 'count90'
+YrThreshN = 10
 ###############################################################################
 ###############################################################################
 ###############################################################################
@@ -115,13 +116,9 @@ map_os_index = np.empty((lats.shape[0],lons.shape[0]))
 map_os_10ye_index = np.empty((lats.shape[0],lons.shape[0]))
 for i in range(lats.shape[0]):
     for j in range(lons.shape[0]):
-        gridpoint_osr = spear_osm_mean[:,i,j]
-        gridpoint_osr_10ye = spear_osm_10ye_mean[:,i,j]
-        
-        ### Calculate running mean
-        gridpoint_os = pd.Series(gridpoint_osr).rolling(window=rolling_years,center=True).mean().values
-        gridpoint_os_10ye = pd.Series(gridpoint_osr_10ye).rolling(window=rolling_years,center=True).mean().values
-        
+        gridpoint_os = spear_osm_mean[:,i,j]
+        gridpoint_os_10ye = spear_osm_10ye_mean[:,i,j]
+
         gridpoint_os = gridpoint_os[-len(years):]
         gridpoint_os_10ye = gridpoint_os_10ye[-len(years):]
         
@@ -153,12 +150,8 @@ diffbenefit = np.empty((lats.shape[0],lons.shape[0]))
 diffbenefit[:] = np.nan
 for i in range(lats.shape[0]):
     for j in range(lons.shape[0]):
-        gridpoint_osr = spear_osm_mean[:,i,j]
-        gridpoint_osr_10ye = spear_osm_10ye_mean[:,i,j]
-        
-        ### Calculate running mean then slice 2015-2100
-        gridpoint_os = pd.Series(gridpoint_osr).rolling(window=rolling_years,center=True).mean().values
-        gridpoint_os_10ye = pd.Series(gridpoint_osr_10ye).rolling(window=rolling_years,center=True).mean().values
+        gridpoint_os = spear_osm_mean[:,i,j]
+        gridpoint_os_10ye = spear_osm_10ye_mean[:,i,j]
         
         gridpoint_os = gridpoint_os[-len(years):]
         gridpoint_os_10ye = gridpoint_os_10ye[-len(years):]
@@ -177,10 +170,21 @@ for i in range(lats.shape[0]):
             
             IndexmaxAfterOS = np.nanargmax(gridpoint_os[:])
             
+            ### This is just checking the first index
+            # if len(np.where(gridpoint_os[IndexmaxAfterOS:] <= maxAfterOS_10ye)[0]) > 0:
+            #         minwherebelowMax = np.min(np.where(gridpoint_os[IndexmaxAfterOS:] <= maxAfterOS_10ye)[0]) + IndexmaxAfterOS
+                    
+            #         if np.max(gridpoint_os[minwherebelowMax:minwherebelowMax + YrThreshN]) <= maxAfterOS_10ye == True:
+            #             diffbenefit[i,j] = IndexmaxAfterOS_10ye - minwherebelowMax
+            
             if len(np.where(gridpoint_os[IndexmaxAfterOS:] <= maxAfterOS_10ye)[0]) > 0:
                 
-                minwherebelowMax = np.min(np.where(gridpoint_os[IndexmaxAfterOS:] <= maxAfterOS_10ye)[0]) + IndexmaxAfterOS
-                diffbenefit[i,j] = IndexmaxAfterOS_10ye - minwherebelowMax
+                for mx in range(len(np.where(gridpoint_os[IndexmaxAfterOS:] <= maxAfterOS_10ye)[0])):
+                    minwherebelowMax = np.where(gridpoint_os[IndexmaxAfterOS:] <= maxAfterOS_10ye)[0][mx] + IndexmaxAfterOS
+                    
+                    if (np.max(gridpoint_os[minwherebelowMax:minwherebelowMax + YrThreshN]) <= maxAfterOS_10ye) and (minwherebelowMax+YrThreshN < gridpoint_os.shape[0]):
+                        diffbenefit[i,j] = IndexmaxAfterOS_10ye - minwherebelowMax    
+                        break
           
         ### Plotting a sample definition of the net benefit
         if (i == latqPoint) and (j == lonqPoint):
@@ -198,10 +202,10 @@ directoryoutput = '/home/Zachary.Labe/Research/DetectMitigate/Data/GridLocationE
 gridExample_os = gridpoint_osX
 gridExample_os_10ye = gridpoint_os_10yeX
 diffbenefit_Example = diffbenefit[latqPoint,lonqPoint]
-np.savez(directoryoutput + 'gridpointExample_running_%s_%s_none.npz' % (rolling_years,varcount),gridpoint_osX=gridpoint_osX,
-         gridpoint_os_10yeX=gridpoint_os_10yeX,lats=lats,lons=lons,
-         latqPoint=latqPoint,lonqPoint=lonqPoint,minwherebelowMax_X=minwherebelowMax_X,
-         diffbenefit=diffbenefit)
+np.savez(directoryoutput + 'gridpointExample_YrThreshold-%s_%s_none.npz' % (YrThreshN,varcount),gridpoint_osX=gridpoint_osX,
+          gridpoint_os_10yeX=gridpoint_os_10yeX,lats=lats,lons=lons,
+          latqPoint=latqPoint,lonqPoint=lonqPoint,minwherebelowMax_X=minwherebelowMax_X,
+          diffbenefit=diffbenefit)
 
 ### Evaluate the hemispheres
 latqS = np.where(lats < 0)[0]
@@ -279,7 +283,7 @@ cbar1.outline.set_edgecolor('dimgrey')
 plt.tight_layout()
 plt.subplots_adjust(top=0.85,wspace=0.02,hspace=0.02,bottom=0.14)
 
-plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear_OS-T2M_%s_%s_running-%syr_%s.png' % (variq,seasons[0],rolling_years,varcount),dpi=300)
+plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear_OS-T2M_%s_NorunningYrThresh%s-%syr_%s.png' % (variq,seasons[0],YrThreshN,varcount),dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -322,7 +326,7 @@ cbar1.outline.set_edgecolor('dimgrey')
 
 plt.tight_layout()
 
-plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-Difference_OS-T2M_%s_%s_running-%syr_%s.png' % (variq,seasons[0],rolling_years,varcount),dpi=300)
+plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-Difference_OS-T2M_%s_NorunningYrThresh%s-%syr_%s.png' % (variq,seasons[0],YrThreshN,varcount),dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -365,7 +369,7 @@ cbar1.outline.set_edgecolor('dimgrey')
 
 plt.tight_layout()
 
-plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-Benefit_OS-T2M_%s_%s_running-%syr_%s.png' % (variq,seasons[0],rolling_years,varcount),dpi=300)
+plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-Benefit_OS-T2M_%s_NorunningYrThresh%s-%syr_%s.png' % (variq,seasons[0],YrThreshN,varcount),dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -410,7 +414,7 @@ cbar1.outline.set_edgecolor('dimgrey')
 
 plt.tight_layout()
 
-plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-BenefitMask_OS-%s_%s_running-%syr_%s.png' % (variq,seasons[0],rolling_years,varcount),dpi=300)
+plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-BenefitMask_OS-%s_NorunningYrThresh%s-%syr_%s.png' % (variq,seasons[0],YrThreshN,varcount),dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -438,7 +442,7 @@ x,y = m(lon2,lat2)
 cs1 = m.contourf(lon2,lat2,var,limit,extend='max',latlon=True)
 cs1.set_cmap(cmap) 
 
-m.scatter(lonPoint,latPoint,marker='o',color='aqua',latlon=True,s=3)
+m.scatter(lonPoint,latPoint,marker='o',color='aqua',latlon=True,s=5)
 
 m.drawlsmask(land_color=(0,0,0,0),ocean_color='dimgrey',lakes=False,zorder=11)
 m.drawcoastlines(color='darkgrey',linewidth=0.5,zorder=13)
@@ -460,4 +464,4 @@ cbar1.outline.set_edgecolor('dimgrey')
 
 plt.tight_layout()
 
-plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-BenefitMask_OS-%s_%s_running-%syr_%s_land.png' % (variq,seasons[0],rolling_years,varcount),dpi=300)
+plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-BenefitMask_OS-%s_NorunningYrThresh%s-%syr_%s.png' % (variq,seasons[0],YrThreshN,varcount),dpi=300)

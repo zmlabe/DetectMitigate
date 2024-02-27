@@ -1,9 +1,9 @@
 """
 Calculate a map of the warmest year for the ensemble mean in the overshoot runs
-for the count of summer temperature extremes but with running mean
+for the count of summer temperature extremes but with scipy.signal.savgol_filter 
 
 Author    : Zachary M. Labe
-Date      : 31 July 2023
+Date      : 20 February 2024
 """
 
 from netCDF4 import Dataset
@@ -19,6 +19,8 @@ import calc_Stats as dSS
 import sys
 import scipy.stats as sts
 import pandas as pd
+import scipy.signal as sig
+from scipy.signal import savgol_filter
 
 ### Read in data files from server
 plt.rc('text',usetex=True)
@@ -29,7 +31,6 @@ variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 30
 years = np.arange(2015,2100+1)
-rolling_years = 10 # years
 
 ###############################################################################
 ###############################################################################
@@ -46,6 +47,8 @@ slicemonthnamen = ['JJA']
 monthlychoice = seasons[0]
 reg_name = 'Globe'
 varcount = 'count90'
+Nfilter = 10
+
 ###############################################################################
 ###############################################################################
 ###############################################################################
@@ -118,9 +121,18 @@ for i in range(lats.shape[0]):
         gridpoint_osr = spear_osm_mean[:,i,j]
         gridpoint_osr_10ye = spear_osm_10ye_mean[:,i,j]
         
-        ### Calculate running mean
-        gridpoint_os = pd.Series(gridpoint_osr).rolling(window=rolling_years,center=True).mean().values
-        gridpoint_os_10ye = pd.Series(gridpoint_osr_10ye).rolling(window=rolling_years,center=True).mean().values
+        ### Calculate filtered data
+        gridpoint_os = savgol_filter(gridpoint_osr,Nfilter,3)
+        gridpoint_os_10ye = savgol_filter(gridpoint_osr_10ye,Nfilter,3)
+        
+        # plt.figure()
+        # plt.plot(gridpoint_os)
+        # plt.plot(gridpoint_osr)
+        
+        # plt.figure()
+        # plt.plot(gridpoint_os_10ye)
+        # plt.plot(gridpoint_osr_10ye)
+        # sys.exit()
         
         gridpoint_os = gridpoint_os[-len(years):]
         gridpoint_os_10ye = gridpoint_os_10ye[-len(years):]
@@ -156,9 +168,9 @@ for i in range(lats.shape[0]):
         gridpoint_osr = spear_osm_mean[:,i,j]
         gridpoint_osr_10ye = spear_osm_10ye_mean[:,i,j]
         
-        ### Calculate running mean then slice 2015-2100
-        gridpoint_os = pd.Series(gridpoint_osr).rolling(window=rolling_years,center=True).mean().values
-        gridpoint_os_10ye = pd.Series(gridpoint_osr_10ye).rolling(window=rolling_years,center=True).mean().values
+        ### Calculate filtered data
+        gridpoint_os = savgol_filter(gridpoint_osr,Nfilter,3)
+        gridpoint_os_10ye = savgol_filter(gridpoint_osr_10ye,Nfilter,3)
         
         gridpoint_os = gridpoint_os[-len(years):]
         gridpoint_os_10ye = gridpoint_os_10ye[-len(years):]
@@ -198,7 +210,7 @@ directoryoutput = '/home/Zachary.Labe/Research/DetectMitigate/Data/GridLocationE
 gridExample_os = gridpoint_osX
 gridExample_os_10ye = gridpoint_os_10yeX
 diffbenefit_Example = diffbenefit[latqPoint,lonqPoint]
-np.savez(directoryoutput + 'gridpointExample_running_%s_%s_none.npz' % (rolling_years,varcount),gridpoint_osX=gridpoint_osX,
+np.savez(directoryoutput + 'gridpointExample_savgolfilter_%s_%s_none.npz' % (Nfilter,varcount),gridpoint_osX=gridpoint_osX,
          gridpoint_os_10yeX=gridpoint_os_10yeX,lats=lats,lons=lons,
          latqPoint=latqPoint,lonqPoint=lonqPoint,minwherebelowMax_X=minwherebelowMax_X,
          diffbenefit=diffbenefit)
@@ -279,7 +291,7 @@ cbar1.outline.set_edgecolor('dimgrey')
 plt.tight_layout()
 plt.subplots_adjust(top=0.85,wspace=0.02,hspace=0.02,bottom=0.14)
 
-plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear_OS-T2M_%s_%s_running-%syr_%s.png' % (variq,seasons[0],rolling_years,varcount),dpi=300)
+plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear_OS-T2M_%s_%s_%s_%sFilterSavGol.png' % (variq,seasons[0],varcount,Nfilter),dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -322,7 +334,7 @@ cbar1.outline.set_edgecolor('dimgrey')
 
 plt.tight_layout()
 
-plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-Difference_OS-T2M_%s_%s_running-%syr_%s.png' % (variq,seasons[0],rolling_years,varcount),dpi=300)
+plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-Difference_OS-T2M_%s_%s_%s_%sFilterSavGol.png' % (variq,seasons[0],varcount,Nfilter),dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -365,52 +377,7 @@ cbar1.outline.set_edgecolor('dimgrey')
 
 plt.tight_layout()
 
-plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-Benefit_OS-T2M_%s_%s_running-%syr_%s.png' % (variq,seasons[0],rolling_years,varcount),dpi=300)
-
-###############################################################################
-###############################################################################
-###############################################################################
-### Plot difference in benefit
-limit = np.arange(0,31,1)
-barlim = np.round(np.arange(0,31,5),2)
-cmap = cmr.fall_r
-label = r'\textbf{Years [+10 years]}'
-
-fig = plt.figure()
-
-benefitdecade = diffbenefit.copy()
-benefitdecade[np.where(benefitdecade > -10)] = np.nan
-var = (benefitdecade*-1) - 10
-
-ax1 = plt.subplot(111)
-m = Basemap(projection='robin',lon_0=0,resolution='h',area_thresh=10000)
-m.drawcoastlines(color='w',linewidth=0.5)
-   
-circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
-                  linewidth=0.7)
-circle.set_clip_on(False)
-
-x,y = m(lon2,lat2)
-cs1 = m.contourf(lon2,lat2,var,limit,extend='max',latlon=True)
-cs1.set_cmap(cmap) 
-        
-ax1.annotate(r'\textbf{ADDED BENEFIT BY MITIGATING 10 YEARS EARLIER}',xy=(0,0),xytext=(0.5,1.10),
-              textcoords='axes fraction',color='dimgrey',fontsize=16,
-              rotation=0,ha='center',va='center')
-    
-###############################################################################
-cbar_ax1 = fig.add_axes([0.36,0.08,0.3,0.03])                
-cbar1 = fig.colorbar(cs1,cax=cbar_ax1,orientation='horizontal',
-                    extend='max',extendfrac=0.07,drawedges=False)
-cbar1.set_label(label,fontsize=9,color='dimgrey',labelpad=1.4)  
-cbar1.set_ticks(barlim)
-cbar1.set_ticklabels(list(map(str,barlim)))
-cbar1.ax.tick_params(axis='x', size=.01,labelsize=5)
-cbar1.outline.set_edgecolor('dimgrey')
-
-plt.tight_layout()
-
-plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-BenefitMask_OS-%s_%s_running-%syr_%s.png' % (variq,seasons[0],rolling_years,varcount),dpi=300)
+plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-Benefit_OS-T2M_%s_%s_%s_%sFilterSavGol.png' % (variq,seasons[0],varcount,Nfilter),dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -438,11 +405,8 @@ x,y = m(lon2,lat2)
 cs1 = m.contourf(lon2,lat2,var,limit,extend='max',latlon=True)
 cs1.set_cmap(cmap) 
 
-m.scatter(lonPoint,latPoint,marker='o',color='aqua',latlon=True,s=3)
-
 m.drawlsmask(land_color=(0,0,0,0),ocean_color='dimgrey',lakes=False,zorder=11)
-m.drawcoastlines(color='darkgrey',linewidth=0.5,zorder=13)
-m.drawstates(color='k',linewidth=0.3,zorder=12)
+m.drawcoastlines(color='darkgrey',linewidth=0.5,zorder=12)
         
 ax1.annotate(r'\textbf{ADDED BENEFIT BY MITIGATING 10 YEARS EARLIER}',xy=(0,0),xytext=(0.5,1.10),
               textcoords='axes fraction',color='dimgrey',fontsize=16,
@@ -460,4 +424,4 @@ cbar1.outline.set_edgecolor('dimgrey')
 
 plt.tight_layout()
 
-plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-BenefitMask_OS-%s_%s_running-%syr_%s_land.png' % (variq,seasons[0],rolling_years,varcount),dpi=300)
+plt.savefig(directoryfigure + 'SummerHeatExtremesTemperatureYear-BenefitMask_OS-%s_%s_%s_land_%sFilterSavGol.png' % (variq,seasons[0],varcount,Nfilter),dpi=300)
