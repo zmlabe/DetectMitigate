@@ -1,4 +1,4 @@
-# DetectMitigate [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10083257.svg)](https://doi.org/10.5281/zenodo.10083257)
+# DetectMitigate [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.10727521.svg)](https://doi.org/10.5281/zenodo.10727521)
 Using neural networks to detect effects of rapid climate mitigation
 
 ###### Under construction... ```[Python 3.9]```
