@@ -243,7 +243,7 @@ def read_SPEAR_MED_FA(directory,vari,sliceperiod,sliceshape,slicenan,numOfEns,ti
 
     ###########################################################################
     ### Change units
-    if any([vari=='T2M',vari=='SST',vari=='TMAX',vari=='TMIN']):
+    if any([vari=='T2M',vari=='SST',vari=='TMAX',vari=='TMIN',vari=='TS']):
         ensshape = ensshape - 273.15 # K to C
         print('Completed: Changed units (K to C)!')
     elif any([vari=='PRECL',vari=='PRECC',vari=='PRECT',vari=='WA',vari=='EVAP',vari=='SNOWRATE']):

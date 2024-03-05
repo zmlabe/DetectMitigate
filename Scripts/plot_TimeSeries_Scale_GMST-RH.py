@@ -24,7 +24,7 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 variablesall = ['rh_ref']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 yearsh = np.arange(1921,2014+1,1)
 years = np.arange(1921,2100+1)
 years_ssp245 = np.arange(2011,2100+1)
@@ -115,8 +115,8 @@ lon2,lat2 = np.meshgrid(lons,lats)
 yearq = np.where((yearsh >= 1921) & (yearsh <= 1950))[0]
 climoh = np.nanmean(np.nanmean(spear_hALL[:,yearq,:,:],axis=1),axis=0)
 
-spear_mALLa = spear_hALL - climoh[np.newaxis,np.newaxis,:,:]
-spear_hALLa = spear_mALL - climoh[np.newaxis,np.newaxis,:,:]
+spear_hALLa = spear_hALL - climoh[np.newaxis,np.newaxis,:,:]
+spear_mALLa = spear_mALL - climoh[np.newaxis,np.newaxis,:,:]
 spear_osmALLa = spear_osmALL - climoh[np.newaxis,np.newaxis,:,:]
 spear_osm_10yeALLa = spear_osm_10yeALL - climoh[np.newaxis,np.newaxis,:,:]
 
@@ -147,15 +147,15 @@ ave_os_10ye_avg = np.nanmean(avg_freq90_os10ye,axis=0)
 ############################################################################### 
 ############################################################################### 
 ### Organize variables
-years = np.arange(1921,2100+1)
+years = np.arange(2011,2100+1)
 years_os = np.arange(2011,2100+1)
 years_os10ye = np.arange(2031,2100+1)
 
-gmst_585 = gwl_allt
-heat_585 = np.append(ave_avg_h,ave_avg)
-
 gmst_os = np.append(gwl_spearht[-4:],gwl_ost,axis=0)
 heat_os = ave_os_avg
+
+gmst_585 = gwl_allt[-len(gmst_os):]
+heat_585 = np.append(ave_avg_h,ave_avg)[-len(gmst_os):]
 
 gmst_os10ye = gwl_os_10yet[-len(ave_os_10ye_avg):]
 heat_os10ye = ave_os_10ye_avg
@@ -258,8 +258,8 @@ for line,text in zip(leg.get_lines(), leg.get_texts()):
 
 plt.xticks(np.arange(-10,11,0.5),np.arange(-10,11,0.5))
 plt.yticks(np.round(np.arange(-5,5.1,0.5),2),np.round(np.arange(-5,5.1,0.5),2))
-plt.xlim([-1,5])
-plt.ylim([-5,1])
+plt.xlim([0.5,5])
+plt.ylim([-5.5,0.5])
 
 # plt.text(0.78,20.5,r'\textbf{2020}',fontsize=7,color='darkgrey')
 # plt.text(1.21,16,r'\textbf{2100}',fontsize=7,color='k')

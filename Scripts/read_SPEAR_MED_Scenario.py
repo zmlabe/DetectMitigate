@@ -340,7 +340,7 @@ def read_SPEAR_MED_Scenario(directory,scenario,vari,sliceperiod,sliceshape,slice
 
     ###########################################################################
     ### Change units
-    if any([vari=='T2M',vari=='SST',vari=='TMAX',vari=='TMIN',vari=='TMAXabs',vari=='TMINabs']):
+    if any([vari=='T2M',vari=='SST',vari=='TMAX',vari=='TMIN',vari=='TMAXabs',vari=='TMINabs',vari=='TS']):
         ensshape = ensshape - 273.15 # K to C
         print('Completed: Changed units (K to C)!')
     elif any([vari=='PRECL',vari=='PRECC',vari=='PRECT',vari=='WA',vari=='EVAP',vari=='SNOWRATE']):

@@ -93,7 +93,7 @@ def read_SPEAR_MED_SSP534OS_10ye(directory,vari,sliceperiod,sliceshape,slicenan,
     ### Change units
     membersvar2 = np.asarray(membersvar2)
     
-    if any([vari=='T2M',vari=='SST',vari=='TMAX',vari=='TMIN',vari=='TMAXabs',vari=='TMINabs']):
+    if any([vari=='T2M',vari=='SST',vari=='TMAX',vari=='TMIN',vari=='TMAXabs',vari=='TMINabs',vari=='TS']):
         membersvar2 = membersvar2 - 273.15 # K to C
         print('Completed: Changed units (K to C)!')
     elif any([vari=='PRECL',vari=='PRECC',vari=='PRECT',vari=='WA',vari=='EVAP',vari=='SNOWRATE']):

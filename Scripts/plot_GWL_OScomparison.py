@@ -21,10 +21,10 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['SST']
+variablesall = ['TS']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 years = np.arange(2015,2100+1)
 yearsh = np.arange(1921,2014+1,1)
 yearsall = np.arange(1921,2100+1,1)
@@ -109,7 +109,7 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-selectGWL = 1.8
+selectGWL = 1.5
 selectGWLn = '%s' % (int(selectGWL*10))
 yrplus = 3
 
@@ -270,7 +270,7 @@ elif style == 'global':
     m = Basemap(projection='robin',lon_0=0,resolution='h',area_thresh=10000)
     
 ### Colorbar limits
-if any([variq == 'T2M', variq == 'T850', variq == 'SST']):
+if any([variq == 'T2M', variq == 'T850', variq == 'SST', variq == 'TS']):
     barlim = np.arange(-6,7,2)
     limit = np.arange(-6,6.1,0.1)
     barlim2 = np.arange(-1.5,1.6,0.5)
@@ -295,6 +295,11 @@ elif any([variq == 'U200']):
     limit = np.arange(-5,5.01,0.1)
     barlim2 = np.arange(-5,5.1,1)
     limit2 = np.arange(-5,5.01,0.1)   
+elif any([variq == 'rh_ref']):
+    barlim = np.arange(-5,5.1,1)
+    limit = np.arange(-5,5.01,0.1)
+    barlim2 = np.arange(-5,5.1,1)
+    limit2 = np.arange(-5,5.01,0.1)  
 elif any([variq == 'Z500', variq == 'Z200']):
     barlim = np.arange(-100,100.1,25)
     limit = np.arange(-100,101,5)
@@ -309,6 +314,8 @@ if variq == 'PRECT':
     label = r'\textbf{PRECIPITATION CHANGE [mm/day]}' 
 elif variq == 'T2M':
     label = r'\textbf{T2M CHANGE [$^{\circ}$C]}' 
+elif variq == 'TS':
+    label = r'\textbf{TS CHANGE [$^{\circ}$C]}' 
 elif variq == 'SST':
     label = r'\textbf{SST CHANGE [$^{\circ}$C]}' 
 elif variq == 'T850':
@@ -327,6 +334,8 @@ elif variq == 'tau_x':
     label = r'\textbf{ZONAL WIND STRESS CHANGE [Pa]}' 
 elif variq == 'tau_y':
     label = r'\textbf{MERIDIONAL WIND STRESS CHANGE [Pa]}' 
+elif variq == 'rh_ref':
+    label = r'\textbf{NEAR-SURFACE RELATIVE HUMIDITY [Percent]}' 
 
 ### Map world map
 fig = plt.figure(figsize=(10,4))
@@ -349,9 +358,9 @@ if any([variq == 'tau_x',variq == 'tau_y',variq == 'SST']):
 else:
     m.drawcoastlines(color='dimgrey',linewidth=0.7)
                 
-if any([variq == 'T2M', variq == 'T850',variq == 'SST']):
+if any([variq == 'T2M', variq == 'T850',variq == 'SST',variq == 'TS']):
     cmap = cmocean.cm.balance    
-elif variq == 'PRECT':
+elif any([variq == 'PRECT',variq == 'rh_ref']):
     cmap = cmr.seasons_r    
 elif any([variq == 'U200',variq == 'U700',variq == 'tau_x',variq == 'tau_y', variq == 'Z500', variq == 'SLP', variq == 'Z200']):
     cmap = cmr.fusion_r  

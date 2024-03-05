@@ -1,5 +1,5 @@
 """
-Calculate land ocean time series for GMST over NORTHERN HEMISPHERE [$<$60N]
+Calculate land ocean time series for GMST over NORTHERN HEMISPHERE [30-65N]
 
 Author    : Zachary M. Labe
 Date      : 16 November 2023
@@ -42,7 +42,7 @@ dataset_obs = 'ERA5_MEDS'
 seasons = ['annual']
 slicemonthnamen = ['ANNUAL']
 monthlychoice = seasons[0]
-reg_name = 'NHnopole'
+reg_name = 'NHExtra'
 
 
 ###############################################################################
@@ -284,13 +284,13 @@ plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10))
 plt.yticks(np.round(np.arange(-2,2.1,0.5),2),np.round(np.arange(-2,2.1,0.5),2))
 plt.xlim([1921,2100])
 plt.ylim([-2.5,2])
-plt.title(r'\textbf{NORTHERN HEMISPHERE [$<$60N]}',color='k',fontsize=15)
+plt.title(r'\textbf{NORTHERN HEMISPHERE [30-65N]}',color='k',fontsize=15)
 
 plt.ylabel(r'\textbf{Relative Humidity Anomaly [Percent; 1921-1950]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_rh_ref_GlobeLandOcean_NHnoPole.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_rh_ref_GlobeLandOcean_NHExtra.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -331,12 +331,12 @@ plt.yticks(np.round(np.arange(-2,2.1,0.5),2),np.round(np.arange(-2,2.1,0.5),2))
 plt.xlim([2030,2100])
 plt.ylim([-2.5,2])
 
-plt.title(r'\textbf{NORTHERN HEMISPHERE [$<$60N]}',color='k',fontsize=15)
+plt.title(r'\textbf{NORTHERN HEMISPHERE [30-65N]}',color='k',fontsize=15)
 plt.ylabel(r'\textbf{Relative Humidity Anomaly [Percent; 1921-1950]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_rh_ref_LandOcean_NHnoPole.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_rh_ref_LandOcean_NHExtra.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -412,10 +412,10 @@ plt.yticks(np.round(np.arange(-26,26.01,2),2),np.round(np.arange(-26,26.01,2),2)
 plt.xlim([1921,2100])
 plt.ylim([-14,10])
 
-plt.title(r'\textbf{NORTHERN HEMISPHERE [$<$60N]}',color='k',fontsize=15)
+plt.title(r'\textbf{NORTHERN HEMISPHERE [30-65N]}',color='k',fontsize=15)
 plt.ylabel(r'\textbf{Humidity Ratio [Land/Ocean]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_ratio_LandOcean_NHnoPole_rh_ref.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_ratio_LandOcean_NHExtra_rh_ref.png',dpi=300)
 

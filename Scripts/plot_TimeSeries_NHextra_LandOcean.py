@@ -1,5 +1,5 @@
 """
-Calculate land ocean time series for GMST over NORTHERN HEMISPHERE [$<$60N]
+Calculate land ocean time series for GMST over NORTHERN HEMISPHERE [30-65N]
 
 Author    : Zachary M. Labe
 Date      : 16 November 2023
@@ -40,10 +40,10 @@ letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
 experimentnames = ['SSP5-34OS','SSP5-34OS_10ye','DIFFERENCE [a-b]']
 dataset_obs = 'ERA5_MEDS'
-seasons = ['annual']
-slicemonthnamen = ['ANNUAL']
+seasons = ['JJA']
+slicemonthnamen = ['JJA']
 monthlychoice = seasons[0]
-reg_name = 'NHnopole'
+reg_name = 'NHExtra'
 
 
 ###############################################################################
@@ -255,13 +255,13 @@ plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10))
 plt.yticks(np.round(np.arange(-18,18.1,1),2),np.round(np.arange(-18,18.1,1),2))
 plt.xlim([2030,2100])
 plt.ylim([0,7])
-plt.title(r'\textbf{NORTHERN HEMISPHERE [$<$60N]}',color='k',fontsize=15)
+plt.title(r'\textbf{NORTHERN HEMISPHERE [30-65N]}',color='k',fontsize=15)
 
 plt.ylabel(r'\textbf{Near-Surface Temperature Anomaly [$^{\circ}$C; 1921-1950]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_GMST_GlobeLandOcean_NHnoPole.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_GMST_GlobeLandOcean_NHExtra_JJA.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -302,12 +302,12 @@ plt.yticks(np.round(np.arange(-18,18.1,1),2),np.round(np.arange(-18,18.1,1),2))
 plt.xlim([2030,2100])
 plt.ylim([0,7])
 
-plt.title(r'\textbf{NORTHERN HEMISPHERE [$<$60N]}',color='k',fontsize=15)
+plt.title(r'\textbf{NORTHERN HEMISPHERE [30-65N]}',color='k',fontsize=15)
 plt.ylabel(r'\textbf{Near-Surface Temperature Anomaly [$^{\circ}$C; 1921-1950]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_GMST_LandOcean_NHnoPole.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_GMST_LandOcean_NHExtra_JJA.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -368,12 +368,12 @@ plt.yticks(np.round(np.arange(0,1.01,0.02),2),np.round(np.arange(0,1.01,0.02),2)
 plt.xlim([2015,2100])
 plt.ylim([0,0.18])
 
-plt.title(r'\textbf{NORTHERN HEMISPHERE [$<$60N]}',color='k',fontsize=15)
+plt.title(r'\textbf{NORTHERN HEMISPHERE [30-65N]}',color='k',fontsize=15)
 plt.ylabel(r'\textbf{Coefficient of Variation [fraction]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_CV_GlobeLandOcean_NHnoPole.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_CV_GlobeLandOcean_NHExtra_JJA.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -434,12 +434,12 @@ plt.yticks(np.round(np.arange(0,1.01,0.1),2),np.round(np.arange(0,1.01,0.1),2))
 plt.xlim([2015,2100])
 plt.ylim([0,0.8])
 
-plt.title(r'\textbf{NORTHERN HEMISPHERE [$<$60N]}',color='k',fontsize=15)
+plt.title(r'\textbf{NORTHERN HEMISPHERE [30-65N]}',color='k',fontsize=15)
 plt.ylabel(r'\textbf{Modified Coefficient of Variation [spread/mean]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_CVmod_GlobeLandOcean_NHnoPole.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_CVmod_GlobeLandOcean_NHExtra_JJA.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -476,12 +476,12 @@ plt.yticks(np.round(np.arange(-5,5.01,0.2),2),np.round(np.arange(-5,5.01,0.2),2)
 plt.xlim([2015,2100])
 plt.ylim([0,3])
 
-plt.title(r'\textbf{NORTHERN HEMISPHERE [$<$60N]}',color='k',fontsize=15)
+plt.title(r'\textbf{NORTHERN HEMISPHERE [30-65N]}',color='k',fontsize=15)
 plt.ylabel(r'\textbf{Land - Ocean [GMST $^{\circ}$C]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_difference_LandOcean_NHnoPole.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_difference_LandOcean_NHExtra_JJA.png',dpi=300)
 
 ###############################################################################
 ###############################################################################
@@ -518,10 +518,10 @@ plt.yticks(np.round(np.arange(-5,5.01,0.1),2),np.round(np.arange(-5,5.01,0.1),2)
 plt.xlim([2015,2100])
 plt.ylim([1.5,1.8])
 
-plt.title(r'\textbf{NORTHERN HEMISPHERE [$<$60N]}',color='k',fontsize=15)
+plt.title(r'\textbf{NORTHERN HEMISPHERE [30-65N]}',color='k',fontsize=15)
 plt.ylabel(r'\textbf{Ratio [Land/Ocean]}',
             fontsize=10,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_ratio_LandOcean_NHnoPole.png',dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_ratio_LandOcean_NHExtra_JJA.png',dpi=300)
 
