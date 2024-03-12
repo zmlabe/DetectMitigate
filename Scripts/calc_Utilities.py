@@ -1075,6 +1075,15 @@ def regions(name):
     elif name == 'US':
         lat_bounds = (20, 55)
         lon_bounds = (220, 310)
+    elif name == 'W_US':
+        lat_bounds = (20, 55)
+        lon_bounds = (220, 256)
+    elif name == 'Ce_US':
+        lat_bounds = (20, 55)
+        lon_bounds = (256, 275)
+    elif name == 'E_US':
+        lat_bounds = (20, 55)
+        lon_bounds = (275, 310)
     elif name == 'NAext':
         lat_bounds = (25, 90)
         lon_bounds = (200,330)         
