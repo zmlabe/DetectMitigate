@@ -42,7 +42,7 @@ dataset_obs = 'ERA5_MEDS'
 seasons = ['JJA']
 slicemonthnamen = ['JJA']
 monthlychoice = seasons[0]
-reg_name = 'US'
+reg_name = 'E_US'
 
 ###############################################################################
 ###############################################################################
@@ -179,9 +179,9 @@ plt.yticks(np.round(np.arange(-100,101,0.1),2),np.round(np.arange(-100,101,0.1),
 plt.xlim([1921,2100])
 plt.ylim([-1,1])
 
-plt.ylabel(r'\textbf{P-E [mm/day; 1921-1950; %s]}' % (seasons[0]),
+plt.ylabel(r'\textbf{P-E [mm/day; 1921-1950; %s; %s]}' % (seasons[0],reg_name),
             fontsize=7,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_CONUS_WA_historicalbaseline_%s.png' % (seasons[0]),dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_CONUS_WA_historicalbaseline_%s_%s.png' % (seasons[0],reg_name),dpi=300)
 

@@ -43,7 +43,7 @@ dataset_obs = 'ERA5_MEDS'
 seasons = ['JJA']
 slicemonthnamen = ['JJA']
 monthlychoice = seasons[0]
-reg_name = 'US'
+reg_name = 'W_US'
 
 ###############################################################################
 ###############################################################################
@@ -222,9 +222,9 @@ plt.yticks(np.round(np.arange(-10,10.1,0.5),2),np.round(np.arange(-10,10.1,0.5),
 plt.xlim([1921,2100])
 plt.ylim([-1.5,4])
 
-plt.ylabel(r'\textbf{Bowen Ratio Anomaly [Unitless; 1921-1950; %s]}' % (seasons[0]),
+plt.ylabel(r'\textbf{Bowen Ratio Anomaly [Unitless; 1921-1950; %s; %s]}' % (seasons[0],reg_name),
             fontsize=7,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_CONUS_BowenRatio_historicalbaseline_%s.png' % (seasons[0]),dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_CONUS_BowenRatio_historicalbaseline_%s_%s.png' % (seasons[0],reg_name),dpi=300)
 

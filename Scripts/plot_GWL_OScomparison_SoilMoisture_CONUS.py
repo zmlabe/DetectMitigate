@@ -1,8 +1,8 @@
 """
-Calculate trend for OS 
+Calculate trend for OS for water_soil for just the CONUS
 
 Author    : Zachary M. Labe
-Date      : 22 May 2023
+Date      : 14 March 2024
 """
 
 from netCDF4 import Dataset
@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['SHFLX']
+variablesall = ['water_soil']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 30
@@ -38,8 +38,8 @@ letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 ###############################################################################
 ###############################################################################
 modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
-seasons = ['JJA']
-slicemonthnamen = ['JJA']
+seasons = ['annual']
+slicemonthnamen = ['ANNUAL']
 monthlychoice = seasons[0]
 reg_name = 'Globe'
 
@@ -259,92 +259,26 @@ else:
 ### Plot figure
 
 ### Select map type
-style = 'global'
+style = 'US'
 
 if style == 'ortho':
-    m = Basemap(projection='ortho',lon_0=-90,
-                lat_0=70,resolution='h',round=True,area_thresh=10000)
+    m = Basemap(projection='ortho',lon_0=270,
+                lat_0=50,resolution='h',round=True,area_thresh=10000)
 elif style == 'polar':
     m = Basemap(projection='npstere',boundinglat=67,lon_0=270,resolution='h',round=True,area_thresh=10000)
 elif style == 'global':
     m = Basemap(projection='robin',lon_0=0,resolution='h',area_thresh=10000)
+elif style == 'US':
+    m = Basemap(llcrnrlon=-119,llcrnrlat=22,urcrnrlon=-64,urcrnrlat=49,
+                projection='lcc',lat_1=33,lat_2=45,lon_0=-95,resolution='l',
+                area_thresh=10000)
     
 ### Colorbar limits
-if any([variq == 'T2M', variq == 'T850', variq == 'SST', variq == 'TS']):
-    barlim = np.arange(-6,7,2)
-    limit = np.arange(-6,6.1,0.1)
-    barlim2 = np.arange(-1.5,1.6,0.5)
-    limit2 = np.arange(-1.5,1.51,0.05)
-elif any([variq == 'PRECT',variq == 'WA']):
-    barlim = np.arange(-2,2.1,0.5)
-    limit = np.arange(-2,2.01,0.05)
-    barlim2 = np.arange(-1,1.1,0.5)
-    limit2 = np.arange(-1,1.01,0.05)
-elif variq == 'SLP':
-    barlim = np.arange(-2,2.1,0.5)
-    limit = np.arange(-2,2.01,0.05)
-    barlim2 = np.arange(-1,1.1,0.5)
-    limit2 = np.arange(-1,1.01,0.05)
-elif any([variq == 'U700']):
-    barlim = np.arange(-2,2.1,0.5)
-    limit = np.arange(-2,2.01,0.05)
-    barlim2 = np.arange(-1,1.1,0.5)
-    limit2 = np.arange(-1,1.01,0.05)  
-elif any([variq == 'U200']):
-    barlim = np.arange(-5,5.1,1)
-    limit = np.arange(-5,5.01,0.1)
-    barlim2 = np.arange(-5,5.1,1)
-    limit2 = np.arange(-5,5.01,0.1)   
-elif any([variq == 'rh_ref']):
-    barlim = np.arange(-5,5.1,1)
-    limit = np.arange(-5,5.01,0.1)
-    barlim2 = np.arange(-5,5.1,1)
-    limit2 = np.arange(-5,5.01,0.1)  
-elif any([variq == 'Z500', variq == 'Z200']):
-    barlim = np.arange(-100,100.1,25)
-    limit = np.arange(-100,101,5)
-    barlim2 = np.arange(-100,100.1,25)
-    limit2 = np.arange(-100,101,5)
-elif any([variq == 'SHFLX']):
-    barlim = np.arange(-25,26,5)
-    limit = np.arange(-25,25.1,0.1)
-    barlim2 = np.arange(-25,26,5)
-    limit2 = np.arange(-25,25.1,0.1)
-elif any([variq == 'tau_x',variq == 'tau_y']):
-    barlim = np.arange(-0.02,0.021,0.01)
-    limit = np.arange(-0.02,0.0201,0.0001)
-    barlim2 = np.arange(-0.02,0.021,0.01)
-    limit2 = np.arange(-0.02,0.0201,0.0001)  
-if variq == 'PRECT':
-    label = r'\textbf{PRECIPITATION CHANGE [mm/day]}' 
-if variq == 'WA':
-    label = r'\textbf{P--E CHANGE [mm/day]}' 
-elif variq == 'T2M':
-    label = r'\textbf{T2M CHANGE [$^{\circ}$C]}' 
-elif variq == 'TS':
-    label = r'\textbf{TS CHANGE [$^{\circ}$C]}' 
-elif variq == 'SST':
-    label = r'\textbf{SST CHANGE [$^{\circ}$C]}' 
-elif variq == 'T850':
-    label = r'\textbf{T850 CHANGE [$^{\circ}$C]}' 
-elif variq == 'SLP':
-    label = r'\textbf{SLP CHANGE [hPa]}' 
-elif variq == 'Z500':
-    label = r'\textbf{Z500 CHANGE [m]}' 
-elif variq == 'Z200':
-    label = r'\textbf{Z200 CHANGE [m]}' 
-elif variq == 'U200':
-    label = r'\textbf{U200 CHANGE [m/s]}' 
-elif variq == 'U700':
-    label = r'\textbf{U700 CHANGE [m/s]}' 
-elif variq == 'tau_x':
-    label = r'\textbf{ZONAL WIND STRESS CHANGE [Pa]}' 
-elif variq == 'tau_y':
-    label = r'\textbf{MERIDIONAL WIND STRESS CHANGE [Pa]}' 
-elif variq == 'rh_ref':
-    label = r'\textbf{NEAR-SURFACE RELATIVE HUMIDITY [Percent]}' 
-elif variq == 'SHFLX':
-    label = r'\textbf{SENSIBLE HEAT FLUX [W/m$^{2}$]}' 
+barlim = np.arange(-0.5,0.51,0.25)
+limit = np.arange(-0.5,0.51,0.01)
+barlim2 = np.arange(-0.5,0.51,0.25)
+limit2 = np.arange(-0.5,0.51,0.01)  
+label = r'\textbf{SOIL MOISTURE CHANGE [m]}' 
 
 ### Map world map
 fig = plt.figure(figsize=(10,4))
@@ -355,24 +289,17 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='dimgrey',linewidth=0.7)
+m.drawcoastlines(color='darkgrey',linewidth=1)
+m.drawstates(color='darkgrey',linewidth=0.5)
+m.drawcountries(color='darkgrey',linewidth=0.5)
 
 ### Make the plot continuous
-cs = m.contourf(lon2,lat2,climatechange_GWL,limit,
+cs = m.contourf(lon2,lat2,climatechange_GWL/1000,limit,
                   extend='both',latlon=True)
 
-if any([variq == 'tau_x',variq == 'tau_y',variq == 'SST']):
-    m.fillcontinents(color='dimgrey',zorder=30)
-    m.drawcoastlines(color='darkgrey',linewidth=0.7)
-else:
-    m.drawcoastlines(color='dimgrey',linewidth=0.7)
+m.drawlsmask(land_color=(0,0,0,0),ocean_color='dimgray',lakes=False,zorder=11)  
                 
-if any([variq == 'T2M', variq == 'T850',variq == 'SST',variq == 'TS',variq == 'SHFLX']):
-    cmap = cmocean.cm.balance    
-elif any([variq == 'PRECT',variq == 'rh_ref',variq == 'WA']):
-    cmap = cmr.seasons_r    
-elif any([variq == 'U200',variq == 'U700',variq == 'tau_x',variq == 'tau_y', variq == 'Z500', variq == 'SLP', variq == 'Z200']):
-    cmap = cmr.fusion_r  
+cmap = cmr.seasons_r    
 cs.set_cmap(cmap)
 
 plt.title(r'\textbf{(a); %s$^{\circ}$C [%s] for SSP5-8.5}' % (selectGWL,years[ssp_GWL]),fontsize=11,color='dimgrey')
@@ -385,17 +312,16 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
+m.drawcoastlines(color='darkgrey',linewidth=1)
+m.drawstates(color='darkgrey',linewidth=0.5)
+m.drawcountries(color='darkgrey',linewidth=0.5)
 
 ### Make the plot continuous
-cs = m.contourf(lon2,lat2,os_GWL,limit,
+cs = m.contourf(lon2,lat2,os_GWL/1000,limit,
                 extend='both',latlon=True)                        
 cs.set_cmap(cmap)
 
-if any([variq == 'tau_x',variq == 'tau_y',variq == 'SST']):
-    m.fillcontinents(color='dimgrey',zorder=30)
-    m.drawcoastlines(color='darkgrey',linewidth=0.7)
-else:
-    m.drawcoastlines(color='dimgrey',linewidth=0.7)
+m.drawlsmask(land_color=(0,0,0,0),ocean_color='dimgray',lakes=False,zorder=11)  
 
 plt.title(r'\textbf{(b); %s$^{\circ}$C [%s] for SSP5-3.4OS}' % (selectGWL,years[os_second_GWL]),fontsize=11,color='dimgrey')
 
@@ -407,17 +333,16 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
+m.drawcoastlines(color='darkgrey',linewidth=1)
+m.drawstates(color='darkgrey',linewidth=0.5)
+m.drawcountries(color='darkgrey',linewidth=0.5)
 
 ### Make the plot continuous
-cs = m.contourf(lon2,lat2,os_10ye_GWL,limit,
+cs = m.contourf(lon2,lat2,os_10ye_GWL/1000,limit,
                 extend='both',latlon=True)                        
 cs.set_cmap(cmap)
 
-if any([variq == 'tau_x',variq == 'tau_y',variq == 'SST']):
-    m.fillcontinents(color='dimgrey',zorder=30)
-    m.drawcoastlines(color='darkgrey',linewidth=0.7)
-else:
-    m.drawcoastlines(color='dimgrey',linewidth=0.7)
+m.drawlsmask(land_color=(0,0,0,0),ocean_color='dimgray',lakes=False,zorder=11)  
 
 plt.title(r'\textbf{(c); %s$^{\circ}$C [%s] for SSP5-3.4OS_10ye}' % (selectGWL,years[os_10ye_second_GWL]),fontsize=11,color='dimgrey')
 
@@ -429,9 +354,12 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
+m.drawcoastlines(color='darkgrey',linewidth=1)
+m.drawstates(color='darkgrey',linewidth=0.5)
+m.drawcountries(color='darkgrey',linewidth=0.5)
 
 ### Make the plot continuous
-cs2 = m.contourf(lon2,lat2,diff_os,limit2,
+cs2 = m.contourf(lon2,lat2,diff_os/1000,limit2,
                 extend='both',latlon=True) 
 cs2.set_cmap(cmap)
 
@@ -440,11 +368,7 @@ pval_os[np.where(pval_os == 1)] = np.nan
 pval_os[np.where(pval_os == 0)] = 1. 
 cs3 = m.contourf(lon2,lat2,pval_os,colors='None',hatches=['/////////'],latlon=True)   
 
-if any([variq == 'tau_x',variq == 'tau_y',variq == 'SST']):
-    m.fillcontinents(color='dimgrey',zorder=30)
-    m.drawcoastlines(color='darkgrey',linewidth=0.7)
-else:
-    m.drawcoastlines(color='dimgrey',linewidth=0.7)               
+m.drawlsmask(land_color=(0,0,0,0),ocean_color='dimgray',lakes=False,zorder=11)               
 
 plt.title(r'\textbf{(d); (b) minus (a)}',fontsize=11,color='dimgrey')
 
@@ -456,9 +380,12 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
+m.drawcoastlines(color='darkgrey',linewidth=1)
+m.drawstates(color='darkgrey',linewidth=0.5)
+m.drawcountries(color='darkgrey',linewidth=0.5)
 
 ### Make the plot continuous
-cs2 = m.contourf(lon2,lat2,diff_os_10ye,limit2,
+cs2 = m.contourf(lon2,lat2,diff_os_10ye/1000,limit2,
                 extend='both',latlon=True)   
 cs2.set_cmap(cmap) 
  
@@ -467,11 +394,7 @@ pval_os_10ye[np.where(pval_os_10ye == 1)] = np.nan
 pval_os_10ye[np.where(pval_os_10ye == 0)] = 1. 
 cs3 = m.contourf(lon2,lat2,pval_os_10ye,colors='None',hatches=['/////////'],latlon=True)      
 
-if any([variq == 'tau_x',variq == 'tau_y',variq == 'SST']):
-    m.fillcontinents(color='dimgrey',zorder=30)
-    m.drawcoastlines(color='darkgrey',linewidth=0.7)
-else:
-    m.drawcoastlines(color='dimgrey',linewidth=0.7)                 
+m.drawlsmask(land_color=(0,0,0,0),ocean_color='dimgray',lakes=False,zorder=11)                 
 
 plt.title(r'\textbf{(e); (c) minus (a)}',fontsize=11,color='dimgrey')
 
@@ -496,4 +419,4 @@ cbar.outline.set_edgecolor('dimgrey')
 ### Save figure 
 plt.tight_layout()   
 fig.subplots_adjust(right=0.93)
-plt.savefig(directoryfigure + 'GWL-%s_%s_%s.png' % (selectGWLn,variq,seasons[0]),dpi=300)
+plt.savefig(directoryfigure + 'GWL-%s_%s_%s_CONUS.png' % (selectGWLn,variq,seasons[0]),dpi=300)

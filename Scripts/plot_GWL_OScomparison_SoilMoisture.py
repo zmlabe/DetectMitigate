@@ -38,8 +38,8 @@ letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 ###############################################################################
 ###############################################################################
 modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
-seasons = ['JJA']
-slicemonthnamen = ['JJA']
+seasons = ['annual']
+slicemonthnamen = ['ANNUAL']
 monthlychoice = seasons[0]
 reg_name = 'Globe'
 
@@ -109,7 +109,7 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-selectGWL = 1.6
+selectGWL = 1.8
 selectGWLn = '%s' % (int(selectGWL*10))
 yrplus = 3
 

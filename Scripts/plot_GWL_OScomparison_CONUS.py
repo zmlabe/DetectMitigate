@@ -1,8 +1,8 @@
 """
-Calculate trend for OS 
+Calculate trend for OS  but for the CONUS
 
 Author    : Zachary M. Labe
-Date      : 22 May 2023
+Date      : 18 March 2024
 """
 
 from netCDF4 import Dataset
@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['SHFLX']
+variablesall = ['EVAP']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 30
@@ -41,7 +41,7 @@ modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
 seasons = ['JJA']
 slicemonthnamen = ['JJA']
 monthlychoice = seasons[0]
-reg_name = 'Globe'
+reg_name = 'US'
 
 ### Calculate linear trends
 def calcTrend(data):
@@ -259,15 +259,19 @@ else:
 ### Plot figure
 
 ### Select map type
-style = 'global'
+style = 'US'
 
 if style == 'ortho':
-    m = Basemap(projection='ortho',lon_0=-90,
-                lat_0=70,resolution='h',round=True,area_thresh=10000)
+    m = Basemap(projection='ortho',lon_0=270,
+                lat_0=50,resolution='h',round=True,area_thresh=10000)
 elif style == 'polar':
     m = Basemap(projection='npstere',boundinglat=67,lon_0=270,resolution='h',round=True,area_thresh=10000)
 elif style == 'global':
     m = Basemap(projection='robin',lon_0=0,resolution='h',area_thresh=10000)
+elif style == 'US':
+    m = Basemap(llcrnrlon=-119,llcrnrlat=22,urcrnrlon=-64,urcrnrlat=49,
+                projection='lcc',lat_1=33,lat_2=45,lon_0=-95,resolution='l',
+                area_thresh=10000)
     
 ### Colorbar limits
 if any([variq == 'T2M', variq == 'T850', variq == 'SST', variq == 'TS']):
@@ -275,7 +279,7 @@ if any([variq == 'T2M', variq == 'T850', variq == 'SST', variq == 'TS']):
     limit = np.arange(-6,6.1,0.1)
     barlim2 = np.arange(-1.5,1.6,0.5)
     limit2 = np.arange(-1.5,1.51,0.05)
-elif any([variq == 'PRECT',variq == 'WA']):
+elif any([variq == 'PRECT',variq == 'WA',variq == 'EVAP']):
     barlim = np.arange(-2,2.1,0.5)
     limit = np.arange(-2,2.01,0.05)
     barlim2 = np.arange(-1,1.1,0.5)
@@ -306,10 +310,10 @@ elif any([variq == 'Z500', variq == 'Z200']):
     barlim2 = np.arange(-100,100.1,25)
     limit2 = np.arange(-100,101,5)
 elif any([variq == 'SHFLX']):
-    barlim = np.arange(-25,26,5)
-    limit = np.arange(-25,25.1,0.1)
-    barlim2 = np.arange(-25,26,5)
-    limit2 = np.arange(-25,25.1,0.1)
+    barlim = np.arange(-25,25.1,5)
+    limit = np.arange(-25,26,5)
+    barlim2 = np.arange(-25,25.1,5)
+    limit2 = np.arange(-25,26,5)
 elif any([variq == 'tau_x',variq == 'tau_y']):
     barlim = np.arange(-0.02,0.021,0.01)
     limit = np.arange(-0.02,0.0201,0.0001)
@@ -317,7 +321,9 @@ elif any([variq == 'tau_x',variq == 'tau_y']):
     limit2 = np.arange(-0.02,0.0201,0.0001)  
 if variq == 'PRECT':
     label = r'\textbf{PRECIPITATION CHANGE [mm/day]}' 
-if variq == 'WA':
+elif variq == 'EVAP':
+    label = r'\textbf{EVAPORATION CHANGE [mm/day]}' 
+elif variq == 'WA':
     label = r'\textbf{P--E CHANGE [mm/day]}' 
 elif variq == 'T2M':
     label = r'\textbf{T2M CHANGE [$^{\circ}$C]}' 
@@ -344,7 +350,7 @@ elif variq == 'tau_y':
 elif variq == 'rh_ref':
     label = r'\textbf{NEAR-SURFACE RELATIVE HUMIDITY [Percent]}' 
 elif variq == 'SHFLX':
-    label = r'\textbf{SENSIBLE HEAT FLUX [W/m$^{2}$]}' 
+    label = r'\textbf{SENSIBLE HEAT FLUX [W/m^{2}]}' 
 
 ### Map world map
 fig = plt.figure(figsize=(10,4))
@@ -355,7 +361,9 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
-m.drawcoastlines(color='dimgrey',linewidth=0.7)
+m.drawcoastlines(color='darkgrey',linewidth=1)
+m.drawstates(color='darkgrey',linewidth=0.5)
+m.drawcountries(color='darkgrey',linewidth=0.5)
 
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,climatechange_GWL,limit,
@@ -369,7 +377,7 @@ else:
                 
 if any([variq == 'T2M', variq == 'T850',variq == 'SST',variq == 'TS',variq == 'SHFLX']):
     cmap = cmocean.cm.balance    
-elif any([variq == 'PRECT',variq == 'rh_ref',variq == 'WA']):
+elif any([variq == 'PRECT',variq == 'rh_ref',variq == 'WA',variq == 'EVAP']):
     cmap = cmr.seasons_r    
 elif any([variq == 'U200',variq == 'U700',variq == 'tau_x',variq == 'tau_y', variq == 'Z500', variq == 'SLP', variq == 'Z200']):
     cmap = cmr.fusion_r  
@@ -385,6 +393,9 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
+m.drawcoastlines(color='darkgrey',linewidth=1)
+m.drawstates(color='darkgrey',linewidth=0.5)
+m.drawcountries(color='darkgrey',linewidth=0.5)
 
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,os_GWL,limit,
@@ -407,6 +418,9 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
+m.drawcoastlines(color='darkgrey',linewidth=1)
+m.drawstates(color='darkgrey',linewidth=0.5)
+m.drawcountries(color='darkgrey',linewidth=0.5)
 
 ### Make the plot continuous
 cs = m.contourf(lon2,lat2,os_10ye_GWL,limit,
@@ -429,6 +443,9 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
+m.drawcoastlines(color='darkgrey',linewidth=1)
+m.drawstates(color='darkgrey',linewidth=0.5)
+m.drawcountries(color='darkgrey',linewidth=0.5)
 
 ### Make the plot continuous
 cs2 = m.contourf(lon2,lat2,diff_os,limit2,
@@ -456,6 +473,9 @@ for txt in fig.texts:
 circle = m.drawmapboundary(fill_color='dimgrey',color='dimgray',
                   linewidth=0.7)
 circle.set_clip_on(False)
+m.drawcoastlines(color='darkgrey',linewidth=1)
+m.drawstates(color='darkgrey',linewidth=0.5)
+m.drawcountries(color='darkgrey',linewidth=0.5)
 
 ### Make the plot continuous
 cs2 = m.contourf(lon2,lat2,diff_os_10ye,limit2,
@@ -496,4 +516,4 @@ cbar.outline.set_edgecolor('dimgrey')
 ### Save figure 
 plt.tight_layout()   
 fig.subplots_adjust(right=0.93)
-plt.savefig(directoryfigure + 'GWL-%s_%s_%s.png' % (selectGWLn,variq,seasons[0]),dpi=300)
+plt.savefig(directoryfigure + 'GWL-%s_%s_%s_CONUS.png' % (selectGWLn,variq,seasons[0]),dpi=300)

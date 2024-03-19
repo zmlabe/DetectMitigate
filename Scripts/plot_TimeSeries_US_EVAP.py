@@ -1,8 +1,8 @@
 """
-Calculate timeseries of CONUS mean of rh_ref
+Calculate timeseries of CONUS mean of EVAP
 
 Author    : Zachary M. Labe
-Date      : 14 June 2023
+Date      : 14 March 2024
 """
 
 from netCDF4 import Dataset
@@ -21,10 +21,10 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['rh_ref']
+variablesall = ['EVAP']
 variq = variablesall[0]
 numOfEns = 30
-numOfEns_10ye = 9
+numOfEns_10ye = 30
 years = np.arange(2015,2100+1)
 yearsh = np.arange(1921,2014+1,1)
 
@@ -43,53 +43,6 @@ seasons = ['JJA']
 slicemonthnamen = ['JJA']
 monthlychoice = seasons[0]
 reg_name = 'E_US'
-
-### Calculate linear trends
-def calcTrend(data):
-    if data.ndim == 3:
-        slopes = np.empty((data.shape[1],data.shape[2]))
-        x = np.arange(data.shape[0])
-        for i in range(data.shape[1]):
-            for j in range(data.shape[2]):
-                mask = np.isfinite(data[:,i,j])
-                y = data[:,i,j]
-                
-                if np.sum(mask) == y.shape[0]:
-                    xx = x
-                    yy = y
-                else:
-                    xx = x[mask]
-                    yy = y[mask]      
-                if np.isfinite(np.nanmean(yy)):
-                    slopes[i,j],intercepts, \
-                    r_value,p_value,std_err = sts.linregress(xx,yy)
-                else:
-                    slopes[i,j] = np.nan
-    elif data.ndim == 4:
-        slopes = np.empty((data.shape[0],data.shape[2],data.shape[3]))
-        x = np.arange(data.shape[1])
-        for ens in range(data.shape[0]):
-            print('Ensemble member completed: %s!' % (ens+1))
-            for i in range(data.shape[2]):
-                for j in range(data.shape[3]):
-                    mask = np.isfinite(data[ens,:,i,j])
-                    y = data[ens,:,i,j]
-                    
-                    if np.sum(mask) == y.shape[0]:
-                        xx = x
-                        yy = y
-                    else:
-                        xx = x[mask]
-                        yy = y[mask]      
-                    if np.isfinite(np.nanmean(yy)):
-                        slopes[ens,i,j],intercepts, \
-                        r_value,p_value,std_err = sts.linregress(xx,yy)
-                    else:
-                        slopes[ens,i,j] = np.nan
-    
-    dectrend = slopes * 10.   
-    print('Completed: Finished calculating trends!')      
-    return dectrend
 
 ###############################################################################
 ###############################################################################
@@ -222,13 +175,13 @@ for line,text in zip(leg.get_lines(), leg.get_texts()):
     text.set_color(line.get_color())
 
 plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10))
-plt.yticks(np.round(np.arange(-100,101,2),2),np.round(np.arange(-100,101,2),2))
+plt.yticks(np.round(np.arange(-100,101,0.2),2),np.round(np.arange(-100,101,0.2),2))
 plt.xlim([1921,2100])
-plt.ylim([-12,10])
+plt.ylim([-1,1])
 
-plt.ylabel(r'\textbf{Relative Humidity Anomaly [\%%; 1921-1950; %s; %s]}' % (seasons[0],reg_name),
+plt.ylabel(r'\textbf{Evaporation Rate [mm/day; 1921-1950; %s; %s]}' % (seasons[0],reg_name),
             fontsize=7,color='k')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'TimeSeries_CONUS_RH_historicalbaseline_%s_%s.png' % (seasons[0],reg_name),dpi=300)
+plt.savefig(directoryfigure + 'TimeSeries_CONUS_EVAP_historicalbaseline_%s_%s.png' % (seasons[0],reg_name),dpi=300)
 
