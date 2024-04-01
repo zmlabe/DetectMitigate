@@ -41,7 +41,7 @@ modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
 seasons = ['JJA']
 slicemonthnamen = ['JJA']
 monthlychoice = seasons[0]
-reg_name = 'US'
+reg_name = 'Globe'
 
 ### Calculate linear trends
 def calcTrend(data):
@@ -109,7 +109,7 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-selectGWL = 1.7
+selectGWL = 1.5
 selectGWLn = '%s' % (int(selectGWL*10))
 yrplus = 3
 
@@ -310,10 +310,10 @@ elif any([variq == 'Z500', variq == 'Z200']):
     barlim2 = np.arange(-100,100.1,25)
     limit2 = np.arange(-100,101,5)
 elif any([variq == 'SHFLX']):
-    barlim = np.arange(-25,25.1,5)
-    limit = np.arange(-25,26,5)
-    barlim2 = np.arange(-25,25.1,5)
-    limit2 = np.arange(-25,26,5)
+    barlim = np.arange(-25,26,5)
+    limit = np.arange(-25,25.1,0.1)
+    barlim2 = np.arange(-25,26,5)
+    limit2 = np.arange(-25,25.1,0.1)
 elif any([variq == 'tau_x',variq == 'tau_y']):
     barlim = np.arange(-0.02,0.021,0.01)
     limit = np.arange(-0.02,0.0201,0.0001)
@@ -350,7 +350,7 @@ elif variq == 'tau_y':
 elif variq == 'rh_ref':
     label = r'\textbf{NEAR-SURFACE RELATIVE HUMIDITY [Percent]}' 
 elif variq == 'SHFLX':
-    label = r'\textbf{SENSIBLE HEAT FLUX [W/m^{2}]}' 
+    label = r'\textbf{SENSIBLE HEAT FLUX [W/m$^{2}$]}' 
 
 ### Map world map
 fig = plt.figure(figsize=(10,4))

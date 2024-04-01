@@ -63,170 +63,170 @@ def read_primary_dataset(variq,dataset,monthlychoice,scenario,lat_bounds,lon_bou
 def findNearestValueIndex(array,value):
     index = (np.abs(array-value)).argmin()
     return index
-# ###############################################################################
-# ###############################################################################
-# ###############################################################################
-# ### Get data
-# lat_bounds,lon_bounds = UT.regions(reg_name)
+###############################################################################
+###############################################################################
+###############################################################################
+### Get data
+lat_bounds,lon_bounds = UT.regions(reg_name)
 
-# spear_mtnomask,lats,lons = read_primary_dataset(variqAir,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
-# spear_htnomask,lats,lons = read_primary_dataset(variqAir,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
-# spear_osmtnomask,lats,lons = read_primary_dataset(variqAir,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
-# spear_SSP245nomask,lats,lons = read_primary_dataset(variqAir,'SPEAR_MED_Scenario',monthlychoice,'SSP245',lat_bounds,lon_bounds)
-# spear_osm_10yetnomask,lats,lons = read_primary_dataset(variqAir,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
-# lon2,lat2 = np.meshgrid(lons,lats)
+spear_mtnomask,lats,lons = read_primary_dataset(variqAir,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
+spear_htnomask,lats,lons = read_primary_dataset(variqAir,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
+spear_osmtnomask,lats,lons = read_primary_dataset(variqAir,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
+spear_SSP245nomask,lats,lons = read_primary_dataset(variqAir,'SPEAR_MED_Scenario',monthlychoice,'SSP245',lat_bounds,lon_bounds)
+spear_osm_10yetnomask,lats,lons = read_primary_dataset(variqAir,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
+lon2,lat2 = np.meshgrid(lons,lats)
 
-# ### Remove the ocean to get only land temperatures
-# spear_mt,emptyobs = dSS.remove_ocean(spear_mtnomask,np.full((spear_mtnomask.shape[1],spear_mtnomask.shape[2],spear_mtnomask.shape[3]),np.nan),lat_bounds,lon_bounds,'MEDS')
-# spear_ht,emptyobs = dSS.remove_ocean(spear_htnomask,np.full((spear_mtnomask.shape[1],spear_mtnomask.shape[2],spear_mtnomask.shape[3]),np.nan),lat_bounds,lon_bounds,'MEDS')
-# spear_osmt,emptyobs = dSS.remove_ocean(spear_osmtnomask,np.full((spear_mtnomask.shape[1],spear_mtnomask.shape[2],spear_mtnomask.shape[3]),np.nan),lat_bounds,lon_bounds,'MEDS')
-# spear_SSP245,emptyobs = dSS.remove_ocean(spear_SSP245nomask,np.full((spear_mtnomask.shape[1],spear_mtnomask.shape[2],spear_mtnomask.shape[3]),np.nan),lat_bounds,lon_bounds,'MEDS')
-# spear_osm_10yet,emptyobs = dSS.remove_ocean(spear_osm_10yetnomask,np.full((spear_mtnomask.shape[1],spear_mtnomask.shape[2],spear_mtnomask.shape[3]),np.nan),lat_bounds,lon_bounds,'MEDS')
+### Remove the ocean to get only land temperatures
+spear_mt,emptyobs = dSS.remove_ocean(spear_mtnomask,np.full((spear_mtnomask.shape[1],spear_mtnomask.shape[2],spear_mtnomask.shape[3]),np.nan),lat_bounds,lon_bounds,'MEDS')
+spear_ht,emptyobs = dSS.remove_ocean(spear_htnomask,np.full((spear_mtnomask.shape[1],spear_mtnomask.shape[2],spear_mtnomask.shape[3]),np.nan),lat_bounds,lon_bounds,'MEDS')
+spear_osmt,emptyobs = dSS.remove_ocean(spear_osmtnomask,np.full((spear_mtnomask.shape[1],spear_mtnomask.shape[2],spear_mtnomask.shape[3]),np.nan),lat_bounds,lon_bounds,'MEDS')
+spear_SSP245,emptyobs = dSS.remove_ocean(spear_SSP245nomask,np.full((spear_mtnomask.shape[1],spear_mtnomask.shape[2],spear_mtnomask.shape[3]),np.nan),lat_bounds,lon_bounds,'MEDS')
+spear_osm_10yet,emptyobs = dSS.remove_ocean(spear_osm_10yetnomask,np.full((spear_mtnomask.shape[1],spear_mtnomask.shape[2],spear_mtnomask.shape[3]),np.nan),lat_bounds,lon_bounds,'MEDS')
 
-# spear_mt[np.where(spear_mt == 0.)] = np.nan
-# spear_ht[np.where(spear_ht == 0.)] = np.nan
-# spear_osmt[np.where(spear_osmt == 0.)] = np.nan
-# spear_SSP245[np.where(spear_SSP245 == 0.)] = np.nan
-# spear_osm_10yet[np.where(spear_osm_10yet == 0.)] = np.nan
+spear_mt[np.where(spear_mt == 0.)] = np.nan
+spear_ht[np.where(spear_ht == 0.)] = np.nan
+spear_osmt[np.where(spear_osmt == 0.)] = np.nan
+spear_SSP245[np.where(spear_SSP245 == 0.)] = np.nan
+spear_osm_10yet[np.where(spear_osm_10yet == 0.)] = np.nan
 
-# ### Calculate preindustrial baseline
-# yearq = np.where((yearsh >= 1921) & (yearsh <= 1950))[0]
-# climoh_speart = np.nanmean(np.nanmean(spear_ht[:,yearq,:,:],axis=1),axis=0)
+### Calculate preindustrial baseline
+yearq = np.where((yearsh >= 1921) & (yearsh <= 1950))[0]
+climoh_speart = np.nanmean(np.nanmean(spear_ht[:,yearq,:,:],axis=1),axis=0)
 
-# ### Calculate anomalies
-# spear_aht = spear_ht - climoh_speart[np.newaxis,np.newaxis,:,:]
-# spear_SSP245 = spear_SSP245 - climoh_speart[np.newaxis,np.newaxis,:,:]
-# spear_amt = spear_mt - climoh_speart[np.newaxis,np.newaxis,:,:]
-# spear_aosmt = spear_osmt - climoh_speart[np.newaxis,np.newaxis,:,:]
-# spear_aosm_10yet = spear_osm_10yet - climoh_speart[np.newaxis,np.newaxis,:,:]
+### Calculate anomalies
+spear_aht = spear_ht - climoh_speart[np.newaxis,np.newaxis,:,:]
+spear_SSP245 = spear_SSP245 - climoh_speart[np.newaxis,np.newaxis,:,:]
+spear_amt = spear_mt - climoh_speart[np.newaxis,np.newaxis,:,:]
+spear_aosmt = spear_osmt - climoh_speart[np.newaxis,np.newaxis,:,:]
+spear_aosm_10yet = spear_osm_10yet - climoh_speart[np.newaxis,np.newaxis,:,:]
 
-# ### Calculate global land average in SPEAR_MED
-# lon2,lat2 = np.meshgrid(lons,lats)
-# spear_ah_globeht = UT.calc_weightedAve(spear_aht,lat2)
-# spear_SSP245_globeht = UT.calc_weightedAve(spear_SSP245,lat2)
-# spear_am_globeht = UT.calc_weightedAve(spear_amt,lat2)
-# spear_osm_globeht = UT.calc_weightedAve(spear_aosmt,lat2)
-# spear_osm_10ye_globeht = UT.calc_weightedAve(spear_aosm_10yet,lat2)
+### Calculate global land average in SPEAR_MED
+lon2,lat2 = np.meshgrid(lons,lats)
+spear_ah_globeht = UT.calc_weightedAve(spear_aht,lat2)
+spear_SSP245_globeht = UT.calc_weightedAve(spear_SSP245,lat2)
+spear_am_globeht = UT.calc_weightedAve(spear_amt,lat2)
+spear_osm_globeht = UT.calc_weightedAve(spear_aosmt,lat2)
+spear_osm_10ye_globeht = UT.calc_weightedAve(spear_aosm_10yet,lat2)
 
-# ### Calculate GWL for ensemble means
-# gwl_spearht = np.nanmean(spear_ah_globeht,axis=0)
-# gwl_spearSSP245 = np.nanmean(spear_SSP245_globeht,axis=0)
-# gwl_spearft = np.nanmean(spear_am_globeht,axis=0)
-# gwl_ost = np.nanmean(spear_osm_globeht,axis=0)
-# gwl_os_10yet = np.nanmean(spear_osm_10ye_globeht,axis=0)
+### Calculate GWL for ensemble means
+gwl_spearht = np.nanmean(spear_ah_globeht,axis=0)
+gwl_spearSSP245 = np.nanmean(spear_SSP245_globeht,axis=0)
+gwl_spearft = np.nanmean(spear_am_globeht,axis=0)
+gwl_ost = np.nanmean(spear_osm_globeht,axis=0)
+gwl_os_10yet = np.nanmean(spear_osm_10ye_globeht,axis=0)
 
-# ### Combined gwl
-# gwl_allt = np.append(gwl_spearht,gwl_spearft,axis=0)
+### Combined gwl
+gwl_allt = np.append(gwl_spearht,gwl_spearft,axis=0)
 
-# ###############################################################################
-# ###############################################################################
-# ###############################################################################
-# ### Read in SPEAR_MED
-# lat_bounds,lon_bounds = UT.regions(reg_name)
-# spear_mALL,latsus,lonsus = read_primary_dataset(variq,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
-# spear_hALL,latsus,lonsus = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
-# spear_osmALL,latsus,lonsus = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
-# spear_osm_10yeALL,latsus,lonsus = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
-# lon2,lat2 = np.meshgrid(lons,lats)
+###############################################################################
+###############################################################################
+###############################################################################
+### Read in SPEAR_MED
+lat_bounds,lon_bounds = UT.regions(reg_name)
+spear_mALL,latsus,lonsus = read_primary_dataset(variq,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
+spear_hALL,latsus,lonsus = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
+spear_osmALL,latsus,lonsus = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
+spear_osm_10yeALL,latsus,lonsus = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
+lon2,lat2 = np.meshgrid(lons,lats)
 
-# ### Calculate anomalies
-# yearq = np.where((yearsh >= 1921) & (yearsh <= 1950))[0]
-# climoh = np.nanmean(np.nanmean(spear_hALL[:,yearq,:,:],axis=1),axis=0)
+### Calculate anomalies
+yearq = np.where((yearsh >= 1921) & (yearsh <= 1950))[0]
+climoh = np.nanmean(np.nanmean(spear_hALL[:,yearq,:,:],axis=1),axis=0)
 
-# spear_hALLa = spear_hALL - climoh[np.newaxis,np.newaxis,:,:]
-# spear_mALLa = spear_mALL - climoh[np.newaxis,np.newaxis,:,:]
-# spear_osmALLa = spear_osmALL - climoh[np.newaxis,np.newaxis,:,:]
-# spear_osm_10yeALLa = spear_osm_10yeALL - climoh[np.newaxis,np.newaxis,:,:]
+spear_hALLa = spear_hALL - climoh[np.newaxis,np.newaxis,:,:]
+spear_mALLa = spear_mALL - climoh[np.newaxis,np.newaxis,:,:]
+spear_osmALLa = spear_osmALL - climoh[np.newaxis,np.newaxis,:,:]
+spear_osm_10yeALLa = spear_osm_10yeALL - climoh[np.newaxis,np.newaxis,:,:]
 
-# ### Mask over the USA
-# # spear_m,maskobs = dSS.mask_CONUS(spear_mALLa,np.full((spear_mALL.shape[1],spear_mALL.shape[2],spear_mALL.shape[3]),np.nan),'MEDS',lat_bounds,lon_bounds)
-# # spear_h,maskobs = dSS.mask_CONUS(spear_hALLa,np.full((spear_mALL.shape[1],spear_mALL.shape[2],spear_mALL.shape[3]),np.nan),'MEDS',lat_bounds,lon_bounds)
-# # spear_osm,maskobs = dSS.mask_CONUS(spear_osmALLa,np.full((spear_mALL.shape[1],spear_mALL.shape[2],spear_mALL.shape[3]),np.nan),'MEDS',lat_bounds,lon_bounds)
-# # spear_osm_10ye,maskobs = dSS.mask_CONUS(spear_osm_10yeALLa,np.full((spear_mALL.shape[1],spear_mALL.shape[2],spear_mALL.shape[3]),np.nan),'MEDS',lat_bounds,lon_bounds)
-# spear_m = spear_mALLa
-# spear_h = spear_hALLa
-# spear_osm = spear_osmALLa
-# spear_osm_10ye = spear_osm_10yeALLa
+### Mask over the USA
+# spear_m,maskobs = dSS.mask_CONUS(spear_mALLa,np.full((spear_mALL.shape[1],spear_mALL.shape[2],spear_mALL.shape[3]),np.nan),'MEDS',lat_bounds,lon_bounds)
+# spear_h,maskobs = dSS.mask_CONUS(spear_hALLa,np.full((spear_mALL.shape[1],spear_mALL.shape[2],spear_mALL.shape[3]),np.nan),'MEDS',lat_bounds,lon_bounds)
+# spear_osm,maskobs = dSS.mask_CONUS(spear_osmALLa,np.full((spear_mALL.shape[1],spear_mALL.shape[2],spear_mALL.shape[3]),np.nan),'MEDS',lat_bounds,lon_bounds)
+# spear_osm_10ye,maskobs = dSS.mask_CONUS(spear_osm_10yeALLa,np.full((spear_mALL.shape[1],spear_mALL.shape[2],spear_mALL.shape[3]),np.nan),'MEDS',lat_bounds,lon_bounds)
+spear_m = spear_mALLa
+spear_h = spear_hALLa
+spear_osm = spear_osmALLa
+spear_osm_10ye = spear_osm_10yeALLa
 
-# ### Start in 2011
-# spear_os_2011 = np.append(spear_h[:,-3:,:,:],spear_osm[:,:,:,:],axis=1)
-# spear_osm_10ye_2031 = spear_osm_10ye[:,-70:,:,:]
+### Start in 2011
+spear_os_2011 = np.append(spear_h[:,-3:,:,:],spear_osm[:,:,:,:],axis=1)
+spear_osm_10ye_2031 = spear_osm_10ye[:,-70:,:,:]
 
-# ### Calculate spatial averages
-# lon2us,lat2us = np.meshgrid(lonsus,latsus)
-# avg_freq90_h = UT.calc_weightedAve(spear_h,lat2us)
-# avg_freq90 = UT.calc_weightedAve(spear_m,lat2us)
-# avg_freq90_os = UT.calc_weightedAve(spear_os_2011,lat2us)
-# avg_freq90_os10ye = UT.calc_weightedAve(spear_osm_10ye_2031,lat2us)
+### Calculate spatial averages
+lon2us,lat2us = np.meshgrid(lonsus,latsus)
+avg_freq90_h = UT.calc_weightedAve(spear_h,lat2us)
+avg_freq90 = UT.calc_weightedAve(spear_m,lat2us)
+avg_freq90_os = UT.calc_weightedAve(spear_os_2011,lat2us)
+avg_freq90_os10ye = UT.calc_weightedAve(spear_osm_10ye_2031,lat2us)
 
-# ### Calculate ensemble means
-# ave_avg_h = np.nanmean(avg_freq90_h,axis=0)
-# ave_avg = np.nanmean(avg_freq90,axis=0)
-# ave_os_avg = np.nanmean(avg_freq90_os,axis=0)
-# ave_os_10ye_avg = np.nanmean(avg_freq90_os10ye,axis=0)
+### Calculate ensemble means
+ave_avg_h = np.nanmean(avg_freq90_h,axis=0)
+ave_avg = np.nanmean(avg_freq90,axis=0)
+ave_os_avg = np.nanmean(avg_freq90_os,axis=0)
+ave_os_10ye_avg = np.nanmean(avg_freq90_os10ye,axis=0)
 
-# ############################################################################### 
-# ############################################################################### 
-# ############################################################################### 
-# ### Organize variables
-# years = np.arange(2011,2100+1)
-# years_os = np.arange(2011,2100+1)
-# years_os10ye = np.arange(2031,2100+1)
+############################################################################### 
+############################################################################### 
+############################################################################### 
+### Organize variables
+years = np.arange(2011,2100+1)
+years_os = np.arange(2011,2100+1)
+years_os10ye = np.arange(2031,2100+1)
 
-# gmst_os = np.append(gwl_spearht[-4:],gwl_ost,axis=0)
-# heat_os = ave_os_avg
+gmst_os = np.append(gwl_spearht[-4:],gwl_ost,axis=0)
+heat_os = ave_os_avg
 
-# gmst_585 = gwl_allt[-len(gmst_os):]
-# heat_585 = np.append(ave_avg_h,ave_avg)[-len(gmst_os):]
+gmst_585 = gwl_allt[-len(gmst_os):]
+heat_585 = np.append(ave_avg_h,ave_avg)[-len(gmst_os):]
 
-# gmst_os10ye = gwl_os_10yet[-len(ave_os_10ye_avg):]
-# heat_os10ye = ave_os_10ye_avg
+gmst_os10ye = gwl_os_10yet[-len(ave_os_10ye_avg):]
+heat_os10ye = ave_os_10ye_avg
 
-# ### Calculate decadal averages
-# dec_gmst_585 = []
-# dec_heat_585 = []
-# dec_years_585 = []
-# for y in range(0,len(gmst_585),10):
-#     print(y,y+10,years[y:y+10])
+### Calculate decadal averages
+dec_gmst_585 = []
+dec_heat_585 = []
+dec_years_585 = []
+for y in range(0,len(gmst_585),10):
+    print(y,y+10,years[y:y+10])
     
-#     dec_gmst_585q = np.nanmean(gmst_585[y:y+10])
-#     dec_gmst_585.append(dec_gmst_585q)
+    dec_gmst_585q = np.nanmean(gmst_585[y:y+10])
+    dec_gmst_585.append(dec_gmst_585q)
     
-#     dec_heat_585q = np.nanmean(heat_585[y:y+10])
-#     dec_heat_585.append(dec_heat_585q)
+    dec_heat_585q = np.nanmean(heat_585[y:y+10])
+    dec_heat_585.append(dec_heat_585q)
     
-#     dec_years_585q = years[y+10-1]
-#     dec_years_585.append(dec_years_585q)
-# ###############################################################################      
-# dec_gmst_os = []
-# dec_heat_os = []
-# dec_years_os = []
-# for y in range(0,len(gmst_os),10):
-#     print(y,y+10,years[y:y+10])
+    dec_years_585q = years[y+10-1]
+    dec_years_585.append(dec_years_585q)
+###############################################################################      
+dec_gmst_os = []
+dec_heat_os = []
+dec_years_os = []
+for y in range(0,len(gmst_os),10):
+    print(y,y+10,years[y:y+10])
     
-#     dec_gmst_osq = np.nanmean(gmst_os[y:y+10])
-#     dec_gmst_os.append(dec_gmst_osq)
+    dec_gmst_osq = np.nanmean(gmst_os[y:y+10])
+    dec_gmst_os.append(dec_gmst_osq)
     
-#     dec_heat_osq = np.nanmean(heat_os[y:y+10])
-#     dec_heat_os.append(dec_heat_osq)
+    dec_heat_osq = np.nanmean(heat_os[y:y+10])
+    dec_heat_os.append(dec_heat_osq)
     
-#     dec_years_osq = years_os[y+10-1]
-#     dec_years_os.append(dec_years_osq)
-# ###############################################################################      
-# dec_gmst_os10ye = []
-# dec_heat_os10ye = []
-# dec_years_os10ye = []
-# for y in range(0,len(gmst_os10ye),10):
-#     print(y,y+10,years[y:y+10])
+    dec_years_osq = years_os[y+10-1]
+    dec_years_os.append(dec_years_osq)
+###############################################################################      
+dec_gmst_os10ye = []
+dec_heat_os10ye = []
+dec_years_os10ye = []
+for y in range(0,len(gmst_os10ye),10):
+    print(y,y+10,years[y:y+10])
     
-#     dec_gmst_os10yeq = np.nanmean(gmst_os10ye[y:y+10])
-#     dec_gmst_os10ye.append(dec_gmst_os10yeq)
+    dec_gmst_os10yeq = np.nanmean(gmst_os10ye[y:y+10])
+    dec_gmst_os10ye.append(dec_gmst_os10yeq)
     
-#     dec_heat_os10yeq = np.nanmean(heat_os10ye[y:y+10])
-#     dec_heat_os10ye.append(dec_heat_os10yeq)
+    dec_heat_os10yeq = np.nanmean(heat_os10ye[y:y+10])
+    dec_heat_os10ye.append(dec_heat_os10yeq)
     
-#     dec_years_os10yeq = years_os10ye[y+10-1]
-#     dec_years_os10ye.append(dec_years_os10yeq)
+    dec_years_os10yeq = years_os10ye[y+10-1]
+    dec_years_os10ye.append(dec_years_os10yeq)
 
 ###############################################################################
 ###############################################################################
