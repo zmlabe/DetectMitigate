@@ -1,8 +1,8 @@
 """
-Explore heat extremes in the OS runs
+Explore dry extremes in the OS runs
  
 Author    : Zachary M. Labe
-Date      : 21 July 2023
+Date      : 31 August 2023
 """
 
 import matplotlib.pyplot as plt
@@ -23,8 +23,8 @@ startTime = time.time()
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 directorydata = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
-vari = 'TMIN'
-variq = 't_ref_min'
+vari = 'q'
+variq = 'q_ref'
 resolution = 'MEDS' 
 minb = 1981
 maxb = 2010
@@ -98,7 +98,7 @@ def readData(model,reg_name):
         
     return datamask,lat,lon,years
 
-def calc_heatExtremes(datamask,model,lat,lon,baselineanom):
+def calc_DryExtremes(datamask,model,lat,lon,baselineanom):
     
     ### Select model
     if model == 'SPEAR_MED':
@@ -133,13 +133,13 @@ def calc_heatExtremes(datamask,model,lat,lon,baselineanom):
     else:
         climdist = baselineanom
     
-    ### Calculate heat extremes
-    tx90 = np.nanpercentile(climdist,90,axis=1)
-    tx95 = np.nanpercentile(climdist,95,axis=1)
-    tx99 = np.nanpercentile(climdist,99,axis=1)
+    ### Calculate Dry extremes
+    tx10 = np.nanpercentile(climdist,10,axis=1)
+    tx05 = np.nanpercentile(climdist,5,axis=1)
+    tx01 = np.nanpercentile(climdist,1,axis=1)
     
-    ### Count of heat extremes for 90th percentile
-    count90v = np.empty((ENS,len(years),lat.shape[0],lon.shape[0]))
+    ### Count of Dry extremes for 10th percentile
+    count10v = np.empty((ENS,len(years),lat.shape[0],lon.shape[0]))
     for ens in range(ENS):
         for i in range(lat.shape[0]):
             for j in range(lon.shape[0]):
@@ -147,12 +147,12 @@ def calc_heatExtremes(datamask,model,lat,lon,baselineanom):
                     summerens = datamask[ens,yr,:,i,j]
                     
                     if np.isfinite(np.nanmax(summerens)):
-                        count90v[ens,yr,i,j] = (summerens > tx90[ens,i,j]).sum() 
+                        count10v[ens,yr,i,j] = (summerens < tx10[ens,i,j]).sum() 
                     else:
-                        count90v[ens,yr,i,j] = np.nan
+                        count10v[ens,yr,i,j] = np.nan
                         
-    ### Count of heat extremes for 95th percentile
-    count95v = np.empty((ENS,len(years),lat.shape[0],lon.shape[0]))
+    ### Count of Dry extremes for 5th percentile
+    count05v = np.empty((ENS,len(years),lat.shape[0],lon.shape[0]))
     for ens in range(ENS):
         for i in range(lat.shape[0]):
             for j in range(lon.shape[0]):
@@ -160,12 +160,12 @@ def calc_heatExtremes(datamask,model,lat,lon,baselineanom):
                     summerens = datamask[ens,yr,:,i,j]
                     
                     if np.isfinite(np.nanmax(summerens)):
-                        count95v[ens,yr,i,j] = (summerens > tx95[ens,i,j]).sum() 
+                        count05v[ens,yr,i,j] = (summerens < tx05[ens,i,j]).sum() 
                     else:
-                        count95v[ens,yr,i,j] = np.nan
+                        count05v[ens,yr,i,j] = np.nan
                         
-    ### Count of heat extremes for 99th percentile
-    count99v = np.empty((ENS,len(years),lat.shape[0],lon.shape[0]))
+    ### Count of Dry extremes for 1st percentile
+    count01v = np.empty((ENS,len(years),lat.shape[0],lon.shape[0]))
     for ens in range(ENS):
         for i in range(lat.shape[0]):
             for j in range(lon.shape[0]):
@@ -173,94 +173,94 @@ def calc_heatExtremes(datamask,model,lat,lon,baselineanom):
                     summerens = datamask[ens,yr,:,i,j]
 
                     if np.isfinite(np.nanmax(summerens)):
-                        count99v[ens,yr,i,j] = (summerens > tx99[ens,i,j]).sum() 
+                        count01v[ens,yr,i,j] = (summerens < tx01[ens,i,j]).sum() 
                     else:
-                        count99v[ens,yr,i,j] = np.nan
+                        count01v[ens,yr,i,j] = np.nan
     
-    ### Frequency of heat extremes
-    freq90v = count90v/dayslength
-    freq95v = count95v/dayslength
-    freq99v = count99v/dayslength
+    ### Frequency of Dry extremes
+    freq10v = count10v/dayslength
+    freq05v = count05v/dayslength
+    freq01v = count01v/dayslength
     
-    return climdist,count90v,count95v,count99v,freq90v,freq95v,freq99v
+    return climdist,count10v,count05v,count01v,freq10v,freq05v,freq01v
 
 ##############################################################################
 ##############################################################################
 ##############################################################################
-def netcdfHEAT(lats,lons,count90v,count95v,count99v,freq90v,freq95v,freq99v,directory,model,reg_name,vari):
-    print('\n>>> Using netcdfHEAT function!')
+def netcdfDry(lats,lons,count10v,count05v,count01v,freq10v,freq05v,freq01v,directory,model,reg_name,vari):
+    print('\n>>> Using netcdfDry function!')
     
     from netCDF4 import Dataset
     import numpy as np
     
-    name = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + vari + '_' + model + '.nc'
+    name = 'DryStats/DryStats' + '_JJA_' + reg_name + '_' + vari + '_' + model + '.nc'
     filename = directory + name
     ncfile = Dataset(filename,'w',format='NETCDF4')
-    ncfile.description = '90th, 95th, and 99th percentiles for JJA heat' 
+    ncfile.description = '10th, 05th, and 01th percentiles for JJA Dry' 
     
     ### Dimensions
-    ncfile.createDimension('ensembles',count90v.shape[0])
-    ncfile.createDimension('years',count90v.shape[1])
-    ncfile.createDimension('lat',count90v.shape[2])
-    ncfile.createDimension('lon',count90v.shape[3])
+    ncfile.createDimension('ensembles',count10v.shape[0])
+    ncfile.createDimension('years',count10v.shape[1])
+    ncfile.createDimension('lat',count10v.shape[2])
+    ncfile.createDimension('lon',count10v.shape[3])
     
     ### Variables
     ensembles = ncfile.createVariable('ensembles','f4',('ensembles'))
     years = ncfile.createVariable('years','f4',('years'))
     latitude = ncfile.createVariable('lat','f4',('lat'))
     longitude = ncfile.createVariable('lon','f4',('lon'))
-    count90n = ncfile.createVariable('count90','f4',('ensembles','years','lat','lon'))
-    count95n = ncfile.createVariable('count95','f4',('ensembles','years','lat','lon'))
-    count99n = ncfile.createVariable('count99','f4',('ensembles','years','lat','lon'))
-    freq90n = ncfile.createVariable('freq90','f4',('ensembles','years','lat','lon'))
-    freq95n = ncfile.createVariable('freq95','f4',('ensembles','years','lat','lon'))
-    freq99n = ncfile.createVariable('freq99','f4',('ensembles','years','lat','lon'))
+    count10n = ncfile.createVariable('count10','f4',('ensembles','years','lat','lon'))
+    count05n = ncfile.createVariable('count05','f4',('ensembles','years','lat','lon'))
+    count01n = ncfile.createVariable('count01','f4',('ensembles','years','lat','lon'))
+    freq10n = ncfile.createVariable('freq10','f4',('ensembles','years','lat','lon'))
+    freq05n = ncfile.createVariable('freq05','f4',('ensembles','years','lat','lon'))
+    freq01n = ncfile.createVariable('freq01','f4',('ensembles','years','lat','lon'))
     
     ### Units
-    count90n.units = 'count'
-    count95n.units = 'count'
-    freq90n.units = 'frequency'
-    freq95n.units = 'frequency'
-    ncfile.title = 'heat statistics'
+    count10n.units = 'count'
+    count05n.units = 'count'
+    freq10n.units = 'frequency'
+    freq05n.units = 'frequency'
+    ncfile.title = 'Dry statistics'
     ncfile.instituion = 'NOAA GFDL SPEAR_MED'
     ncfile.references = 'Delworth et al. 2020'
     
     ### Data
-    ensembles[:] = np.arange(count90v.shape[0])
-    years[:] = np.arange(count90v.shape[1])
+    ensembles[:] = np.arange(count10v.shape[0])
+    years[:] = np.arange(count10v.shape[1])
     latitude[:] = lats
     longitude[:] = lons
-    count90n[:] = count90v
-    count95n[:] = count95v
-    count99n[:] = count99v
-    freq90n[:] = freq90v
-    freq95n[:] = freq95v
-    freq99n[:] = freq99v
+    count10n[:] = count10v
+    count05n[:] = count05v
+    count01n[:] = count01v
+    freq10n[:] = freq10v
+    freq05n[:] = freq05v
+    freq01n[:] = freq01v
     
     ncfile.close()
     print('*Completed: Created netCDF4 File!')
 
-summer_LM42p2_test,lat,lon,years_LM42p2_test = readData('SPEAR_MED_LM42p2_test',reg_name)
+# summer_LM42p2_test,lat,lon,years_LM42p2_test = readData('SPEAR_MED_LM42p2_test',reg_name)
 # summer_osSSP245,lat,lon,years_osSSP245 = readData('SPEAR_MED_SSP245',reg_name)
 # summer_osAMOC2,lat,lon,years_osAMOC2 = readData('SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv',reg_name)
 # summer_osAMOC,lat,lon,years_osAMOC = readData('SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',reg_name)
 summer_os10ye,lat,lon,years_os10ye = readData('SPEAR_MED_SSP534OS_10ye',reg_name)
-summer_os,lat,lon,years_os = readData('SPEAR_MED_SSP534OS',reg_name)
+# summer_os,lat,lon,years_os = readData('SPEAR_MED_SSP534OS',reg_name)
 summer,lat,lon,years = readData('SPEAR_MED',reg_name)
 
-climdist,count90sp,count95sp,count99sp,freq90sp,freq95sp,freq99sp = calc_heatExtremes(summer,'SPEAR_MED',lat,lon,np.nan)
-climdist_os10ye,count90_os10ye,count95_os10ye,count99_os10ye,freq90_os10ye,freq95_os10ye,freq99_os10ye = calc_heatExtremes(summer_os10ye,'SPEAR_MED_SSP534OS_10ye',lat,lon,climdist)
-climdist_os,count90_os,count95_os,count99_os,freq90_os,freq95_os,freq99_os = calc_heatExtremes(summer_os,'SPEAR_MED_SSP534OS',lat,lon,climdist)
-# climdist_osAMOC,count90_osAMOC,count95_osAMOC,count99_osAMOC,freq90_osAMOC,freq95_osAMOC,freq99_osAMOC = calc_heatExtremes(summer_osAMOC,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',lat,lon,climdist)
-# climdist_osAMOC2,count90_osAMOC2,count95_osAMOC2,count99_osAMOC2,freq90_osAMOC2,freq95_osAMOC2,freq99_osAMOC2 = calc_heatExtremes(summer_osAMOC2,'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv',lat,lon,climdist)
-# climdist_osSSP245,count90_osSSP245,count95_osSSP245,count99_osSSP245,freq90_osSSP245,freq95_osSSP245,freq99_osSSP245 = calc_heatExtremes(summer_osSSP245,'SPEAR_MED_SSP245',lat,lon,climdist)
-# climdist_LM42p2_test,count90_LM42p2_test,count95_LM42p2_test,count99_LM42p2_test,freq90_LM42p2_test,freq95_LM42p2_test,freq99_LM42p2_test = calc_heatExtremes(summer_LM42p2_test,'SPEAR_MED_LM42p2_test',lat,lon,np.nan)
+climdist,count10sp,count05sp,count01sp,freq10sp,freq05sp,freq01sp = calc_DryExtremes(summer,'SPEAR_MED',lat,lon,np.nan)
+climdist_os10ye,count10_os10ye,count05_os10ye,count01_os10ye,freq10_os10ye,freq05_os10ye,freq01_os10ye = calc_DryExtremes(summer_os10ye,'SPEAR_MED_SSP534OS_10ye',lat,lon,climdist)
+# climdist_os,count10_os,count05_os,count01_os,freq10_os,freq05_os,freq01_os = calc_DryExtremes(summer_os,'SPEAR_MED_SSP534OS',lat,lon,climdist)
+# climdist_osAMOC,count10_osAMOC,count05_osAMOC,count01_osAMOC,freq10_osAMOC,freq05_osAMOC,freq01_osAMOC = calc_DryExtremes(summer_osAMOC,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',lat,lon,climdist)
+# climdist_osAMOC2,count10_osAMOC2,count05_osAMOC2,count01_osAMOC2,freq10_osAMOC2,freq05_osAMOC2,freq01_osAMOC2 = calc_DryExtremes(summer_osAMOC2,'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv',lat,lon,climdist)
+# climdist_osSSP245,count10_osSSP245,count05_osSSP245,count01_osSSP245,freq10_osSSP245,freq05_osSSP245,freq01_osSSP245 = calc_DryExtremes(summer_osSSP245,'SPEAR_MED_SSP245',lat,lon,climdist)
+# climdist_LM42p2_test,count10_LM42p2_test,count05_LM42p2_test,count01_LM42p2_test,freq10_LM42p2_test,freq05_LM42p2_test,freq01_LM42p2_test = calc_DryExtremes(summer_LM42p2_test,'SPEAR_MED_LM42p2_test',lat,lon,np.nan)
 
 ### Save data
-netcdfHEAT(lat,lon,count90sp,count95sp,count99sp,freq90sp,freq95sp,freq99sp,directorydata,'SPEAR_MED',reg_name,vari)
-netcdfHEAT(lat,lon,count90_os,count95_os,count99_os,freq90_os,freq95_os,freq99_os,directorydata,'SPEAR_MED_SSP534OS',reg_name,vari)
-netcdfHEAT(lat,lon,count90_os10ye,count95_os10ye,count99_os10ye,freq90_os10ye,freq95_os10ye,freq99_os10ye,directorydata,'SPEAR_MED_SSP534OS_10ye',reg_name,vari)
-# netcdfHEAT(lat,lon,count90_osAMOC,count95_osAMOC,count99_osAMOC,freq90_osAMOC,freq95_osAMOC,freq99_osAMOC,directorydata,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',reg_name,vari)
-# netcdfHEAT(lat,lon,count90_osAMOC2,count95_osAMOC2,count99_osAMOC2,freq90_osAMOC2,freq95_osAMOC2,freq99_osAMOC2,directorydata,'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv',reg_name,vari)
-# netcdfHEAT(lat,lon,count90_osSSP245,count95_osSSP245,count99_osSSP245,freq90_osSSP245,freq95_osSSP245,freq99_osSSP245,directorydata,'SPEAR_MED_SSP245',reg_name,vari)
-# netcdfHEAT(lat,lon,count90_LM42p2_test,count95_LM42p2_test,count99_LM42p2_test,freq90_LM42p2_test,freq95_LM42p2_test,freq99_LM42p2_test,directorydata,'SPEAR_MED_LM42p2_test',reg_name,vari)
+# netcdfDry(lat,lon,count10sp,count05sp,count01sp,freq10sp,freq05sp,freq01sp,directorydata,'SPEAR_MED',reg_name,vari)
+# netcdfDry(lat,lon,count10_os,count05_os,count05_os,freq10_os,freq05_os,freq01_os,directorydata,'SPEAR_MED_SSP534OS',reg_name,vari)
+netcdfDry(lat,lon,count10_os10ye,count05_os10ye,count01_os10ye,freq10_os10ye,freq05_os10ye,freq01_os10ye,directorydata,'SPEAR_MED_SSP534OS_10ye',reg_name,vari)
+# netcdfDry(lat,lon,count10_osAMOC,count05_osAMOC,count01_osAMOC,freq10_osAMOC,freq05_osAMOC,freq01_osAMOC,directorydata,'SPEAR_MED_SSP534OS_STRONGAMOC_p1Sv',reg_name,vari)
+# netcdfDry(lat,lon,count10_osAMOC2,count05_osAMOC2,count01_osAMOC2,freq10_osAMOC2,freq05_osAMOC2,freq01_osAMOC2,directorydata,'SPEAR_MED_SSP534OS_STRONGAMOC_p2Sv',reg_name,vari)
+# netcdfDry(lat,lon,count10_osSSP245,count05_osSSP245,count01_osSSP245,freq10_osSSP245,freq05_osSSP245,freq01_osSSP245,directorydata,'SPEAR_MED_SSP245',reg_name,vari)
+# netcdfDry(lat,lon,count10_LM42p2_test,count05_LM42p2_test,count01_LM42p2_test,freq10_LM42p2_test,freq05_LM42p2_test,freq01_LM42p2_test,directorydata,'SPEAR_MED_LM42p2_test',reg_name,vari)
