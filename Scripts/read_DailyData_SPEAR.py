@@ -77,13 +77,13 @@ for e in range(ENS):
     print('<<<<<STARTED: Read in ---> raw_%s/atmos_daily.*.%s.nc' % (e+1,variq))
     
     ### Read in data
-    # ds = xr.open_mfdataset(glob_pattern,concat_dim="time",combine="nested",
-    #                         data_vars='minimal',coords='minimal',compat='override',
-    #                         parallel=True,chunks={'time':'6GB','latitude':1,'longitude':1},
-    #                         engine='netcdf4')
-    ds = xr.open_mfdataset(glob_pattern,concat_dim="time",combine="nested", ### for LM42
+    ds = xr.open_mfdataset(glob_pattern,concat_dim="time",combine="nested",
                             data_vars='minimal',coords='minimal',compat='override',
-                            parallel=True,engine='netcdf4')
+                            parallel=True,chunks={'time':'6GB','latitude':1,'longitude':1},
+                            engine='netcdf4')
+    # ds = xr.open_mfdataset(glob_pattern,concat_dim="time",combine="nested", ### for LM42
+    #                         data_vars='minimal',coords='minimal',compat='override',
+    #                         parallel=True,engine='netcdf4')
     lat1 = ds['lat'].to_numpy()
     lon1 = ds['lon'].to_numpy()
     
