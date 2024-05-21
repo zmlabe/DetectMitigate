@@ -29,6 +29,7 @@ numOfEns_10ye = 30
 yearsh = np.arange(1921,2014+1,1)
 years = np.arange(1921,2100+1)
 yearsf = np.arange(2015,2100+1)
+reg_name_vari = 'US'
 
 ###############################################################################
 ###############################################################################
@@ -57,7 +58,7 @@ def read_primary_dataset(variq,dataset,monthlychoice,scenario,lat_bounds,lon_bou
 ###############################################################################
 ###############################################################################
 ### Read in data
-lat_bounds,lon_bounds = UT.regions('US')
+lat_bounds,lon_bounds = UT.regions(reg_name_vari)
 spear_mALL,lats,lons = read_primary_dataset(variq,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
 spear_hALL,lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
 spear_osmALL,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
@@ -120,7 +121,7 @@ os_10ye_yr = np.where((yearsf == 2031))[0][0]
 ### Read in data for OS daily extremes
 ### Read in SPEAR_MED_SSP534OS
 directorydatahHEAT = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
-name_osHEAT = 'HeatStats/HeatStats' + '_JJA_' + 'US' + '_' + 'TMIN' + '_' + 'SPEAR_MED_SSP534OS' + '.nc'
+name_osHEAT = 'HeatStats/HeatStats' + '_JJA_' + reg_name_vari + '_' + 'TMAX' + '_' + 'SPEAR_MED_SSP534OS' + '.nc'
 filename_osHEAT = directorydatahHEAT + name_osHEAT
 data_osHEAT = Dataset(filename_osHEAT)
 count90_osHEAT = data_osHEAT.variables[varcount][:,4:,:,:] # Need to start in 2015, not 2011
@@ -130,7 +131,7 @@ data_osHEAT.close()
 
 ### Read in SPEAR_MED_SSP534OS_10ye
 directorydatahHEAT = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'
-name_os10yeHEAT = 'HeatStats/HeatStats' + '_JJA_' + 'US' + '_' + 'TMIN' + '_' + 'SPEAR_MED_SSP534OS_10ye' + '.nc'
+name_os10yeHEAT = 'HeatStats/HeatStats' + '_JJA_' + reg_name_vari + '_' + 'TMAX' + '_' + 'SPEAR_MED_SSP534OS_10ye' + '.nc'
 filename_os10yeHEAT = directorydatahHEAT+ name_os10yeHEAT
 data_os10yeHEAT = Dataset(filename_os10yeHEAT)
 count90_os10yeqHEAT = data_os10yeHEAT.variables[varcount][:]
@@ -287,8 +288,8 @@ plt.yticks(np.arange(-50,51,2),map(str,np.round(np.arange(-50,51,2),2)),fontsize
 plt.xlim([0,60])
 plt.ylim([-8,8])
 
-plt.xlabel(r'\textbf{Count of Tn90 days in JJA}',fontsize=11,color='dimgrey')
-plt.ylabel(r'\textbf{rh_ref Anomaly [percent]}',fontsize=11,color='dimgrey')
+plt.xlabel(r'\textbf{Count of Tx90 days in JJA - %s}' % reg_name_vari,fontsize=11,color='dimgrey')
+plt.ylabel(r'\textbf{rh_ref Anomaly [percent] - %s}' % reg_name_vari,fontsize=11,color='dimgrey')
 
 ############################################################################### 
 ax = plt.subplot(122)
@@ -328,8 +329,8 @@ plt.yticks(np.arange(-50,51,2),map(str,np.round(np.arange(-50,51,2),2)),fontsize
 plt.xlim([0,60])
 plt.ylim([-8,8])
 
-plt.xlabel(r'\textbf{Count of Tn90 days in JJA}',fontsize=11,color='dimgrey')
+plt.xlabel(r'\textbf{Count of Tx90 days in JJA - %s}' % reg_name_vari,fontsize=11,color='dimgrey')
 
 plt.tight_layout()
-plt.savefig(directoryfigure + 'Scatter_RH-Tn90_OS.png',dpi=300)
+plt.savefig(directoryfigure + 'Scatter_RH-Tx90_OS_%s.png' % reg_name_vari,dpi=300)
 
