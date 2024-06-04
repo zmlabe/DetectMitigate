@@ -81,7 +81,7 @@ def readData(model,reg_name):
         data3.close()        
 
         ### Convert units if needed
-        if any([vari == 'T2M',vari == 'TMAX']):
+        if any([vari == 'T2M',vari == 'TMAX',vari == 'TMIN']):
             daysall[e,:,:,:,:] = np.concatenate([june,july,august],axis=1) - 273.15 # K to C
             print('Completed: Changed units (K to C)!')
         else:
