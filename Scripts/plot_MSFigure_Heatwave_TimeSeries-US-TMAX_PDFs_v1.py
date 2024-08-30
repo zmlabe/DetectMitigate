@@ -45,7 +45,7 @@ dayslength = len(junedays) + len(julydays) + len(augustdays)
 ###############################################################################
 ###############################################################################
 ### Data preliminaries 
-directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/MS_Figures/'
+directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/MSFigures_Heat/'
 letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 ###############################################################################
 ###############################################################################
@@ -249,27 +249,27 @@ ax.tick_params(axis='x',labelsize=6,pad=1.5)
 ax.tick_params(axis='y',labelsize=6,pad=1.5)
 ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.8)
 
-color = [cmr.dusk(0.01),cmr.sapphire(0.5),cmr.dusk(0.8)]
-for i,c in zip(range(1,len(meanens),1),color): 
-    if i == 0:
-        c = 'dimgrey'
+color = [cmr.dusk(0.3),'darkgrey',cmr.sapphire(0.5),cmr.dusk(0.8)]
+for i,c in zip(range(0,len(meanens),1),color): 
+    # if i == 0:
+    #     c = 'dimgrey'
     plt.fill_between(x=yearsall[i],y1=minens[i],y2=maxens[i],facecolor=c,zorder=1,
              alpha=0.4,edgecolor='none')
     if scenarioalln[i] == 'SSP5-3.4OS_10ye':
-        plt.plot(yearsall[i],meanens[i],linestyle='--',linewidth=2,color=c,
-                 label=r'\textbf{%s}' % scenarioalln[i],zorder=2,dashes=(1,.3))
-    elif scenarioalln[i] == 'SSP5-3.4OS':
-        plt.plot(yearsall[i],meanens[i],linestyle='-',linewidth=2,color=c,
-                 label=r'\textbf{%s}' % scenarioalln[i],zorder=2)
-    else:
         plt.plot(yearsall[i],meanens[i],linestyle='-',linewidth=4,color=c,
                  label=r'\textbf{%s}' % scenarioalln[i],zorder=2)
+    elif scenarioalln[i] == 'SSP5-3.4OS':
+        plt.plot(yearsall[i],meanens[i],linestyle='-',linewidth=4,color=c,
+                 label=r'\textbf{%s}' % scenarioalln[i],zorder=2)
+    else:
+        plt.plot(yearsall[i],meanens[i],linestyle='-',linewidth=2,color=c,
+                 label=r'\textbf{%s}' % scenarioalln[i],zorder=2)
     
-leg = plt.legend(shadow=False,fontsize=9,loc='upper center',
-      bbox_to_anchor=(0.5,0.06),fancybox=True,ncol=3,frameon=False,
-      handlelength=1,handletextpad=0.5)
-for line,text in zip(leg.get_lines(), leg.get_texts()):
-    text.set_color(line.get_color())
+# leg = plt.legend(shadow=False,fontsize=9,loc='upper center',
+#       bbox_to_anchor=(0.5,0.06),fancybox=True,ncol=3,frameon=False,
+#       handlelength=1,handletextpad=0.5)
+# for line,text in zip(leg.get_lines(), leg.get_texts()):
+#     text.set_color(line.get_color())
 
 plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10))
 plt.yticks(np.round(np.arange(0,101,10),2),np.round(np.arange(0,101,10),2))
@@ -301,7 +301,10 @@ color = [cmr.dusk(0.01),'darkgrey',cmr.dusk(0.3),cmr.sapphire(0.5),cmr.dusk(0.8)
 for i,c in zip(range(len(allpdfs)),color): 
     if i == 0:
         plt.plot(grid,allpdfs[i],linestyle='--',color=color[i],label=r'\textbf{%s}' % scenarioalln2[i],
-                 linewidth=4,clip_on=False,dashes=(1,0.3))
+                 linewidth=6,clip_on=False,dashes=(1,0.3))
+    elif i >= 3:
+        plt.plot(grid,allpdfs[i],linestyle='-',color=color[i],label=r'\textbf{%s}' % scenarioalln2[i],
+                 linewidth=4,clip_on=False)
     else:
         plt.plot(grid,allpdfs[i],linestyle='-',color=color[i],label=r'\textbf{%s}' % scenarioalln2[i],
                  linewidth=2.5,clip_on=False)

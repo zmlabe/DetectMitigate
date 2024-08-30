@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['SHFLX']
+variablesall = ['TS']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 30
@@ -38,9 +38,8 @@ letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 ###############################################################################
 ###############################################################################
 modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
-seasons = ['JJA']
-slicemonthnamen = ['JJA']
-monthlychoice = seasons[0]
+monthlychoice = 'annual'
+monthlychoiceVARI = 'JJA'
 reg_name = 'Globe'
 
 ### Calculate linear trends
@@ -177,10 +176,10 @@ if variq == 'T2M':
     
 else:
     lat_bounds,lon_bounds = UT.regions(reg_name)
-    spear_m,lats,lons = read_primary_dataset(variq,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
-    spear_h,lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
-    spear_osm,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
-    spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
+    spear_m,lats,lons = read_primary_dataset(variq,'SPEAR_MED',monthlychoiceVARI,'SSP585',lat_bounds,lon_bounds)
+    spear_h,lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoiceVARI,'SSP585',lat_bounds,lon_bounds)
+    spear_osm,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoiceVARI,'SSP534OS',lat_bounds,lon_bounds)
+    spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoiceVARI,'SSP534OS_10ye',lat_bounds,lon_bounds)
 
     spear_mt,lats,lons = read_primary_dataset('T2M','SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
     spear_ht,lats,lons = read_primary_dataset('T2M','SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
@@ -271,7 +270,7 @@ elif style == 'global':
     
 ### Colorbar limits
 if any([variq == 'T2M', variq == 'T850', variq == 'SST', variq == 'TS']):
-    barlim = np.arange(-6,7,2)
+    barlim = np.arange(-6,7.1,2)
     limit = np.arange(-6,6.1,0.1)
     barlim2 = np.arange(-1.5,1.6,0.5)
     limit2 = np.arange(-1.5,1.51,0.05)
@@ -478,7 +477,7 @@ plt.title(r'\textbf{(e); (c) minus (a)}',fontsize=11,color='dimgrey')
 cbar_axg = fig.add_axes([0.94,0.61,0.013,0.25])                
 cbarg = fig.colorbar(cs,cax=cbar_axg,orientation='vertical',
                     extend='both',extendfrac=0.07,drawedges=False) 
-cbarg.set_label(label,fontsize=8,color='k',labelpad=12)
+cbarg.set_label(label,fontsize=8,color='k',labelpad=8)
 cbarg.set_ticks(barlim)
 cbarg.set_ticklabels(list(map(str,np.round(barlim,2)))) 
 cbarg.ax.tick_params(axis='y', size=.01,labelsize=7)
@@ -496,4 +495,4 @@ cbar.outline.set_edgecolor('dimgrey')
 ### Save figure 
 plt.tight_layout()   
 fig.subplots_adjust(right=0.93)
-plt.savefig(directoryfigure + 'GWL-%s_%s_%s.png' % (selectGWLn,variq,seasons[0]),dpi=300)
+plt.savefig(directoryfigure + 'GWL-%s_%s_%s.png' % (selectGWLn,variq,monthlychoiceVARI),dpi=300)

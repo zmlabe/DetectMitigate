@@ -43,7 +43,7 @@ seasons = ['annual']
 slicemonthnamen = ['ANNUAL']
 monthlychoice = seasons[0]
 reg_name = 'US'
-varcount = 'count95'
+varcount = 'count90'
 
 ### Calculate linear trends
 def calcTrend(data):
@@ -111,7 +111,7 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-selectGWL = 1.8
+selectGWL = 1.7
 selectGWLn = '%s' % (int(selectGWL*10))
 yrplus = 3
 
@@ -370,7 +370,7 @@ plt.title(r'\textbf{(e); (c) minus (a)}',fontsize=11,color='dimgrey')
 cbar_axg = fig.add_axes([0.94,0.61,0.013,0.25])                
 cbarg = fig.colorbar(cs,cax=cbar_axg,orientation='vertical',
                     extend='max',extendfrac=0.07,drawedges=False) 
-cbarg.set_label(label,fontsize=8,color='k',labelpad=12)
+cbarg.set_label(label,fontsize=8,color='k',labelpad=10)
 cbarg.set_ticks(barlim)
 cbarg.set_ticklabels(list(map(str,np.round(barlim,2)))) 
 cbarg.ax.tick_params(axis='y', size=.01,labelsize=7)

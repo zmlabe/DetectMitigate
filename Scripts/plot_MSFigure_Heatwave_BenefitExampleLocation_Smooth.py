@@ -33,7 +33,7 @@ years = np.arange(2015,2100+1)
 ###############################################################################
 ###############################################################################
 ### Data preliminaries 
-directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/'
+directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/MSFigures_Heat/'
 directorydata = '/home/Zachary.Labe/Research/DetectMitigate/Data/GridLocationExample/'
 letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 ###############################################################################
@@ -66,7 +66,7 @@ lat_bounds,lon_bounds = UT.regions(reg_name)
 ###############################################################################
 ###############################################################################
 ### Read in data for OS daily extremes
-raw = np.load(directorydata + 'gridpointExample_%s_none.npz' % varcount)
+raw = np.load(directorydata + 'gridpointExample_%s.npz' % varcount)
 os_raw = raw['gridpoint_osX'][:]
 os10ye_raw = raw['gridpoint_os_10yeX'][:]
 whereBenefit_raw = raw['minwherebelowMax_X']
@@ -77,21 +77,21 @@ lonqPoint_raw = raw['lonqPoint']
 latloc = lats[latqPoint_raw]
 lonloc = lons[lonqPoint_raw]
 
-threshold = np.load(directorydata + 'gridpointExample_YrThreshold-%s_%s_none.npz' % (YrThreshN,varcount))
+threshold = np.load(directorydata + 'gridpointExample_YrThreshold-%s_%s.npz' % (YrThreshN,varcount))
 whereBenefit_threshold = threshold['minwherebelowMax_X']
 lats = threshold['lats'][:]
 lons = threshold['lons'][:]
 latqPoint_threshold = threshold['latqPoint']
 lonqPoint_threshold = threshold['lonqPoint']
 
-running = np.load(directorydata + 'gridpointExample_running_%s_%s_none.npz' % (smoothingFactor,varcount))
+running = np.load(directorydata + 'gridpointExample_running_%s_%s.npz' % (smoothingFactor,varcount))
 os_running = running['gridpoint_osX'][:]
 os10ye_running = running['gridpoint_os_10yeX'][:]
 whereBenefit_running = running['minwherebelowMax_X']
 latqPoint_running = running['latqPoint']
 lonqPoint_running = running['lonqPoint']
 
-filtering = np.load(directorydata + 'gridpointExample_savgolfilter_%s_%s_none.npz' % (smoothingFactor,varcount))
+filtering = np.load(directorydata + 'gridpointExample_savgolfilter_%s_%s.npz' % (smoothingFactor,varcount))
 os_filtering = filtering['gridpoint_osX'][:]
 os10ye_filtering = filtering['gridpoint_os_10yeX'][:]
 whereBenefit_filtering = filtering['minwherebelowMax_X']
@@ -140,33 +140,33 @@ plt.plot(years,os_raw,linestyle='-',linewidth=3,color='teal',
           clip_on=False,zorder=3,label=r'\textbf{SSP543OS}')
 plt.plot(years,os10ye_raw,linestyle='-',linewidth=3,color='maroon',
           clip_on=False,zorder=4,label=r'\textbf{SSP543OS_10ye}')
-plt.plot(years,os_filtering,linestyle='--',linewidth=0.8,color='k',
-          clip_on=False,zorder=5,dashes=(1,0.3))
-plt.plot(years,os10ye_filtering,linestyle='--',linewidth=0.8,color='k',
-          clip_on=False,zorder=6,dashes=(1,0.3))
+# plt.plot(years,os_filtering,linestyle='--',linewidth=0.8,color='k',
+#           clip_on=False,zorder=5,dashes=(1,0.3))
+# plt.plot(years,os10ye_filtering,linestyle='--',linewidth=0.8,color='k',
+#           clip_on=False,zorder=6,dashes=(1,0.3))
 
-# plt.scatter(years[np.argmax(os10ye_raw)],np.nanmax(os10ye_raw),s=27,color='r',
-#             zorder=7,clip_on=False)
-# plt.scatter(years[whereBenefit_raw],os_raw[whereBenefit_raw],s=27,color='r',
-#             zorder=8,clip_on=False)
-# plt.scatter(years[whereBenefit_threshold],os_raw[whereBenefit_threshold],s=30,edgecolor='r',color='None',
-#             zorder=8,clip_on=False)
-# plt.hlines(y=np.nanmax(os10ye_raw),xmin=years[np.argmax(os10ye_raw)],xmax=2100,
-#           color='r',linestyle='--',clip_on=False,zorder=6)
-# plt.hlines(y=np.nanmax(os10ye_raw),xmin=years[np.argmax(os10ye_raw)],xmax=years[whereBenefit_raw],
-#           color='r',linestyle='-',clip_on=False,zorder=6)
-# plt.fill_between(np.arange(years[np.argmax(os10ye_raw)],years[whereBenefit_raw]+1,1),0,40,
-#                  alpha=0.3,color='r',edgecolor=None,zorder=1)
-# plt.fill_between(np.arange(years[np.argmax(os10ye_raw)],years[whereBenefit_threshold]+1,1),0,40,
-#                  alpha=0.2,color='r',edgecolor=None,zorder=1)
+plt.scatter(years[np.argmax(os10ye_raw)],np.nanmax(os10ye_raw),s=27,color='r',
+            zorder=7,clip_on=False)
+plt.scatter(years[whereBenefit_raw],os_raw[whereBenefit_raw],s=27,color='r',
+            zorder=8,clip_on=False)
+plt.scatter(years[whereBenefit_threshold],os_raw[whereBenefit_threshold],s=30,edgecolor='r',color='None',
+            zorder=8,clip_on=False)
+plt.hlines(y=np.nanmax(os10ye_raw),xmin=years[np.argmax(os10ye_raw)],xmax=2100,
+          color='r',linestyle='--',clip_on=False,zorder=6)
+plt.hlines(y=np.nanmax(os10ye_raw),xmin=years[np.argmax(os10ye_raw)],xmax=years[whereBenefit_raw],
+          color='r',linestyle='-',clip_on=False,zorder=6)
+plt.fill_between(np.arange(years[np.argmax(os10ye_raw)],years[whereBenefit_raw]+1,1),0,40,
+                 alpha=0.3,color='r',edgecolor=None,zorder=1)
+plt.fill_between(np.arange(years[np.argmax(os10ye_raw)],years[whereBenefit_threshold]+1,1),0,40,
+                 alpha=0.2,color='r',edgecolor=None,zorder=1)
 
-# plt.text(2046.5,40.5,r'\textbf{%s} (%s) \textbf{years}' % (years[whereBenefit_raw] - years[np.argmax(os10ye_raw)] - 10,years[whereBenefit_raw] - years[np.argmax(os10ye_raw)]),
-#                                                                                         color='crimson',fontsize=12,
-#                                                                                         alpha=0.5)
-# plt.text(2070.35,40.5,r'\textbf{%s} (%s) \textbf{years}' % (years[whereBenefit_threshold] - years[np.argmax(os10ye_raw)] - 10, years[whereBenefit_threshold] - years[np.argmax(os10ye_raw)]),
-#                                                 color='crimson',fontsize=12,
-#                                                 alpha=0.3)
-plt.text(2015,30,r'\textbf{[d]}',color='k',fontsize=12)
+plt.text(2046.5,40.5,r'\textbf{%s} (%s) \textbf{years}' % (years[whereBenefit_raw] - years[np.argmax(os10ye_raw)] - 10,years[whereBenefit_raw] - years[np.argmax(os10ye_raw)]),
+                                                                                        color='crimson',fontsize=12,
+                                                                                        alpha=0.5)
+plt.text(2070.35,40.5,r'\textbf{%s} (%s) \textbf{years}' % (years[whereBenefit_threshold] - years[np.argmax(os10ye_raw)] - 10, years[whereBenefit_threshold] - years[np.argmax(os10ye_raw)]),
+                                                color='crimson',fontsize=12,
+                                                alpha=0.3)
+plt.text(2015,40,r'\textbf{[d]}',color='k',fontsize=12)
 plt.text(2015,1.5,r'\textbf{%s$^{\circ}$N}' % (np.round(latloc,2)),
          color='dimgrey',fontsize=10,ha='left')
 plt.text(2015,0,r'\textbf{%s$^{\circ}$W}' % (np.round(360-lonloc,2)),
@@ -181,7 +181,7 @@ plt.text(2015,0,r'\textbf{%s$^{\circ}$W}' % (np.round(360-lonloc,2)),
 plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10))
 plt.yticks(np.round(np.arange(0,41,5),2),np.round(np.arange(0,41,5),2))
 plt.xlim([2015,2100])
-plt.ylim([0,30])
+plt.ylim([0,40])
 
 plt.ylabel(r'\textbf{Count of heatwave days}',fontsize=10,color='k')
 
@@ -203,29 +203,29 @@ plt.axvline(x=2040,color='teal',linewidth=1,linestyle=':',zorder=1)
 plt.axvline(x=2031,color='maroon',linewidth=1,linestyle=':',zorder=2)
     
 plt.plot(years,os_filtering,linestyle='-',linewidth=3,color='teal',
-          clip_on=False,zorder=3,label=r'\textbf{SSP543OS}')
+          clip_on=False,zorder=3,label=r'\textbf{SSP5-3.4OS}')
 plt.plot(years,os10ye_filtering,linestyle='-',linewidth=3,color='maroon',
-          clip_on=False,zorder=4,label=r'\textbf{SSP543OS_10ye}')
+          clip_on=False,zorder=4,label=r'\textbf{SSP5-3.4OS_10ye}')
 plt.plot(years,os_raw,linestyle='--',linewidth=0.8,color='k',
           clip_on=False,zorder=5,dashes=(1,0.3))
 plt.plot(years,os10ye_raw,linestyle='--',linewidth=0.8,color='k',
           clip_on=False,zorder=6,dashes=(1,0.3))
 
-# plt.scatter(years[np.argmax(os10ye_filtering)],np.nanmax(os10ye_filtering),s=27,color='r',
-#             zorder=7,clip_on=False)
-# plt.scatter(years[whereBenefit_filtering],os_filtering[whereBenefit_filtering],s=27,color='r',
-#             zorder=8,clip_on=False)
-# plt.hlines(y=np.nanmax(os10ye_filtering),xmin=years[np.argmax(os10ye_filtering)],xmax=2100,
-#           color='r',linestyle='--',clip_on=False,zorder=6)
-# plt.hlines(y=np.nanmax(os10ye_filtering),xmin=years[np.argmax(os10ye_filtering)],xmax=years[whereBenefit_filtering],
-#           color='r',linestyle='-',clip_on=False,zorder=6)
-# plt.fill_between(np.arange(years[np.argmax(os10ye_filtering)],years[whereBenefit_filtering]+1,1),0,40,
-#                  alpha=0.2,color='r',edgecolor=None,zorder=1)
+plt.scatter(years[np.argmax(os10ye_filtering)],np.nanmax(os10ye_filtering),s=27,color='r',
+            zorder=7,clip_on=False)
+plt.scatter(years[whereBenefit_filtering],os_filtering[whereBenefit_filtering],s=27,color='r',
+            zorder=8,clip_on=False)
+plt.hlines(y=np.nanmax(os10ye_filtering),xmin=years[np.argmax(os10ye_filtering)],xmax=2100,
+          color='r',linestyle='--',clip_on=False,zorder=6)
+plt.hlines(y=np.nanmax(os10ye_filtering),xmin=years[np.argmax(os10ye_filtering)],xmax=years[whereBenefit_filtering],
+          color='r',linestyle='-',clip_on=False,zorder=6)
+plt.fill_between(np.arange(years[np.argmax(os10ye_filtering)],years[whereBenefit_filtering]+1,1),0,40,
+                 alpha=0.2,color='r',edgecolor=None,zorder=1)
 
-plt.text(2015,30,r'\textbf{[e]}',color='k',fontsize=12)
-# plt.text(2057,40.5,r'\textbf{%s} (%s) \textbf{years}' % (years[whereBenefit_filtering] - years[np.argmax(os10ye_filtering)] - 10, years[whereBenefit_filtering] - years[np.argmax(os10ye_filtering)]),
-#                                                 color='crimson',fontsize=12,
-#                                                 alpha=0.3)
+plt.text(2015,40,r'\textbf{[e]}',color='k',fontsize=12)
+plt.text(2057,40.5,r'\textbf{%s} (%s) \textbf{years}' % (years[whereBenefit_filtering] - years[np.argmax(os10ye_filtering)] - 10, years[whereBenefit_filtering] - years[np.argmax(os10ye_filtering)]),
+                                                color='crimson',fontsize=12,
+                                                alpha=0.3)
 plt.text(2015,1.5,r'\textbf{%s$^{\circ}$N}' % (np.round(latloc,2)),
          color='dimgrey',fontsize=10,ha='left')
 plt.text(2015,0,r'\textbf{%s$^{\circ}$W}' % (np.round(360-lonloc,2)),
@@ -242,8 +242,8 @@ for line,text in zip(leg.get_lines(), leg.get_texts()):
 plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10))
 plt.yticks(np.round(np.arange(0,41,5),2),np.round(np.arange(0,41,5),2))
 plt.xlim([2015,2100])
-plt.ylim([0,30])
+plt.ylim([0,40])
 
 # plt.ylabel(r'\textbf{Count of heatwave days}',fontsize=10,color='k')
 
-plt.savefig(directoryfigure + 'BenefitTimeSeries_%s_ExampleLoc_%s-%s_%s_none.png' % (variq,latloc,lonloc,monthlychoice),dpi=300)
+plt.savefig(directoryfigure + 'MSFigure_Heatwave_BenefitTimeSeries_%s_ExampleLoc_%s-%s_%s.png' % (variq,latloc,lonloc,monthlychoice),dpi=300)

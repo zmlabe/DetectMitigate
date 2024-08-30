@@ -33,7 +33,7 @@ years = np.arange(2015,2100+1)
 ###############################################################################
 ###############################################################################
 ### Data preliminaries 
-directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/'
+directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/MSFigures_Heat/'
 directorydata = '/home/Zachary.Labe/Research/DetectMitigate/Data/GridLocationExample/'
 letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 ###############################################################################
@@ -203,9 +203,9 @@ plt.axvline(x=2040,color='teal',linewidth=1,linestyle=':',zorder=1)
 plt.axvline(x=2031,color='maroon',linewidth=1,linestyle=':',zorder=2)
     
 plt.plot(years,os_filtering,linestyle='-',linewidth=3,color='teal',
-          clip_on=False,zorder=3,label=r'\textbf{SSP543OS}')
+          clip_on=False,zorder=3,label=r'\textbf{SSP5-3.4OS}')
 plt.plot(years,os10ye_filtering,linestyle='-',linewidth=3,color='maroon',
-          clip_on=False,zorder=4,label=r'\textbf{SSP543OS_10ye}')
+          clip_on=False,zorder=4,label=r'\textbf{SSP5-3.4OS_10ye}')
 plt.plot(years,os_raw,linestyle='--',linewidth=0.8,color='k',
           clip_on=False,zorder=5,dashes=(1,0.3))
 plt.plot(years,os10ye_raw,linestyle='--',linewidth=0.8,color='k',
@@ -246,4 +246,4 @@ plt.ylim([0,30])
 
 # plt.ylabel(r'\textbf{Count of heatwave days}',fontsize=10,color='k')
 
-plt.savefig(directoryfigure + 'BenefitTimeSeries_%s_ExampleLoc_%s-%s_%s_none.png' % (variq,latloc,lonloc,monthlychoice),dpi=300)
+plt.savefig(directoryfigure + 'MSFigure_Heatwave_BenefitTimeSeries_%s_ExampleLoc_%s-%s_%s_none.png' % (variq,latloc,lonloc,monthlychoice),dpi=300)

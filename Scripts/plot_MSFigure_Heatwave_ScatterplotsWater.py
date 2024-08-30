@@ -1,8 +1,9 @@
 """
-Examine relationships with heatwaves and physical processes for MS
+Examine relationships with heatwaves and physical processes for MS for only
+water-related variables
 
 Author    : Zachary M. Labe
-Date      : 10 June 2024
+Date      : 27 August 2024
 """
 
 from netCDF4 import Dataset
@@ -21,9 +22,9 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variqall = ['PRECT','WA','rh_ref','SHFLX','EF','swup_toa']
-variHEAT = 'TMIN'
-modelpick = 'OS'
+variqall = ['PRECT','EVAP','rh_ref']
+variHEAT = 'TMAX'
+modelpick = 'OS_10ye'
 slicemonthnamen = ['JJA']
 monthlychoice = slicemonthnamen[0]
 monthlychoiceJJA = slicemonthnamen[0]
@@ -317,7 +318,7 @@ for v in range(len(variqall)):
     ###############################################################################
     ###############################################################################               
     ### Plot Figure            
-    ax = plt.subplot(2,3,v+1)
+    ax = plt.subplot(1,3,v+1)
     
     adjust_spines(ax, ['left', 'bottom'])            
     ax.spines['top'].set_color('none')
@@ -354,9 +355,9 @@ for v in range(len(variqall)):
                 alpha=0.2,edgecolors='darkorange',linewidth=0.3,clip_on=False,label=r'\textbf{2086-2100 [R=%s]}' % np.round(corr_end_os,2))
     plt.plot(line_end_os_sym,color='darkorange',linewidth=2,linestyle='-')
     
-    leg = plt.legend(shadow=False,fontsize=5.5,loc='upper center',
-          bbox_to_anchor=(0.5,1.2),fancybox=True,ncol=2,frameon=False,
-          handlelength=0.3,handletextpad=0.3)
+    leg = plt.legend(shadow=False,fontsize=7.5,loc='upper center',
+          bbox_to_anchor=(0.5,1.26),fancybox=True,ncol=2,frameon=False,
+          handlelength=0.6,handletextpad=0.3)
     for line,text in zip(leg.get_lines(), leg.get_texts()):
         text.set_color(line.get_color())
     
@@ -365,6 +366,11 @@ for v in range(len(variqall)):
         plt.yticks(np.arange(-3,3.1,0.2),map(str,np.round(np.arange(-3,3.1,0.2),2)),fontsize=8)
         plt.xlim([0,80])
         plt.ylim([-1.2,1.2])
+    elif variq == 'EVAP':
+        plt.xticks(np.arange(0,101,10),map(str,np.round(np.arange(0,101,10),2)),fontsize=8)
+        plt.yticks(np.arange(-3,3.1,0.2),map(str,np.round(np.arange(-3,3.1,0.2),2)),fontsize=8)
+        plt.xlim([0,80])
+        plt.ylim([-0.6,1.0])
     elif variq == 'WA':
         plt.xticks(np.arange(0,101,10),map(str,np.round(np.arange(0,101,10),2)),fontsize=8)
         plt.yticks(np.arange(-3,3.1,0.2),map(str,np.round(np.arange(-3,3.1,0.2),2)),fontsize=8)
@@ -391,16 +397,15 @@ for v in range(len(variqall)):
         plt.xlim([0,80])
         plt.ylim([-20,10])
     
-    if v > 2:
-        if variHEAT == 'TMAX':
-            plt.xlabel(r'\textbf{Count of Tx90 days in JJA}',fontsize=7,color='dimgrey')
-        elif variHEAT == 'TMIN':
-            plt.xlabel(r'\textbf{Count of Tn90 days in JJA}',fontsize=7,color='dimgrey')
-        elif variHEAT == 'T2M':
-            plt.xlabel(r'\textbf{Count of T90 days in JJA}',fontsize=7,color='dimgrey')
-        else:
-            print(ValueError('wrong model!'))
-            sys.exit()
+    if variHEAT == 'TMAX':
+        plt.xlabel(r'\textbf{Count of Tx90 days in JJA}',fontsize=7,color='dimgrey')
+    elif variHEAT == 'TMIN':
+        plt.xlabel(r'\textbf{Count of Tn90 days in JJA}',fontsize=7,color='dimgrey')
+    elif variHEAT == 'T2M':
+        plt.xlabel(r'\textbf{Count of T90 days in JJA}',fontsize=7,color='dimgrey')
+    else:
+        print(ValueError('wrong model!'))
+        sys.exit()
         
     ax.annotate(r'\textbf{[%s]}' % (letters[v]),xy=(0,0),xytext=(1,1.06),
               textcoords='axes fraction',color='k',fontsize=10,
@@ -409,17 +414,11 @@ for v in range(len(variqall)):
     if v == 0:
         plt.ylabel(r'\textbf{Precipitation Anomaly [mm/day]}',fontsize=7,color='dimgrey')
     elif v==1:
-        plt.ylabel(r'\textbf{P-E Anomaly [mm/day]}',fontsize=7,color='dimgrey')
+        plt.ylabel(r'\textbf{Evaporation Anomaly [mm/day]}',fontsize=7,color='dimgrey')
     elif v==2:
         plt.ylabel(r'\textbf{RH Anomaly [Percent]}',fontsize=7,color='dimgrey')
-    elif v==3:
-        plt.ylabel(r'\textbf{SHFLX Anomaly [W/m$^{2}$]}',fontsize=7,color='dimgrey')
-    elif v==4:
-        plt.ylabel(r'\textbf{Evaporative Fraction [Percent]}',fontsize=7,color='dimgrey')
-    elif v==5:
-        plt.ylabel(r'\textbf{SWFLX [W/m$^{2}$]}',fontsize=7,color='dimgrey')
 
 plt.tight_layout()
 # plt.subplots_adjust(bottom=0.15)
-plt.savefig(directoryfigure + 'Scatter_Heatwaves_%s_%s.png' % (variHEAT,modelpick),dpi=300)
+plt.savefig(directoryfigure + 'Scatter_Heatwaves_%s_%s_Water.png' % (variHEAT,modelpick),dpi=300)
 

@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['EVAP']
+variablesall = ['TS']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 30
@@ -38,9 +38,8 @@ letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 ###############################################################################
 ###############################################################################
 modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
-seasons = ['JJA']
-slicemonthnamen = ['JJA']
-monthlychoice = seasons[0]
+monthlychoice = 'annual'
+monthlychoiceVARI = 'JJA'
 reg_name = 'Globe'
 
 ### Calculate linear trends
@@ -109,7 +108,7 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-selectGWL = 1.5
+selectGWL = 1.7
 selectGWLn = '%s' % (int(selectGWL*10))
 yrplus = 3
 
@@ -177,10 +176,10 @@ if variq == 'T2M':
     
 else:
     lat_bounds,lon_bounds = UT.regions(reg_name)
-    spear_m,lats,lons = read_primary_dataset(variq,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
-    spear_h,lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
-    spear_osm,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
-    spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
+    spear_m,lats,lons = read_primary_dataset(variq,'SPEAR_MED',monthlychoiceVARI,'SSP585',lat_bounds,lon_bounds)
+    spear_h,lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoiceVARI,'SSP585',lat_bounds,lon_bounds)
+    spear_osm,lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoiceVARI,'SSP534OS',lat_bounds,lon_bounds)
+    spear_osm_10ye,lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoiceVARI,'SSP534OS_10ye',lat_bounds,lon_bounds)
 
     spear_mt,lats,lons = read_primary_dataset('T2M','SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
     spear_ht,lats,lons = read_primary_dataset('T2M','SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
@@ -275,7 +274,7 @@ elif style == 'US':
     
 ### Colorbar limits
 if any([variq == 'T2M', variq == 'T850', variq == 'SST', variq == 'TS']):
-    barlim = np.arange(-6,7,2)
+    barlim = np.arange(-6,7.1,2)
     limit = np.arange(-6,6.1,0.1)
     barlim2 = np.arange(-1.5,1.6,0.5)
     limit2 = np.arange(-1.5,1.51,0.05)
@@ -300,9 +299,9 @@ elif any([variq == 'U200']):
     barlim2 = np.arange(-5,5.1,1)
     limit2 = np.arange(-5,5.01,0.1)   
 elif any([variq == 'rh_ref']):
-    barlim = np.arange(-5,5.1,1)
-    limit = np.arange(-5,5.01,0.1)
-    barlim2 = np.arange(-5,5.1,1)
+    barlim = np.arange(-8,8.1,4)
+    limit = np.arange(-8,8.01,0.2)
+    barlim2 = np.arange(-5,5.1,5)
     limit2 = np.arange(-5,5.01,0.1)  
 elif any([variq == 'Z500', variq == 'Z200']):
     barlim = np.arange(-100,100.1,25)
@@ -320,7 +319,7 @@ elif any([variq == 'tau_x',variq == 'tau_y']):
     barlim2 = np.arange(-0.02,0.021,0.01)
     limit2 = np.arange(-0.02,0.0201,0.0001)  
 if variq == 'PRECT':
-    label = r'\textbf{PRECIPITATION CHANGE [mm/day]}' 
+    label = r'\textbf{PRECIP CHANGE [mm/day]}' 
 elif variq == 'EVAP':
     label = r'\textbf{EVAPORATION CHANGE [mm/day]}' 
 elif variq == 'WA':
@@ -348,7 +347,7 @@ elif variq == 'tau_x':
 elif variq == 'tau_y':
     label = r'\textbf{MERIDIONAL WIND STRESS CHANGE [Pa]}' 
 elif variq == 'rh_ref':
-    label = r'\textbf{NEAR-SURFACE RELATIVE HUMIDITY [Percent]}' 
+    label = r'\textbf{RH CHANGE [\%]}' 
 elif variq == 'SHFLX':
     label = r'\textbf{SENSIBLE HEAT FLUX [W/m$^{2}$]}' 
 
@@ -498,7 +497,7 @@ plt.title(r'\textbf{(e); (c) minus (a)}',fontsize=11,color='dimgrey')
 cbar_axg = fig.add_axes([0.94,0.61,0.013,0.25])                
 cbarg = fig.colorbar(cs,cax=cbar_axg,orientation='vertical',
                     extend='both',extendfrac=0.07,drawedges=False) 
-cbarg.set_label(label,fontsize=8,color='k',labelpad=12)
+cbarg.set_label(label,fontsize=8,color='k',labelpad=8)
 cbarg.set_ticks(barlim)
 cbarg.set_ticklabels(list(map(str,np.round(barlim,2)))) 
 cbarg.ax.tick_params(axis='y', size=.01,labelsize=7)
@@ -516,4 +515,4 @@ cbar.outline.set_edgecolor('dimgrey')
 ### Save figure 
 plt.tight_layout()   
 fig.subplots_adjust(right=0.93)
-plt.savefig(directoryfigure + 'GWL-%s_%s_%s_CONUS.png' % (selectGWLn,variq,seasons[0]),dpi=300)
+plt.savefig(directoryfigure + 'GWL-%s_%s_%s_CONUS.png' % (selectGWLn,variq,monthlychoiceVARI),dpi=300)

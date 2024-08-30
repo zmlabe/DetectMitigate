@@ -25,12 +25,13 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 
 ### Directories
 directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/MSFigures_Heat/'
+directoryoutput = '/home/Zachary.Labe/Research/DetectMitigate/Data/MitigateHeat/'
 
 ###############################################################################
 ###############################################################################
 ###############################################################################
 ### Data preliminaries 
-modelGCMs = ['SPEAR_MED_Historical','SPEAR_MED','SPEAR_MED_Scenario','SPEAR_MED_SSP534OS_10ye']
+modelGCMs = ['SPEAR_MED_Historical','SPEAR_MED_Scenario','SPEAR_MED','SPEAR_MED_Scenario','SPEAR_MED_SSP534OS_10ye']
 dataset_obs = 'ERA5_MEDS'
 lenOfPicks = len(modelGCMs)
 monthlychoice = 'annual'
@@ -39,9 +40,9 @@ allregions = ['Globe','US']
 level = 'surface'
 ###############################################################################
 ###############################################################################
-timeper = ['historicalforcing','futureforcing','futureforcing','futureforcing']
-scenarioall = ['historical','SSP585','SSP534OS','SSP534OS_10ye']
-scenarioallnames = ['Historical','SSP5-8.5','SSP5-3.4OS','SSP5-3.34OS_10ye']
+timeper = ['historicalforcing','futureforcing','futureforcing','futureforcing','futureforcing']
+scenarioall = ['historical','SSP245','SSP585','SSP534OS','SSP534OS_10ye']
+scenarioallnames = ['Historical','SSP2-4.5','SSP5-8.5','SSP5-3.4OS','SSP5-3.34OS_10ye']
 ###############################################################################
 ###############################################################################
 land_only = False
@@ -54,7 +55,8 @@ baselinePI = np.arange(1921,1950+1,1)
 ###############################################################################
 window = 0
 yearsall = [np.arange(1921+window,2014+1,1),np.arange(2015+window,2100+1,1),
-            np.arange(2015+window,2100+1,1),np.arange(2015+window,2100+1,1)]
+            np.arange(2015+window,2100+1,1),np.arange(2015+window,2100+1,1),
+            np.arange(2015+window,2100+1,1)]
 yearsobs = np.arange(1921+window,2021+1,1)
 ###############################################################################
 ###############################################################################
@@ -178,30 +180,44 @@ for ii in range(len(allregions)):
         ax.tick_params(axis='y',labelsize=6,pad=1.5)
         ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.4)
         
-        color = ['maroon','darkslategrey','lightseagreen']
+        plt.axhline(y=1.5,color='dimgrey',linestyle='--',linewidth=1,clip_on=False,alpha=1)
+        plt.axhline(y=1.6,color='dimgrey',linestyle='--',linewidth=1,clip_on=False,alpha=1)
+        plt.axhline(y=1.7,color='dimgrey',linestyle='--',linewidth=1,clip_on=False,alpha=1)
+        plt.axhline(y=1.8,color='dimgrey',linestyle='--',linewidth=1,clip_on=False,alpha=1)
+        plt.axhline(y=1.9,color='dimgrey',linestyle='--',linewidth=1,clip_on=False,alpha=1)
+        plt.axhline(y=2,color='dimgrey',linestyle='--',linewidth=1,clip_on=False,alpha=1)
+        
+        color = ['darkorange','maroon','darkslategrey','lightseagreen']
         for i,c in zip(range(1,len(aveall)),color): 
-            if i == 3:
+            # if i == 3:
+            #     plt.fill_between(x=yearsall[i][yearq],y1=minens[i][yearq],y2=maxens[i][yearq],facecolor=c,zorder=1,
+            #              alpha=0.4,edgecolor='none',clip_on=False)
+            #     plt.plot(yearsall[i][yearq],meanens[i][yearq],linestyle='--',dashes=(1,0.3),linewidth=4,color=c,
+            #              label=r'\textbf{%s}' % scenarioallnames[i],zorder=2,clip_on=False)
+            if i == 1:
                 plt.fill_between(x=yearsall[i][yearq],y1=minens[i][yearq],y2=maxens[i][yearq],facecolor=c,zorder=1,
                          alpha=0.4,edgecolor='none',clip_on=False)
-                plt.plot(yearsall[i][yearq],meanens[i][yearq],linestyle='--',dashes=(1,0.3),linewidth=3,color=c,
+                plt.plot(yearsall[i],meanens[i],linestyle='--',dashes=(1,0.3),linewidth=4,color=c,
                          label=r'\textbf{%s}' % scenarioallnames[i],zorder=2,clip_on=False)
             else:
                 plt.fill_between(x=yearsall[i],y1=minens[i],y2=maxens[i],facecolor=c,zorder=1,
                          alpha=0.4,edgecolor='none',clip_on=False)
-                plt.plot(yearsall[i],meanens[i],linestyle='-',linewidth=3,color=c,
-                         label=r'\textbf{%s}' % scenarioallnames[i],zorder=2,clip_on=False)
+                plt.plot(yearsall[i],meanens[i],linestyle='-',linewidth=4,color=c,
+                         label=r'\textbf{%s}' % scenarioallnames[i],zorder=6,clip_on=False)
             
-            if i == 2:
+            if i == 3:
                 plt.axvline(x=2040,color=c,linewidth=1,linestyle=':',zorder=100)
                 plt.axvline(x=yearsall[i][np.argmax(meanens[i])],color=c,linewidth=2,linestyle='-',zorder=200)
-            elif i == 3:
+            elif i == 4:
                 plt.axvline(x=2031,color=c,linewidth=1,linestyle=':',zorder=100)
                 plt.axvline(x=yearsall[i][np.argmax(meanens[i])],color=c,linewidth=2,linestyle='-',zorder=200)
                 
-            if i == 2:
-                plt.text(yearsall[i][np.argmax(meanens[i])],7.5,r'\textbf{Max [OS]}',fontsize=7,color=c,ha='center')
-            elif i == 3:
-                plt.text(yearsall[i][np.argmax(meanens[i])],7.5,r'\textbf{Max [OS_10ye]}',fontsize=7,color=c,ha='center')
+            if i == 3:
+                plt.text(yearsall[i][np.argmax(meanens[i])],5.5,r'\textbf{Max [OS]}',fontsize=7,color=c,ha='center')
+                np.savetxt(directoryoutput + 'Max_GMST_SSP534OS_Annual.txt',[yearsall[i][np.argmax(meanens[i])],np.nanmax(meanens[i]),np.argmax(meanens[i])])
+            elif i == 4:
+                plt.text(yearsall[i][np.argmax(meanens[i])],5.5,r'\textbf{Max [OS_10ye]}',fontsize=7,color=c,ha='center')
+                np.savetxt(directoryoutput + 'Max_GMST_SSP534OS_10ye_Annual.txt',[yearsall[i][np.argmax(meanens[i])],np.nanmax(meanens[i]),np.argmax(meanens[i])])
             
         # leg = plt.legend(shadow=False,fontsize=10,loc='upper center',
         #       bbox_to_anchor=(0.17,0.84),fancybox=True,ncol=1,frameon=False,
@@ -212,12 +228,12 @@ for ii in range(len(allregions)):
         plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10),fontsize=9.2)
         plt.yticks(np.round(np.arange(-18,18.1,0.5),2),np.round(np.arange(-18,18.1,0.5),2),fontsize=9.2)
         plt.xlim([2015,2100])
-        plt.ylim([-0.5,7.5])
+        plt.ylim([0.5,5.5])
         
-        plt.text(2015,7.5,r'\textbf{[d]}',fontsize=11,color='k')
-        plt.text(2031,7.5,r'\textbf{OS_10ye}',fontsize=7,color='lightseagreen',ha='center')
-        plt.text(2040,7.5,r'\textbf{OS}',fontsize=7,color='darkslategrey',ha='center')
-        plt.text(2015,7,r'\textbf{GLOBAL}',fontsize=16,color='dimgrey')
+        plt.text(2015,5.5,r'\textbf{[d]}',fontsize=11,color='k')
+        plt.text(2031,5.5,r'\textbf{OS_10ye}',fontsize=7,color='lightseagreen',ha='center')
+        plt.text(2040,5.5,r'\textbf{OS}',fontsize=7,color='darkslategrey',ha='center')
+        plt.text(2015,5,r'\textbf{GLOBAL}',fontsize=16,color='dimgrey')
         plt.ylabel(r'\textbf{Temperature Anomaly [$^{\circ}$C] Relative to 1921-1950}',
                    fontsize=10,color='dimgrey')
         
@@ -236,23 +252,28 @@ for ii in range(len(allregions)):
         ax.tick_params(axis='y',labelsize=6,pad=1.5)
         ax.yaxis.grid(color='darkgrey',linestyle='-',linewidth=0.5,clip_on=False,alpha=0.4)
         
-        color = ['maroon','darkslategrey','lightseagreen']
+        color = ['darkorange','maroon','darkslategrey','lightseagreen']
         for i,c in zip(range(1,len(aveall)),color): 
-            if i == 3:
+            # if i == 3:
+            #     plt.fill_between(x=yearsall[i][yearq],y1=minens[i][yearq],y2=maxens[i][yearq],facecolor=c,zorder=1,
+            #              alpha=0.4,edgecolor='none',clip_on=False)
+            #     plt.plot(yearsall[i][yearq],meanens[i][yearq],linestyle='--',dashes=(1,0.3),linewidth=4,color=c,
+            #              label=r'\textbf{%s}' % scenarioallnames[i],zorder=2,clip_on=False)
+            if i == 1:
                 plt.fill_between(x=yearsall[i][yearq],y1=minens[i][yearq],y2=maxens[i][yearq],facecolor=c,zorder=1,
                          alpha=0.4,edgecolor='none',clip_on=False)
-                plt.plot(yearsall[i][yearq],meanens[i][yearq],linestyle='--',dashes=(1,0.3),linewidth=3,color=c,
+                plt.plot(yearsall[i],meanens[i],linestyle='--',dashes=(1,0.3),linewidth=4,color=c,
                          label=r'\textbf{%s}' % scenarioallnames[i],zorder=2,clip_on=False)
             else:
                 plt.fill_between(x=yearsall[i],y1=minens[i],y2=maxens[i],facecolor=c,zorder=1,
                          alpha=0.4,edgecolor='none',clip_on=False)
-                plt.plot(yearsall[i],meanens[i],linestyle='-',linewidth=3,color=c,
-                         label=r'\textbf{%s}' % scenarioallnames[i],zorder=2,clip_on=False)
+                plt.plot(yearsall[i],meanens[i],linestyle='-',linewidth=4,color=c,
+                         label=r'\textbf{%s}' % scenarioallnames[i],zorder=6,clip_on=False)
             
-            if i == 2:
+            if i == 3:
                 plt.axvline(x=2040,color=c,linewidth=1,linestyle=':',zorder=100)
                 plt.axvline(x=yearsall[i][np.argmax(meanens[i])],color=c,linewidth=2,linestyle='-',zorder=200)
-            elif i == 3:
+            elif i == 4:
                 plt.axvline(x=2031,color=c,linewidth=1,linestyle=':',zorder=100)
                 plt.axvline(x=yearsall[i][np.argmax(meanens[i])],color=c,linewidth=2,linestyle='-',zorder=200)
                
