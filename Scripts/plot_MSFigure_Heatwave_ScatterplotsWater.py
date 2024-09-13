@@ -52,7 +52,7 @@ def adjust_spines(ax, spines):
         ax.xaxis.set_ticks([]) 
 
 fig = plt.figure(figsize=(10,4))
-for v in range(len(variqall)):
+for v in range(2,3,1):
     variq = variqall[v]
     varcount = 'count90'
     variablesglobe = 'T2M'
@@ -332,16 +332,16 @@ for v in range(len(variqall)):
     ax.tick_params(axis='y',labelsize=6,pad=1.5)
     ax.grid(which='major',axis='x',linestyle='-',color='darkgrey',clip_on=False)
     
-    plt.scatter(endMean_spear.ravel(),endMean_spear_vari.ravel(),marker='o',s=15,color='r',
-                alpha=0.2,edgecolors='r',linewidth=0.3,clip_on=False,label=r'\textbf{SSP5-8.5 [2086-2100] [R=%s]}' % np.round(corr_end_os,2))
-    plt.plot(line_end_spear_sym,color='r',linewidth=2,linestyle='-')
+    plt.scatter(endMean_spear.ravel(),endMean_spear_vari.ravel(),marker='o',s=15,color='darkgray',
+                alpha=0.2,edgecolors='darkgray',linewidth=0.3,clip_on=False,label=r'\textbf{SSP5-8.5 [2086-2100] [R=%s]}' % np.round(corr_end_os,2))
+    plt.plot(line_end_spear_sym,color='k',linewidth=2,linestyle='-')
     
     if modelpick == 'OS':
         plt.scatter(beforeMean_os.ravel(),beforeMean_os_vari.ravel(),marker='o',s=15,color='teal',
-                    alpha=0.2,edgecolors='teal',linewidth=0.3,clip_on=False,label=r'\textbf{BEFORE OS [R=%s]}' % np.round(corr_before_os,2))
+                    alpha=0.2,edgecolors='teal',linewidth=0.3,clip_on=False,label=r'\textbf{2025-2039 [R=%s]}' % np.round(corr_before_os,2))
     elif modelpick == 'OS_10ye':
         plt.scatter(beforeMean_os.ravel(),beforeMean_os_vari.ravel(),marker='o',s=15,color='teal',
-                    alpha=0.2,edgecolors='teal',linewidth=0.3,clip_on=False,label=r'\textbf{BEFORE OS_10ye [R=%s]}' % np.round(corr_before_os,2))
+                    alpha=0.2,edgecolors='teal',linewidth=0.3,clip_on=False,label=r'\textbf{2016-2030 [R=%s]}' % np.round(corr_before_os,2))
     else:
         print(ValueError('wrong model!'))
         sys.exit()
@@ -416,7 +416,7 @@ for v in range(len(variqall)):
     elif v==1:
         plt.ylabel(r'\textbf{Evaporation Anomaly [mm/day]}',fontsize=7,color='dimgrey')
     elif v==2:
-        plt.ylabel(r'\textbf{RH Anomaly [Percent]}',fontsize=7,color='dimgrey')
+        plt.ylabel(r'\textbf{RH Anomaly [\%]}',fontsize=7,color='dimgrey')
 
 plt.tight_layout()
 # plt.subplots_adjust(bottom=0.15)

@@ -113,7 +113,7 @@ def findNearestValueIndex(array,value):
 ### Get data
 selectGWL = 1.7
 selectGWLn = '%s' % (int(selectGWL*10))
-yrplus = 3
+yrplus = 2
 
 lat_bounds,lon_bounds = UT.regions('Globe')
 
@@ -200,9 +200,9 @@ spear_am = count90
 spear_aosm = count90_os
 spear_aosm_10ye = np.append(count90_os[:,:(count90_os.shape[1]-count90_os10ye.shape[1]),:,:],count90_os10ye[:,:,:,:],axis=1)
 
-climatechange_GWL = np.nanmean(spear_am[:,ssp_GWLt-yrplus:ssp_GWLt+yrplus,:,:],axis=(0,1))
-os_GWL = np.nanmean(spear_aosm[:,os_second_GWLt-yrplus:os_second_GWLt+yrplus,:,:],axis=(0,1))
-os_10ye_GWL = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWLt-yrplus:os_10ye_second_GWLt+yrplus,:,:],axis=(0,1))
+climatechange_GWL = np.nanmean(spear_am[:,ssp_GWLt-yrplus:ssp_GWLt+yrplus+1,:,:],axis=(0,1))
+os_GWL = np.nanmean(spear_aosm[:,os_second_GWLt-yrplus:os_second_GWLt+yrplus+1,:,:],axis=(0,1))
+os_10ye_GWL = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWLt-yrplus:os_10ye_second_GWLt+yrplus+1,:,:],axis=(0,1))
 
 ### Differences at selected GWL
 diff_os = os_GWL - climatechange_GWL
@@ -210,9 +210,9 @@ diff_os_10ye = os_10ye_GWL - climatechange_GWL
 
 ### Calculate statistical significance (FDR)
 alpha_f = 0.05
-varx_os = np.nanmean(spear_am[:,ssp_GWL-yrplus:ssp_GWL+yrplus,:,:],axis=(1))
-vary_os = np.nanmean(spear_aosm[:,os_second_GWL-yrplus:os_second_GWL+yrplus,:,:],axis=(1))
-vary_os_10ye = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWL-yrplus:os_10ye_second_GWL+yrplus,:,:],axis=(1))
+varx_os = np.nanmean(spear_am[:,ssp_GWL-yrplus:ssp_GWL+yrplus+1,:,:],axis=(1))
+vary_os = np.nanmean(spear_aosm[:,os_second_GWL-yrplus:os_second_GWL+yrplus+1,:,:],axis=(1))
+vary_os_10ye = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWL-yrplus:os_10ye_second_GWL+yrplus+1,:,:],axis=(1))
 pval_os = UT.calc_FDR_ttest(varx_os,vary_os,alpha_f)
 pval_os_10ye = UT.calc_FDR_ttest(varx_os,vary_os_10ye,alpha_f)
 
@@ -241,8 +241,8 @@ elif style == 'US':
 if any([variq == 'TMAX',variq == 'T2M']):
     barlim = np.arange(0,51,10)
     limit = np.arange(0,51,1)
-    barlim2 = np.arange(-30,31,5)
-    limit2 = np.arange(-30,31,1)
+    barlim2 = np.arange(-20,21,5)
+    limit2 = np.arange(-20,21,1)
 if variq == 'TMAX':
     if varcount == 'count90':
         label = r'\textbf{Count of Tx90}' 

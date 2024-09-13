@@ -66,7 +66,7 @@ def findNearestValueIndex(array,value):
 ### Get data
 selectGWL = 1.5
 selectGWLn = '%s' % (int(selectGWL*10))
-yrplus = 3
+yrplus = 2
 
 lat_bounds,lon_bounds = UT.regions('Globe')
 
@@ -153,9 +153,9 @@ spear_am = count90
 spear_aosm = count90_os
 spear_aosm_10ye = count90_os10ye
 
-climatechange_GWL = np.nanmean(spear_am[:,ssp_GWLt-yrplus:ssp_GWLt+yrplus,:,:],axis=(0,1))
-os_GWL = np.nanmean(spear_aosm[:,os_second_GWLt-yrplus:os_second_GWLt+yrplus,:,:],axis=(0,1))
-os_10ye_GWL = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWLt-yrplus:os_10ye_second_GWLt+yrplus,:,:],axis=(0,1))
+climatechange_GWL = np.nanmean(spear_am[:,ssp_GWLt-yrplus:ssp_GWLt+yrplus+1,:,:],axis=(0,1))
+os_GWL = np.nanmean(spear_aosm[:,os_second_GWLt-yrplus:os_second_GWLt+yrplus+1,:,:],axis=(0,1))
+os_10ye_GWL = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWLt-yrplus:os_10ye_second_GWLt+yrplus+1,:,:],axis=(0,1))
 
 ### Differences at selected GWL
 diff_os = os_GWL - climatechange_GWL

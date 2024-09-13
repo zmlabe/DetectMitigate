@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['TS']
+variablesall = ['Z500']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 30
@@ -110,7 +110,7 @@ def findNearestValueIndex(array,value):
 ### Get data
 selectGWL = 1.7
 selectGWLn = '%s' % (int(selectGWL*10))
-yrplus = 3
+yrplus = 2
 
 if variq == 'T2M':
     lat_bounds,lon_bounds = UT.regions(reg_name)
@@ -158,9 +158,9 @@ if variq == 'T2M':
     os_10ye_second_GWL = findNearestValueIndex(gwl_os_10ye[os_yr:],selectGWL)+(len(years)-len(years[os_yr:])) # need to account for further warming after 2031 to reach 1.5C
     
     ### Epochs for +- years around selected GWL
-    climatechange_GWL = np.nanmean(spear_am[:,ssp_GWL-yrplus:ssp_GWL+yrplus,:,:],axis=(0,1))
-    os_GWL = np.nanmean(spear_aosm[:,os_second_GWL-yrplus:os_second_GWL+yrplus,:,:],axis=(0,1))
-    os_10ye_GWL = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWL-yrplus:os_10ye_second_GWL+yrplus,:,:],axis=(0,1))
+    climatechange_GWL = np.nanmean(spear_am[:,ssp_GWL-yrplus:ssp_GWL+yrplus+1,:,:],axis=(0,1))
+    os_GWL = np.nanmean(spear_aosm[:,os_second_GWL-yrplus:os_second_GWL+yrplus+1,:,:],axis=(0,1))
+    os_10ye_GWL = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWL-yrplus:os_10ye_second_GWL+yrplus+1,:,:],axis=(0,1))
     
     ### Differences at selected GWL
     diff_os = os_GWL - climatechange_GWL
@@ -168,9 +168,9 @@ if variq == 'T2M':
     
     ### Calculate statistical significance (FDR)
     alpha_f = 0.05
-    varx_os = np.nanmean(spear_am[:,ssp_GWL-yrplus:ssp_GWL+yrplus,:,:],axis=(1))
-    vary_os = np.nanmean(spear_aosm[:,os_second_GWL-yrplus:os_second_GWL+yrplus,:,:],axis=(1))
-    vary_os_10ye = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWL-yrplus:os_10ye_second_GWL+yrplus,:,:],axis=(1))
+    varx_os = np.nanmean(spear_am[:,ssp_GWL-yrplus:ssp_GWL+yrplus+1,:,:],axis=(1))
+    vary_os = np.nanmean(spear_aosm[:,os_second_GWL-yrplus:os_second_GWL+yrplus+1,:,:],axis=(1))
+    vary_os_10ye = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWL-yrplus:os_10ye_second_GWL+yrplus+1,:,:],axis=(1))
     pval_os = UT.calc_FDR_ttest(varx_os,vary_os,alpha_f)
     pval_os_10ye = UT.calc_FDR_ttest(varx_os,vary_os_10ye,alpha_f)
     
@@ -236,9 +236,9 @@ else:
     os_10ye_second_GWL = os_10ye_second_GWLt 
     
     ### Epochs for +- years around selected GWL
-    climatechange_GWL = np.nanmean(spear_am[:,ssp_GWLt-yrplus:ssp_GWLt+yrplus,:,:],axis=(0,1))
-    os_GWL = np.nanmean(spear_aosm[:,os_second_GWLt-yrplus:os_second_GWLt+yrplus,:,:],axis=(0,1))
-    os_10ye_GWL = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWLt-yrplus:os_10ye_second_GWLt+yrplus,:,:],axis=(0,1))
+    climatechange_GWL = np.nanmean(spear_am[:,ssp_GWLt-yrplus:ssp_GWLt+yrplus+1,:,:],axis=(0,1))
+    os_GWL = np.nanmean(spear_aosm[:,os_second_GWLt-yrplus:os_second_GWLt+yrplus+1,:,:],axis=(0,1))
+    os_10ye_GWL = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWLt-yrplus:os_10ye_second_GWLt+yrplus+1,:,:],axis=(0,1))
     
     ### Differences at selected GWL
     diff_os = os_GWL - climatechange_GWL
@@ -246,9 +246,9 @@ else:
     
     ### Calculate statistical significance (FDR)
     alpha_f = 0.05
-    varx_os = np.nanmean(spear_am[:,ssp_GWL-yrplus:ssp_GWL+yrplus,:,:],axis=(1))
-    vary_os = np.nanmean(spear_aosm[:,os_second_GWL-yrplus:os_second_GWL+yrplus,:,:],axis=(1))
-    vary_os_10ye = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWL-yrplus:os_10ye_second_GWL+yrplus,:,:],axis=(1))
+    varx_os = np.nanmean(spear_am[:,ssp_GWL-yrplus:ssp_GWL+yrplus+1,:,:],axis=(1))
+    vary_os = np.nanmean(spear_aosm[:,os_second_GWL-yrplus:os_second_GWL+yrplus+1,:,:],axis=(1))
+    vary_os_10ye = np.nanmean(spear_aosm_10ye[:,os_10ye_second_GWL-yrplus:os_10ye_second_GWL+yrplus+1,:,:],axis=(1))
     pval_os = UT.calc_FDR_ttest(varx_os,vary_os,alpha_f)
     pval_os_10ye = UT.calc_FDR_ttest(varx_os,vary_os_10ye,alpha_f)
 
@@ -302,8 +302,8 @@ elif any([variq == 'rh_ref']):
 elif any([variq == 'Z500', variq == 'Z200']):
     barlim = np.arange(-100,100.1,25)
     limit = np.arange(-100,101,5)
-    barlim2 = np.arange(-100,100.1,25)
-    limit2 = np.arange(-100,101,5)
+    barlim2 = np.arange(-75,75.1,25)
+    limit2 = np.arange(-75,76,5)
 elif any([variq == 'SHFLX']):
     barlim = np.arange(-25,26,5)
     limit = np.arange(-25,25.1,0.1)

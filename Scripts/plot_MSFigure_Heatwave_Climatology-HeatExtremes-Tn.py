@@ -163,7 +163,7 @@ tx99ens = np.nanmean(tx99[:,:,:],axis=0)
 ###############################################################################
 limit = np.arange(10,31,1)
 barlim = np.round(np.arange(10,31,5),2)
-label = r'\textbf{TnX Threshold -- 1981-2010 [JJA; $^{\circ}$C]}'
+label = r'\textbf{TnN Threshold -- 1981-2010 [JJA; $^{\circ}$C]}'
 
 fig = plt.figure(figsize=(5,10))                                                                                                                        
 ax = plt.subplot(311)     
@@ -286,4 +286,4 @@ cbar1.outline.set_edgecolor('dimgrey')
 plt.tight_layout()
 plt.subplots_adjust(bottom=0.07)    
 
-plt.savefig(directoryfigure + 'Climo_1981-2010_TnX.png',dpi=600)
+plt.savefig(directoryfigure + 'Climo_1981-2010_TnN.png',dpi=600)

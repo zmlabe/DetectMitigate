@@ -288,7 +288,7 @@ for line,text in zip(leg.get_lines(), leg.get_texts()):
 plt.xticks(np.arange(1920,2101,10),np.arange(1920,2101,10))
 plt.yticks(np.round(np.arange(-5,5.01,0.1),2),np.round(np.arange(-5,5.01,0.1),2))
 plt.xlim([2015,2100])
-plt.ylim([1.6,1.9])
+plt.ylim([1.5,2])
 
 plt.ylabel(r'\textbf{Ratio [Land/Ocean]}',
             fontsize=10,color='k')
