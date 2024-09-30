@@ -52,7 +52,7 @@ def adjust_spines(ax, spines):
         ax.xaxis.set_ticks([]) 
 
 fig = plt.figure(figsize=(10,4))
-for v in range(2,3,1):
+for v in range(len(variqall)):
     variq = variqall[v]
     varcount = 'count90'
     variablesglobe = 'T2M'
@@ -332,8 +332,8 @@ for v in range(2,3,1):
     ax.tick_params(axis='y',labelsize=6,pad=1.5)
     ax.grid(which='major',axis='x',linestyle='-',color='darkgrey',clip_on=False)
     
-    plt.scatter(endMean_spear.ravel(),endMean_spear_vari.ravel(),marker='o',s=15,color='darkgray',
-                alpha=0.2,edgecolors='darkgray',linewidth=0.3,clip_on=False,label=r'\textbf{SSP5-8.5 [2086-2100] [R=%s]}' % np.round(corr_end_os,2))
+    plt.scatter(endMean_spear.ravel(),endMean_spear_vari.ravel(),marker='o',s=15,color='dimgray',
+                alpha=0.2,edgecolors='dimgray',linewidth=0.3,clip_on=False,label=r'\textbf{SSP5-8.5 [2086-2100] [R=%s]}' % np.round(corr_end_os,2))
     plt.plot(line_end_spear_sym,color='k',linewidth=2,linestyle='-')
     
     if modelpick == 'OS':
