@@ -300,8 +300,8 @@ elif any([variq == 'rh_ref']):
     barlim2 = np.arange(-5,5.1,1)
     limit2 = np.arange(-5,5.01,0.1)  
 elif any([variq == 'Z500', variq == 'Z200']):
-    barlim = np.arange(-100,100.1,25)
-    limit = np.arange(-100,101,5)
+    barlim = np.arange(-75,75.1,25)
+    limit = np.arange(-75,76,5)
     barlim2 = np.arange(-75,75.1,25)
     limit2 = np.arange(-75,76,5)
 elif any([variq == 'SHFLX']):
