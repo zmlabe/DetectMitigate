@@ -179,7 +179,7 @@ plt.fill_between(x=yearsh,y1=ave_GLOBE_minhh,y2=ave_GLOBE_maxhh,facecolor='k',zo
 plt.plot(yearsh,ave_GLOBE_avghh,linestyle='-',linewidth=3,color='k',
           clip_on=False,zorder=3,label=r'\textbf{Historical}')   
 
-plt.fill_between(x=years,y1=ave_SSP245_GLOBE_minh,y2=ave_SSP245_GLOBE_maxh,facecolor='darkorange',zorder=1,
+plt.fill_between(x=years,y1=ave_SSP245_GLOBE_minh,y2=ave_SSP245_GLOBE_minh,facecolor='darkorange',zorder=1,
          alpha=0.3,edgecolor='none',clip_on=False) 
 plt.plot(years,ave_SSP245_GLOBE_avgh,linestyle='--',linewidth=2,color='darkorange',
           clip_on=False,zorder=3,label=r'\textbf{SSP2-4.5}',dashes=(1,0.3)) 
@@ -225,4 +225,3 @@ plt.ylabel(r'\textbf{T2M Anomaly [$^{\circ}$C]}',fontsize=7,color='k')
 
 plt.tight_layout()
 plt.savefig(directoryfigure + 'TimeSeries_CONUS_T2M_historicalbaseline_%s_%s.png' % (seasons[0],reg_name),dpi=300)
-

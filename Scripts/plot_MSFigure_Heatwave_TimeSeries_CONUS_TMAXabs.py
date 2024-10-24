@@ -65,29 +65,29 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ### Get data
 lat_bounds,lon_bounds = UT.regions(reg_name)
-spear_m = np.empty((numOfEns,years.shape[0],len(seasons),70,144))
-spear_h = np.empty((numOfEns,yearsh.shape[0],len(seasons),70,144))
-spear_osm = np.empty((numOfEns,years.shape[0],len(seasons),70,144))
-spear_SSP245m = np.empty((numOfEns,years.shape[0],len(seasons),70,144))
-spear_osm_10ye = np.empty((numOfEns_10ye,years.shape[0],len(seasons),70,144))
+spear_mq = np.empty((numOfEns,years.shape[0],len(seasons),70,144))
+spear_hq = np.empty((numOfEns,yearsh.shape[0],len(seasons),70,144))
+spear_osmq = np.empty((numOfEns,years.shape[0],len(seasons),70,144))
+spear_SSP245mq = np.empty((numOfEns,years.shape[0],len(seasons),70,144))
+spear_osm_10yeq = np.empty((numOfEns_10ye,years.shape[0],len(seasons),70,144))
 for mm in range(len(seasons)):
     monthlychoice = seasons[mm]
-    spear_m[:,:,mm,:,:],lats,lons = read_primary_dataset(variq,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
-    spear_h[:,:,mm,:,:],lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
-    spear_osm[:,:,mm,:,:],lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
-    spear_SSP245m[:,:,mm,:,:],lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP245',lat_bounds,lon_bounds)
-    spear_osm_10ye[:,:,mm,:,:],lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
+    spear_mq[:,:,mm,:,:],lats,lons = read_primary_dataset(variq,'SPEAR_MED',monthlychoice,'SSP585',lat_bounds,lon_bounds)
+    spear_hq[:,:,mm,:,:],lats,lons = read_primary_dataset(variq,'SPEAR_MED_ALLofHistorical',monthlychoice,'SSP585',lat_bounds,lon_bounds)
+    spear_osmq[:,:,mm,:,:],lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP534OS',lat_bounds,lon_bounds)
+    spear_SSP245mq[:,:,mm,:,:],lats,lons = read_primary_dataset(variq,'SPEAR_MED_Scenario',monthlychoice,'SSP245',lat_bounds,lon_bounds)
+    spear_osm_10yeq[:,:,mm,:,:],lats,lons = read_primary_dataset(variq,'SPEAR_MED_SSP534OS_10ye',monthlychoice,'SSP534OS_10ye',lat_bounds,lon_bounds)
 lon2,lat2 = np.meshgrid(lons,lats)
 
 ### Meshgrid and mask by CONUS
 lon2,lat2 = np.meshgrid(lons,lats)
 
 ### Calculate TxX
-spear_mALL = np.nanmax(spear_m[:,:,:,:,:],axis=2)
-spear_hALL = np.nanmax(spear_h[:,:,:,:,:],axis=2)
-spear_osmALL = np.nanmax(spear_osm[:,:,:,:,:],axis=2)
-spear_SSP245mALL = np.nanmax(spear_SSP245m[:,:,:,:,:],axis=2)
-spear_osm_10yeALL = np.nanmax(spear_osm_10ye[:,:,:,:,:],axis=2)
+spear_mALL = np.nanmax(spear_mq[:,:,:,:,:],axis=2)
+spear_hALL = np.nanmax(spear_hq[:,:,:,:,:],axis=2)
+spear_osmALL = np.nanmax(spear_osmq[:,:,:,:,:],axis=2)
+spear_SSP245mALL = np.nanmax(spear_SSP245mq[:,:,:,:,:],axis=2)
+spear_osm_10yeALL = np.nanmax(spear_osm_10yeq[:,:,:,:,:],axis=2)
 
 ### Mask over the USA
 spear_m,maskobs = dSS.mask_CONUS(spear_mALL,np.full((spear_mALL.shape[1],spear_mALL.shape[2],spear_mALL.shape[3]),np.nan),'MEDS',lat_bounds,lon_bounds)
@@ -225,4 +225,3 @@ plt.ylabel(r'\textbf{TXx Anomaly [$^{\circ}$C]}',fontsize=7,color='k')
 
 plt.tight_layout()
 plt.savefig(directoryfigure + 'TimeSeries_CONUS_TXx_historicalbaseline_%s_%s.png' % (seasons[0],reg_name),dpi=300)
-

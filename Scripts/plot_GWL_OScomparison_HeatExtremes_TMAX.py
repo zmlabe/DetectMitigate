@@ -43,7 +43,7 @@ seasons = ['annual']
 slicemonthnamen = ['ANNUAL']
 monthlychoice = seasons[0]
 reg_name = 'US'
-varcount = 'count90'
+varcount = 'count99'
 
 ### Calculate linear trends
 def calcTrend(data):
@@ -248,11 +248,15 @@ if variq == 'TMAX':
         label = r'\textbf{Count of Tx90}' 
     elif varcount == 'count95':
         label = r'\textbf{Count of Tx95}' 
+    elif varcount == 'count99':
+        label = r'\textbf{Count of Tx99}' 
 elif variq == 'T2M':
     if varcount == 'count90':
         label = r'\textbf{Count of T2M-Tx90}' 
     elif varcount == 'count95':
         label = r'\textbf{Count of T2M-Tx95}'
+    elif varcount == 'count99':
+        label = r'\textbf{Count of T2M-Tx99}' 
 
 ### Map world map
 fig = plt.figure(figsize=(10,4))

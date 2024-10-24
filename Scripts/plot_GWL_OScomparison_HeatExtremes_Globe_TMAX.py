@@ -64,7 +64,7 @@ def findNearestValueIndex(array,value):
 ###############################################################################
 ###############################################################################
 ### Get data
-selectGWL = 1.8
+selectGWL = 1.7
 selectGWLn = '%s' % (int(selectGWL*10))
 yrplus = 3
 

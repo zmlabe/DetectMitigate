@@ -134,8 +134,8 @@ preparedata = [ssp585,ssp585_os,ssp585_os10ye]
 fig = plt.figure(figsize=(10,5))
 
 label = r'\textbf{Probability of exceeding TXx(1981-2010) [\%]}'
-limit = np.arange(0,76,5)
-barlim = np.round(np.arange(0,76,5),2)
+limit = np.arange(0,51,5)
+barlim = np.round(np.arange(0,51,5),2)
 cmap = cmr.ember
 
 for i in range(len(periods_15)*3):

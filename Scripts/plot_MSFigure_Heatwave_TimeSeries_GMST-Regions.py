@@ -236,7 +236,7 @@ for ii in range(len(allregions)):
         plt.text(2015,5,r'\textbf{GLOBAL}',fontsize=16,color='dimgrey')
         plt.ylabel(r'\textbf{Temperature Anomaly [$^{\circ}$C] Relative to 1921-1950}',
                    fontsize=10,color='dimgrey')
-        
+        sys.exit()
     elif ii == 1:
         ax = plt.subplot(212)
         

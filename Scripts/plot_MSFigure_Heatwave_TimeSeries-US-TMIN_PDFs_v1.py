@@ -212,6 +212,8 @@ scenarioalln2 = ['1981-2010 SPEAR_MED','SSP5-8.5','SSP2-4.5','SSP5-3.4OS','SSP5-
 ### Statistical tests
 overshoots_stat = sts.ks_2samp(os_freq,os10ye_freq,alternative='two-sided',method='auto')
 climo_10ye_stat = sts.ks_2samp(climo_freq,os10ye_freq,alternative='two-sided',method='auto')
+overshoots_stat = sts.ks_2samp(os_kde,os10ye_kde,alternative='two-sided',method='auto')
+climo_10ye_stat = sts.ks_2samp(climo_kde,os10ye_kde,alternative='two-sided',method='auto')
 
 ###############################################################################
 ###############################################################################

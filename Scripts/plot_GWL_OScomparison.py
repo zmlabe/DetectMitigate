@@ -21,7 +21,7 @@ import scipy.stats as sts
 plt.rc('text',usetex=True)
 plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']}) 
 
-variablesall = ['Z500']
+variablesall = ['U200']
 variq = variablesall[0]
 numOfEns = 30
 numOfEns_10ye = 30
@@ -39,7 +39,7 @@ letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 ###############################################################################
 modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
 monthlychoice = 'annual'
-monthlychoiceVARI = 'JJA'
+monthlychoiceVARI = 'JFM'
 reg_name = 'Globe'
 
 ### Calculate linear trends
