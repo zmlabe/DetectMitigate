@@ -15,7 +15,7 @@ Zachary Labe - [Research Website](https://zacklabe.com/) - [@ZLabe](https://twit
     + Delworth, T. L., Cooke, W. F., Adcroft, A., Bushuk, M., Chen, J. H., Dunne, K. A., ... & Zhao, M. (2020). SPEAR: The next generation GFDL modeling system for seasonal to multidecadal prediction and projection. Journal of Advances in Modeling Earth Systems, 12(3), e2019MS001895. doi:10.1029/2019MS001895 [[PUBLICATION]](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019MS001895)
 
 ## Publications
-+ **[1]** **Labe, Z.M.**, T.L. Delworth, N.C. Johnson, and W.F. Cooke (2024). Exploring a data-driven approach to identify regions of change associated with future climate scenarios. *(submitted)* [[PREPRINT]](https://doi.org/10.22541/essoar.171288901.17027965/v1)
++ **[1]** **Labe, Z.M.**, T.L. Delworth, N.C. Johnson, and W.F. Cooke (2024). Exploring a data-driven approach to identify regions of change associated with future climate scenarios. *(accepted to Journal of Geophysical Research: Machine Learning and Computation)* [[PREPRINT]](https://doi.org/10.22541/essoar.171288901.17027965/v1)
 
 ## Conferences/Presentations
 + **[7]** **Labe, Z.M.**, T.L. Delworth, N.C. Johnson, and W.F. Cooke. Explainable AI for distinguishing future climate change scenarios, *EGU General Assembly 2024*, Vienna, Austria (Apr 2024). [[Abstract]](https://meetingorganizer.copernicus.org/EGU24/EGU24-9110.html)
