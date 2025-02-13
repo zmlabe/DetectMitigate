@@ -133,7 +133,7 @@ preparedata = [ssp585,ssp585_os,ssp585_os10ye]
 ### Plot differences in land fraction
 fig = plt.figure(figsize=(10,5))
 
-label = r'\textbf{Probability of exceeding TNn(1981-2010) [\%]}'
+label = r'\textbf{Probability of exceeding TNx(1981-2010) [\%]}'
 limit = np.arange(0,51,5)
 barlim = np.round(np.arange(0,51,5),2)
 cmap = cmr.eclipse

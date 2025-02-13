@@ -139,7 +139,7 @@ nameSSP245 = 'HeatStats/HeatStats' + '_JJA_' + reg_name + '_' + variq + '_' + 'S
 filenameSSP245 = directorydatah + nameSSP245
 dataSSP245 = Dataset(filenameSSP245)
 freq90SSP245 = dataSSP245.variables['freq90'][:]
-data.close()
+dataSSP245.close()
 
 ### Read in SPEAR_MED_SSP534OS
 directorydatah = '/work/Zachary.Labe/Research/DetectMitigate/DataExtremes/'

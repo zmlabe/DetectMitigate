@@ -213,10 +213,10 @@ for ii in range(len(allregions)):
                 plt.axvline(x=yearsall[i][np.argmax(meanens[i])],color=c,linewidth=2,linestyle='-',zorder=200)
                 
             if i == 3:
-                plt.text(yearsall[i][np.argmax(meanens[i])],5.5,r'\textbf{Max [OS]}',fontsize=7,color=c,ha='center')
+                plt.text(yearsall[i][np.argmax(meanens[i])],5.5,r'\textbf{Max [OS]}',fontsize=10,color=c,ha='left')
                 np.savetxt(directoryoutput + 'Max_GMST_SSP534OS_Annual.txt',[yearsall[i][np.argmax(meanens[i])],np.nanmax(meanens[i]),np.argmax(meanens[i])])
             elif i == 4:
-                plt.text(yearsall[i][np.argmax(meanens[i])],5.5,r'\textbf{Max [OS_10ye]}',fontsize=7,color=c,ha='center')
+                plt.text(yearsall[i][np.argmax(meanens[i])],5.5,r'\textbf{Max [OS_10ye]}',fontsize=10,color=c,ha='center')
                 np.savetxt(directoryoutput + 'Max_GMST_SSP534OS_10ye_Annual.txt',[yearsall[i][np.argmax(meanens[i])],np.nanmax(meanens[i]),np.argmax(meanens[i])])
             
         # leg = plt.legend(shadow=False,fontsize=10,loc='upper center',
@@ -231,12 +231,12 @@ for ii in range(len(allregions)):
         plt.ylim([0.5,5.5])
         
         plt.text(2015,5.5,r'\textbf{[d]}',fontsize=11,color='k')
-        plt.text(2031,5.5,r'\textbf{OS_10ye}',fontsize=7,color='lightseagreen',ha='center')
-        plt.text(2040,5.5,r'\textbf{OS}',fontsize=7,color='darkslategrey',ha='center')
+        plt.text(2031,5.5,r'\textbf{OS_10ye}',fontsize=10,color='lightseagreen',ha='center')
+        plt.text(2040,5.5,r'\textbf{OS}',fontsize=10,color='darkslategrey',ha='center')
         plt.text(2015,5,r'\textbf{GLOBAL}',fontsize=16,color='dimgrey')
         plt.ylabel(r'\textbf{Temperature Anomaly [$^{\circ}$C] Relative to 1921-1950}',
                    fontsize=10,color='dimgrey')
-        sys.exit()
+
     elif ii == 1:
         ax = plt.subplot(212)
         

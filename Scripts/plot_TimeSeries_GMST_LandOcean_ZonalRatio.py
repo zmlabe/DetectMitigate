@@ -40,8 +40,8 @@ letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
 modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario']
 experimentnames = ['SSP5-34OS','SSP5-34OS_10ye','DIFFERENCE [a-b]']
 dataset_obs = 'ERA5_MEDS'
-seasons = ['annual']
-slicemonthnamen = ['ANNUAL']
+seasons = ['JJA']
+slicemonthnamen = ['JJA']
 monthlychoice = seasons[0]
 reg_name = 'Globe'
 

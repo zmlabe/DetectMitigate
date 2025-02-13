@@ -24,7 +24,7 @@ plt.rc('font',**{'family':'sans-serif','sans-serif':['Avant Garde']})
 
 variqall = ['PRECT','EVAP','rh_ref']
 variHEAT = 'TMAX'
-modelpick = 'OS_10ye'
+modelpick = 'OS'
 slicemonthnamen = ['JJA']
 monthlychoice = slicemonthnamen[0]
 monthlychoiceJJA = slicemonthnamen[0]
@@ -63,6 +63,7 @@ for v in range(len(variqall)):
     ### Data preliminaries 
     directoryfigure = '/home/Zachary.Labe/Research/DetectMitigate/Figures/MSFigures_Heat/'
     letters = ["a","b","c","d","e","f","g","h","i","j","k","l","m","n"]
+    panels = ['precipitation','evaporation','relative humidity']
     ###############################################################################
     ###############################################################################
     modelGCMs = ['SPEAR_MED_Scenario','SPEAR_MED_Scenario','SPEAR_MED']
@@ -407,9 +408,9 @@ for v in range(len(variqall)):
         print(ValueError('wrong model!'))
         sys.exit()
         
-    ax.annotate(r'\textbf{[%s]}' % (letters[v]),xy=(0,0),xytext=(1,1.06),
+    ax.annotate(r'\textbf{%s [%s]}' % (panels[v],letters[v]),xy=(0,0),xytext=(1,1.06),
               textcoords='axes fraction',color='k',fontsize=10,
-              rotation=0,ha='center',va='center')
+              rotation=0,ha='right',va='center')
     
     if v == 0:
         plt.ylabel(r'\textbf{Precipitation Anomaly [mm/day]}',fontsize=7,color='dimgrey')
@@ -421,4 +422,3 @@ for v in range(len(variqall)):
 plt.tight_layout()
 # plt.subplots_adjust(bottom=0.15)
 plt.savefig(directoryfigure + 'Scatter_Heatwaves_%s_%s_Water.png' % (variHEAT,modelpick),dpi=300)
-
