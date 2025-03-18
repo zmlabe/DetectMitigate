@@ -15,6 +15,7 @@ Zachary Labe - [Research Website](https://zacklabe.com/) - [@ZLabe](https://twit
     + Delworth, T. L., Cooke, W. F., Adcroft, A., Bushuk, M., Chen, J. H., Dunne, K. A., ... & Zhao, M. (2020). SPEAR: The next generation GFDL modeling system for seasonal to multidecadal prediction and projection. Journal of Advances in Modeling Earth Systems, 12(3), e2019MS001895. doi:10.1029/2019MS001895 [[PUBLICATION]](https://agupubs.onlinelibrary.wiley.com/doi/full/10.1029/2019MS001895)
 
 ## Publications
++ **[2]** **Labe, Z.M.**, T.L. Delworth, N.C. Johnson, B-T. Jong, C.E. McHugh, W.F. Cooke, and L. Jia (2025). Large reductions in United States heat extremes found in overshoot simulations with SPEAR, *EarthArXiv*, DOI:10.31223/X5TX4P (*submitted*) [[PREPRINT]](https://doi.org/10.31223/X5TX4P)
 + **[1]** **Labe, Z.M.**, T.L. Delworth, N.C. Johnson, and W.F. Cooke (2024). Exploring a data-driven approach to identify regions of change associated with future climate scenarios. *Journal of Geophysical Research: Machine Learning and Computation*, DOI:10.1029/2024JH000327 [[HTML]](https://doi.org/10.1029/2024JH000327)[[SUMMARY]](https://zacklabe.com/climate-signals-and-explainable-ai/)[[BibTeX]](https://zacklabe.com/wp-content/uploads/2024/11/labedelworthjohnsoncooke_detectann_2024jgr-mlc_bibtex.pdf)
 
 ## Conferences/Presentations
